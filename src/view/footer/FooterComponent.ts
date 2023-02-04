@@ -1,6 +1,6 @@
 import { FooterController } from '../../controller/FooterController';
 import { BaseComponent } from '../BaseComponent';
-import "./footer.css";
+import './footer.css';
 
 interface FooterComponentProps {
     controller: FooterController;
@@ -10,15 +10,15 @@ export class FooterComponent extends BaseComponent<FooterComponentProps> {
     private footerContainer!: HTMLDivElement;
 
     constructor(controller: FooterController) {
-        super("footer", { controller }, "footer");
+        super('footer', { controller }, 'footer');
     }
 
     protected render(): void {
-        this.footerContainer = document.createElement("div");
-        this.footerContainer.className = "footer-container";
+        this.footerContainer = document.createElement('div');
+        this.footerContainer.classList.add('footer-container');
 
         this.footerContainer.insertAdjacentHTML(
-            "beforeend",
+            'beforeend',
             `
     <div class="footer__developers-gitHub">
     <a class="footer__developers-gitHub-link" href="https://github.com/LanaVladi">LanaVladi</a>
@@ -35,5 +35,4 @@ export class FooterComponent extends BaseComponent<FooterComponentProps> {
 
         this.element.append(this.footerContainer);
     }
-
 }

@@ -2,7 +2,7 @@ export abstract class BaseComponent<T> {
     public element: HTMLElement;
     protected props: T;
 
-    constructor(className: string, props: T, tag = "div") {
+    constructor(className: string, props: T, tag = 'div') {
         this.element = document.createElement(tag);
         this.element.classList.add(className);
         this.props = props;
