@@ -10,22 +10,22 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
     private logo!: HTMLDivElement;
     private search!: HTMLDivElement;
     private searchInput!: HTMLInputElement;
-    private searchLogo!: HTMLDivElement;
+    private searchIcon!: HTMLDivElement;
     private conversion!: HTMLDivElement;
     private langName!: HTMLDivElement;
     private langLogo!: HTMLDivElement;
     private temperature!: HTMLSelectElement;
-    private celsius!:HTMLOptionElement;
-    private fahrenheit!:HTMLOptionElement;
-    private componentToday!:HTMLLIElement;
-    private componentTimeWeather!:HTMLLIElement;
-    private componentTenDays!:HTMLLIElement;
-    private componentWeekend!:HTMLLIElement;
-    private componentMonth!:HTMLLIElement;
-    private componentRadar!:HTMLLIElement;
-    private componentOtherWeather!:HTMLLIElement;
-    private weatherPicture!:HTMLDivElement;
-    private nameLocation!:HTMLDivElement;
+    private celsius!: HTMLOptionElement;
+    private fahrenheit!: HTMLOptionElement;
+    private componentToday!: HTMLLIElement;
+    private componentTimeWeather!: HTMLLIElement;
+    private componentTenDays!: HTMLLIElement;
+    private componentWeekend!: HTMLLIElement;
+    private componentMonth!: HTMLLIElement;
+    private componentRadar!: HTMLLIElement;
+    private componentOtherWeather!: HTMLLIElement;
+    private weatherPicture!: HTMLDivElement;
+    private nameLocation!: HTMLDivElement;
     constructor(controller: HeaderController) {
         super('header', { controller }, 'header');
     }
@@ -48,36 +48,33 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
         this.searchInput.placeholder = 'Поиск по городу или индексу';
         this.searchInput.type = 'search';
 
-        this.searchLogo = document.createElement('div');
-        this.searchLogo.className = 'search-logo';
+        this.searchIcon = document.createElement('div');
+        this.searchIcon.className = 'search-icon';
 
         this.conversion = document.createElement('div');
         this.conversion.className = 'conversion';
 
         this.langName = document.createElement('div');
-        this.langName.className='lang-name'
+        this.langName.className = 'lang-name';
         this.langName.textContent = 'RU';
-
 
         this.langLogo = document.createElement('div');
         this.langLogo.className = 'lang-logo';
 
         this.temperature = document.createElement('select');
-        this.temperature.className='temperature'
-        
-        this.celsius=document.createElement('option')
+        this.temperature.className = 'temperature';
+
+        this.celsius = document.createElement('option');
         this.celsius.text = 'C°';
-       
-        this.fahrenheit=document.createElement('option')
-        this.fahrenheit.text='°F';
 
-        this.temperature.append(this.celsius,this.fahrenheit)
+        this.fahrenheit = document.createElement('option');
+        this.fahrenheit.text = '°F';
 
-        this.search.append(this.searchInput, this.searchLogo);
+        this.temperature.append(this.celsius, this.fahrenheit);
+
+        this.search.append(this.searchInput, this.searchIcon);
         this.conversion.append(this.langLogo, this.langName, this.temperature);
         headerTools.append(this.logo, this.search, this.conversion);
-
-
 
         const headerNav = document.createElement('ul');
         headerNav.className = 'header-nav';
@@ -113,18 +110,17 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
             this.componentOtherWeather
         );
 
-        const headerLocation=document.createElement('div')
-        headerLocation.className='header-location'; 
-        
+        const headerLocation = document.createElement('div');
+        headerLocation.className = 'header-location';
 
-        this.weatherPicture=document.createElement('div');
-        
-        this.nameLocation=document.createElement('div');
-        this.nameLocation.textContent='Ташкент Узбекистан'
-        
-        headerLocation.append(this.nameLocation)
+        this.weatherPicture = document.createElement('div');
 
-        headerContainer.append(headerTools,headerLocation,headerNav);
+        this.nameLocation = document.createElement('div');
+        this.nameLocation.textContent = 'Ташкент Узбекистан';
+
+        headerLocation.append(this.nameLocation);
+
+        headerContainer.append(headerTools, headerLocation, headerNav);
         this.element.append(headerContainer);
     }
 }

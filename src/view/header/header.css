@@ -1,4 +1,4 @@
-.header-container{
+.header-container {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -10,67 +10,78 @@
     height: 20rem;
     font-size: 1.5rem;
 }
-.header-tools{
-    width:80%;
+
+.header-tools {
+    width: 80%;
     justify-content: space-between;
     display: flex;
 }
-.header-logo{
+
+.header-logo {
     margin-top: 1em;
 }
 
-.search{
+.search {
     display: inline-flex;
     border: 1px solid black;
     background-color: white;
     border-radius: 30px;
     padding: 1rem;
 }
-input{
+
+input {
     width: 40rem;
-    border: 0; 
+    border: 0;
     border: none;
     outline: none;
 }
-.search-logo{
+
+.search-icon {
     margin-top: 0.5rem;
     background-image: url('https://img.icons8.com/material-outlined/256/search-more.png');
     background-size: contain;
     width: 2rem;
     height: 2rem;
     margin-left: 1rem;
-   
+
 }
-.conversion{
+
+.conversion {
     margin-top: 1em;
     display: flex;
     width: 10em;
     justify-content: space-around;
 }
-.temperature{
+
+.temperature {
     margin-top: -1em;
     background-color: var(--color-bg-footer-header);
 }
-.lang-name{
+
+.lang-name {
     margin-top: 0.1em;
 }
-.lang-logo{
+
+.lang-logo {
     background-image: url("https://www.svgrepo.com/show/116369/earth-globe-tool.svg");
     background-size: contain;
     background-repeat: no-repeat;
     width: 1.5em;
     height: 1.5em;
 }
-.header-nav{
+
+.header-nav {
     width: 80%;
-    margin:  0 auto;
+    margin: 0 auto;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
 }
-li{
+
+li {
     list-style: none;
 }
-li:hover{
+
+li:hover {
     opacity: 0.5;
     cursor: pointer;
 }
