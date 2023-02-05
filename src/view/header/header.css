@@ -32,7 +32,7 @@ input{
     border: none;
     outline: none;
 }
-.search-logo{
+.search-icon{
     margin-top: 0.5rem;
     background-image: url('https://img.icons8.com/material-outlined/256/search-more.png');
     background-size: contain;
