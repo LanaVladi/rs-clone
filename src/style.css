@@ -48,7 +48,8 @@ body {
     -moz-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
+    color: var(--color-textDefault);
 }
 
 input,
@@ -87,20 +88,25 @@ img {
     vertical-align: top;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-size: inherit;
-    font-weight: 400;
-}
-
-
 :root {
+    --color-textDefault: #0d0b0b;
     --color-light-grey: rgb(193, 189, 189, 0.5);
     --color-dark-grey: rgb(51, 53, 54);
     --color-light-blue: rgb(156 194 209);
     --color-light-yellow: rgb(227, 247, 95);
+    --color-bg-footer-header: rgb(156 194 209);
+    --color-logo-border: rgb(9, 84, 113);
+    --color-bg-outer: #e1ecf0;
+}
+
+
+#root {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-bg-outer);
+}
+
+#windy {
+    width: 100%;
+    height: 100vh;
 }
