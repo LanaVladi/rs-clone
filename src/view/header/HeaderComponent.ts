@@ -1,9 +1,11 @@
 import { HeaderController } from '../../controller/HeaderController';
 import { BaseComponent } from '../BaseComponent';
+import { Router } from '../Router';
 import './header.css';
 
 interface HeaderComponentProps {
     controller: HeaderController;
+    router: Router;
 }
 
 export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
@@ -17,17 +19,18 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
     private temperature!: HTMLSelectElement;
     private celsius!: HTMLOptionElement;
     private fahrenheit!: HTMLOptionElement;
+    private headerNav!: HTMLUListElement;
     private componentToday!: HTMLLIElement;
     private componentTimeWeather!: HTMLLIElement;
     private componentTenDays!: HTMLLIElement;
     private componentWeekend!: HTMLLIElement;
     private componentMonth!: HTMLLIElement;
     private componentRadar!: HTMLLIElement;
-    private componentOtherWeather!: HTMLLIElement;
+    private componentOtherForecast!: HTMLLIElement;
     private weatherPicture!: HTMLDivElement;
     private nameLocation!: HTMLDivElement;
-    constructor(controller: HeaderController) {
-        super('header', { controller }, 'header');
+    constructor(controller: HeaderController, router: Router) {
+        super('header', { controller, router }, 'header');
     }
 
     protected render(): void {
@@ -76,8 +79,8 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
         this.conversion.append(this.langLogo, this.langName, this.temperature);
         headerTools.append(this.logo, this.search, this.conversion);
 
-        const headerNav = document.createElement('ul');
-        headerNav.className = 'header-nav';
+        this.headerNav = document.createElement('ul');
+        this.headerNav.className = 'header-nav';
 
         this.componentToday = document.createElement('li');
         this.componentToday.textContent = 'Сегодня';
@@ -97,17 +100,17 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
         this.componentRadar = document.createElement('li');
         this.componentRadar.textContent = 'Радар';
 
-        this.componentOtherWeather = document.createElement('li');
-        this.componentOtherWeather.textContent = 'Другие прогнозы';
+        this.componentOtherForecast = document.createElement('li');
+        this.componentOtherForecast.textContent = 'Другие прогнозы';
 
-        headerNav.append(
+        this.headerNav.append(
             this.componentToday,
             this.componentTimeWeather,
             this.componentTenDays,
             this.componentWeekend,
             this.componentMonth,
             this.componentRadar,
-            this.componentOtherWeather
+            this.componentOtherForecast
         );
 
         const headerLocation = document.createElement('div');
@@ -120,7 +123,38 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
 
         headerLocation.append(this.nameLocation);
 
-        headerContainer.append(headerTools, headerLocation, headerNav);
+        headerContainer.append(headerTools, headerLocation, this.headerNav);
         this.element.append(headerContainer);
+    }
+
+    protected addListeners(): void {
+        this.headerNav.addEventListener('click', (event): void => {
+            if (event.target === this.componentRadar) {
+                this.props.router.goTo('radar');
+            }
+            if (event.target === this.componentToday) {
+                this.props.router.goTo('today');
+            }
+            if (event.target === this.componentTimeWeather) {
+                this.props.router.goTo('hourbyhour');
+            }
+            if (event.target === this.componentTenDays) {
+                this.props.router.goTo('tenday');
+            }
+            if (event.target === this.componentWeekend) {
+                this.props.router.goTo('weekend');
+            }
+            if (event.target === this.componentMonth) {
+                this.props.router.goTo('monthly');
+            }
+        });
+        // this.componentOtherForecast.addEventListener('click', (event): void => {
+        //     if (event.target === this.componentForecastAllergy) {
+        //         this.props.router.goTo('allergy');
+        //     }
+        //     if (event.target === this.componentAirQuality) {
+        //         this.props.router.goTo('air-quality');
+        //     }
+        // });
     }
 }
