@@ -1,3 +1,4 @@
+import getGeolocation from '../geolocation/geolocation';
 import MapControls from './mapControls';
 import './weatherMap.css'
 
@@ -19,14 +20,16 @@ class WeatherMap {
         this.element.append(this.mapControls.getElement());
     }
 
-    drawWeatherMap() {
+    async drawWeatherMap() {
+        const [latitude, longitude] = await getGeolocation();
+       
         const options = {
             key: 'xXzWFyvlQ5v6hx3VoAyja2ss9hpFgVRi',
         
             verbose: true,
         
-            lat: 50.4,
-            lon: 14.3,
+            lat: latitude,
+            lon: longitude,
             zoom: 5,
         };
         // @ts-ignore
