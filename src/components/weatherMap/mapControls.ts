@@ -1,26 +1,38 @@
+import AltitudeInput from "./altitudeInput";
 import LayersButtons from "./layersButtons";
+import WindAnimCheckbox from "./windAnimCheckbox";
 
 class MapControls {
-    private component: HTMLDivElement = document.createElement('div');
+    private element: HTMLDivElement = document.createElement('div');
+    private layersButtons: LayersButtons;
+    private altitudeInput: AltitudeInput;
+    private windAnimCheckbox: WindAnimCheckbox;
 
     constructor() {
-        this.createComponent();
+        this.layersButtons = new LayersButtons();
+        this.altitudeInput = new AltitudeInput();
+        this.windAnimCheckbox = new WindAnimCheckbox();
+        this.render();
     }
 
-    createComponent() {
-        this.component.className = 'weatherMap-controls'
-        const layerButtons = LayersButtons.renderLayersButtons();
-        this.component.innerHTML = layerButtons;
+    private render() {
+        this.element.className = 'weatherMap-controls';
+        this.element.append(
+            this.layersButtons.getElement(),
+            this.altitudeInput.getElement(),
+            this.windAnimCheckbox.getElement()
+        );
     }
 
-    renderMapControls() {
-        return `
-        
-        `
+    // @ts-ignore
+    addListner(store) {
+        this.layersButtons.addListner(store);
+        this.altitudeInput.addListner(store);
+        this.windAnimCheckbox.addListner(store);
     }
 
-    getComponent() {
-        return this.component;
+    getElement() {
+        return this.element;
     }
 }
 

@@ -2,24 +2,24 @@ import MapControls from './mapControls';
 import './weatherMap.css'
 
 class WeatherMap {
-    private component: HTMLDivElement = document.createElement('div');
+    private element: HTMLDivElement = document.createElement('div');
     private windyDiv: HTMLDivElement = document.createElement('div');
     private mapControls: MapControls;
 
     constructor() {
         this.mapControls = new MapControls();
-        this.createComponent();
-        this.renderMap();
+        this.render();
+        this.drawWeatherMap();
     }
 
-    createComponent() {
-        this.component.className = 'weatherMap-container'; 
+    private render() {
+        this.element.className = 'weatherMap-container'; 
         this.windyDiv.id = 'windy';
-        this.component.append(this.windyDiv);
-        this.component.append(this.mapControls.getComponent());
+        this.element.append(this.windyDiv);
+        this.element.append(this.mapControls.getElement());
     }
 
-    renderMap() {
+    drawWeatherMap() {
         const options = {
             key: 'xXzWFyvlQ5v6hx3VoAyja2ss9hpFgVRi',
         
@@ -32,11 +32,13 @@ class WeatherMap {
         // @ts-ignore
         windyInit(options, (windyAPI) => {
             const { store, overlays } = windyAPI;
+
+            this.mapControls.addListner(store);
         });
     }
 
-    getComponent() {
-        return this.component;
+    getElement() {
+        return this.element;
     }
 }
 
