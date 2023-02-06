@@ -8,6 +8,9 @@ module.exports = {
         clean: true,
         filename: "bundle.js",
     },
+    experiments: {
+        topLevelAwait: true
+    },
     module: {
         rules: [
             {
