@@ -2,11 +2,13 @@ import { Map } from 'leaflet';
 import { WeatherMapController } from '../../controller/WeatherMapController';
 import { apiKeyMapForecast, getGeolocation, latLonToDMS } from '../../utils';
 import { BaseComponent } from '../BaseComponent';
+import { Router } from '../Router';
 import MapControls from './mapControls';
 import './weatherMap.css'
 
 interface WeatherMapProps {
     controller: WeatherMapController;
+    router: Router;
 }
 
 const [latitude, longitude] = await getGeolocation();
@@ -25,8 +27,8 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
     private windyDiv!: HTMLDivElement;
     private mapControls!: MapControls;
 
-    constructor(controller: WeatherMapController) {
-        super('weather-map', { controller }, 'div');
+    constructor(controller: WeatherMapController, router: Router) {
+        super('weather-map', { controller, router }, 'div');
     }
 
     protected render() {

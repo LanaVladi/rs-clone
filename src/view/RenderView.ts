@@ -1,8 +1,6 @@
 import { FooterController } from '../controller/FooterController';
 import { HeaderController } from '../controller/HeaderController';
-import { WeatherMapController } from '../controller/WeatherMapController';
-import { WeatherTodayController } from '../controller/WeatherTodayController';
-import MapControls from './weatherMap/mapControls';
+import { Router } from './Router';
 
 class RenderView {
     constructor() {
@@ -11,16 +9,13 @@ class RenderView {
         const main = document.createElement('main');
         main.classList.add('main');
 
-        const headerController = new HeaderController();
-        const weatherTodayController = new WeatherTodayController();
-        const weatherMapController = new WeatherMapController();
+        const router = new Router(main);
+        const headerController = new HeaderController(router);
         const footerController = new FooterController();
 
         root.append(
             headerController.component.element,
             main,
-            weatherTodayController.component.element,
-            weatherMapController.component.element,
             footerController.component.element
         );
         document.body.append(root);
