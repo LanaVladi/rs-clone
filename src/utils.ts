@@ -19,3 +19,32 @@ export async function getGeolocation(): Promise<[number, number]> {
         return [53, 27];
     }
 }
+
+export function convertToDMS(degrees: number) {
+    let d = Math.floor(degrees);
+    let minfloat = (degrees - d) * 60;
+    let m = Math.floor(minfloat);
+    let s = Math.round((minfloat - m) * 60);
+
+    if (s === 60) {
+        m++;
+        s = 0;
+    }
+    if (m === 60) {
+        d++;
+        m = 0;
+    }
+
+    return {
+        degrees: d,
+        minutes: m,
+        seconds: s,
+    };
+}
+
+export function latLonToDMS(lat: number, lon: number) {
+    return {
+        lat: convertToDMS(lat),
+        lon: convertToDMS(lon),
+    };
+}
