@@ -8,7 +8,7 @@
 
 .current-conditions {
     width: 70rem;
-    background-color: var(--color-light-yellow);
+    background-color: var(--color-white);
     border-radius: 1rem;
     margin: 0 auto;
     margin-top: 1rem;
@@ -61,7 +61,7 @@
     width: 70rem;
     padding: 0.5rem;
     border-radius: 1rem;
-    background-color: var(--color-light-yellow);
+    background-color: var(--color-white);
     margin: 0 auto;
 }
 .today-weather-card-title {
@@ -105,7 +105,7 @@
 .today-details {
     padding: 0.5rem;
     border-radius: 1rem;
-    background-color: var(--color-light-yellow);
+    background-color: var(--color-white);
     margin: 0 auto;
     width: 70rem;
     margin-bottom: 1rem;
