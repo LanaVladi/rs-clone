@@ -128,6 +128,10 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
     }
 
     protected addListeners(): void {
+        this.componentRadar.addEventListener('click', () => {
+            this.props.router.goTo('radar');
+        })
+
         this.headerNav.addEventListener('click', (event): void => {
             if (event.target === this.componentRadar) {
                 this.props.router.goTo('radar');
