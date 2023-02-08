@@ -4,7 +4,7 @@ import { apiKeyMapForecast, getGeolocation, latLonToDMS } from '../../utils';
 import { BaseComponent } from '../BaseComponent';
 import { Router } from '../Router';
 import MapControls from './mapControls';
-import './weatherMap.css'
+import './weatherMap.css';
 
 interface WeatherMapProps {
     controller: WeatherMapController;
@@ -40,36 +40,54 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
 
         this.drawWeatherMap(this.windyDiv, this.mapControls);
     }
-    
+
     private async drawWeatherMap(windyDiv: HTMLDivElement, mapControls: MapControls) {
         // @ts-ignore
         windyInit(options, (windyAPI) => {
-            const { picker, utils, broadcast, store, overlays } = windyAPI;
-            const map: Map = windyAPI.map;
-
-            windyDiv.addEventListener('pointerup', (event) => {
-                const { lat, lng: lon } = map.mouseEventToLatLng(event);
-                picker.open({ lat, lon });
-            });
-
-            windyDiv.addEventListener('mousemove', (event) => {
-                const { lat, lng: lon } = map.mouseEventToLatLng(event);
-                const coord = latLonToDMS(lat, lon);
-
-                if (document.getElementById('weather-data-value-display')) {
-                    document.getElementById('weather-data-value-display')?.remove();
-                }
-
-                const valueDisplay = document.createElement('div');
-                valueDisplay.id = 'weather-data-value-display'
-                valueDisplay.innerHTML = `${coord.lat.degrees}°${coord.lat.minutes}'${coord.lat.seconds}", ${coord.lon.degrees}°${coord.lon.minutes}'${coord.lon.seconds}"`;
-                document.body.appendChild(valueDisplay);
-                valueDisplay.style.left = `${event.clientX + 10}px`;
-                valueDisplay.style.top = `${event.clientY + 10}px`;
-            });
-
-            mapControls.addListner(store);
+            this.addListenersToMap(windyDiv, mapControls, windyAPI);
         });
+    }
+
+    private addListenersToMap(windyDiv: HTMLDivElement, mapControls: MapControls, windyAPI: any) {
+        const { picker, utils, broadcast, store, overlays } = windyAPI;
+        const map: Map = windyAPI.map;
+
+        windyDiv.addEventListener('pointerup', (event) => {
+            if (event.target !== document.getElementById('map-container')) {
+                return;
+            }
+            const { lat, lng: lon } = map.mouseEventToLatLng(event);
+            picker.open({ lat, lon });
+        });
+
+        windyDiv.addEventListener('mousemove', (event) => {
+            if (event.target !== document.getElementById('map-container')) {
+                document.getElementById('weather-data-value-display')?.remove();
+                return;
+            }
+
+            const { lat, lng: lon } = map.mouseEventToLatLng(event);
+            const coord = latLonToDMS(lat, lon);
+
+            if (document.getElementById('weather-data-value-display')) {
+                document.getElementById('weather-data-value-display')?.remove();
+            }
+
+            const valueDisplay = document.createElement('div');
+            valueDisplay.id = 'weather-data-value-display';
+            valueDisplay.innerHTML = `${coord.lat.degrees}°${coord.lat.minutes}'${coord.lat.seconds}", ${coord.lon.degrees}°${coord.lon.minutes}'${coord.lon.seconds}"`;
+            document.body.appendChild(valueDisplay);
+            valueDisplay.style.left = `${event.clientX + 10}px`;
+            valueDisplay.style.top = `${event.clientY + 10}px`;
+        });
+
+        windyDiv.addEventListener('mouseout', () => {
+            if (document.getElementById('weather-data-value-display')) {
+                document.getElementById('weather-data-value-display')?.remove();
+            }
+        });
+
+        mapControls.addListner(store);
     }
 }
 
