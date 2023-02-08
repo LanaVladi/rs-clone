@@ -1,3 +1,5 @@
+import { ICoordinates } from "./types";
+
 export const apiKeyMapForecast = 'xXzWFyvlQ5v6hx3VoAyja2ss9hpFgVRi'; // windy.com Map Forecast API
 export const baseLinkMapForecast = `https://api.windy.com/assets/map-forecast/`;
 
@@ -42,9 +44,18 @@ export function convertToDMS(degrees: number) {
     };
 }
 
-export function latLonToDMS(lat: number, lon: number) {
+export function latLonToDMS(lat: number, lon: number): ICoordinates {
     return {
         lat: convertToDMS(lat),
         lon: convertToDMS(lon),
     };
+}
+
+export function displayPosition(coord: ICoordinates, event: MouseEvent): void {
+    const valueDisplay = document.createElement('div');
+    valueDisplay.id = 'weather-data-value-display';
+    valueDisplay.innerHTML = `${coord.lat.degrees}°${coord.lat.minutes}'${coord.lat.seconds}", ${coord.lon.degrees}°${coord.lon.minutes}'${coord.lon.seconds}"`;
+    document.body.appendChild(valueDisplay);
+    valueDisplay.style.left = `${event.clientX + 10}px`;
+    valueDisplay.style.top = `${event.clientY + 10}px`;
 }

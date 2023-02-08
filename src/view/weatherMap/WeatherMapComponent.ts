@@ -1,6 +1,6 @@
 import { Map } from 'leaflet';
 import { WeatherMapController } from '../../controller/WeatherMapController';
-import { apiKeyMapForecast, getGeolocation, latLonToDMS } from '../../utils';
+import { apiKeyMapForecast, displayPosition, getGeolocation, latLonToDMS } from '../../utils';
 import { BaseComponent } from '../BaseComponent';
 import { Router } from '../Router';
 import MapControls from './mapControls';
@@ -66,19 +66,13 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
                 return;
             }
 
-            const { lat, lng: lon } = map.mouseEventToLatLng(event);
-            const coord = latLonToDMS(lat, lon);
-
             if (document.getElementById('weather-data-value-display')) {
                 document.getElementById('weather-data-value-display')?.remove();
             }
 
-            const valueDisplay = document.createElement('div');
-            valueDisplay.id = 'weather-data-value-display';
-            valueDisplay.innerHTML = `${coord.lat.degrees}°${coord.lat.minutes}'${coord.lat.seconds}", ${coord.lon.degrees}°${coord.lon.minutes}'${coord.lon.seconds}"`;
-            document.body.appendChild(valueDisplay);
-            valueDisplay.style.left = `${event.clientX + 10}px`;
-            valueDisplay.style.top = `${event.clientY + 10}px`;
+            const { lat, lng: lon } = map.mouseEventToLatLng(event);
+            const coord = latLonToDMS(lat, lon);
+            displayPosition(coord, event);
         });
 
         windyDiv.addEventListener('mouseout', () => {
