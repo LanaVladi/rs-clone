@@ -1,12 +1,22 @@
 .weather-map {
-    width: 700px;
-    height: 500px;
+    width: 100%;
+    height: 800px;
 }
 
 #windy {
     margin: 0 auto;
     width: 80%;
     height: 70%;
+}
+
+#windy #mobile-ovr-select {
+    display: none;
+}
+
+#windy #logo {
+    transform: scale(0.6, 0.6);
+    left: 7%;
+    top: -5px;
 }
 
 #weather-data-value-display {
@@ -21,3 +31,125 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
 }
+
+#windy #bottom #progress-bar {
+    bottom: 15px;
+}
+
+#windy #bottom #progress-bar .progress-line {
+    height: 40px;
+}
+
+#accTime-legend {
+    position: absolute;
+    left: 45px;
+    right: 0;
+    top: 6px;
+    white-space: nowrap;
+    background-color:rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    box-shadow: 0 0 4px 0 black;
+}
+
+#accTime-legend div {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 6px 0 0 0px;
+    font-size: 12px;
+    line-height: 1;
+    height: 23px;
+    white-space: nowrap;
+    overflow: hidden;
+
+}
+
+#accTime-legend div:not(:first-child) {
+    border-left: 1px solid rgba(68,65,65,0.84);
+}
+
+#windy #legend-mobile {
+    position: absolute;
+    width: 40%;
+    left: auto;
+    font-size: 1.55rem;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+    box-shadow: 0 0 4px 0 black;
+}
+
+#windy #bottom #accumulations {
+    left: 8px;
+    bottom: 0;
+    margin-bottom: 0;
+}
+
+#windy .timecode {
+    font-size: 1.2rem;
+}
+
+#windy #embed-zoom {
+    top: 0;
+}
+
+#windy #embed-zoom .zoom-ctrl {
+    font-size: 2rem;
+    width: 35px;
+    height: 35px;
+    border-radius: 35px;
+}
+
+.weatherMap-controls {
+    margin: 0 auto;
+    width: 20%;
+    position: absolute;
+    top: 60%;
+    left: 11%;
+}
+
+.weatherMap-controls input {
+    width: auto;
+}
+
+.layers-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.layers-buttons button {
+    transition: background-color .3s;
+    line-height: 1.4;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-top: 1.5px;
+    border-radius: 1.2em;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 4px 0 black;
+}
+
+.layers-buttons button:hover {
+    background-color: rgba(68,65,65,0.84);
+}
+
+.layers-buttons button.active {
+    background-color: rgb(212, 149, 0);
+}
+
+.layers-buttons button.active:hover {
+    background-color: rgb(212, 149, 0);
+}
+
+.wind-anim-checkbox-container {
+    display: flex;
+}
+

@@ -1,4 +1,3 @@
-import AccTimeForForecastWeatherSelect from "./accTimeForForecastWeatherSelect";
 import AltitudeInput from "./altitudeInput";
 import LayersButtons from "./layersButtons";
 import WindAnimCheckbox from "./windAnimCheckbox";
@@ -8,13 +7,11 @@ class MapControls {
     private layersButtons: LayersButtons;
     private altitudeInput: AltitudeInput;
     private windAnimCheckbox: WindAnimCheckbox;
-    private accTimeForForecastWeatherSelect: AccTimeForForecastWeatherSelect;
 
     constructor() {
         this.layersButtons = new LayersButtons();
         this.altitudeInput = new AltitudeInput();
         this.windAnimCheckbox = new WindAnimCheckbox();
-        this.accTimeForForecastWeatherSelect = new AccTimeForForecastWeatherSelect();
 
         this.render();
     }
@@ -25,7 +22,6 @@ class MapControls {
             this.layersButtons.getElement(),
             this.altitudeInput.getElement(),
             this.windAnimCheckbox.getElement(),
-            this.accTimeForForecastWeatherSelect.getElement()
         );
     }
 
@@ -34,7 +30,6 @@ class MapControls {
         this.layersButtons.addListner(store);
         this.altitudeInput.addListner(store);
         this.windAnimCheckbox.addListner(store);
-        this.accTimeForForecastWeatherSelect.addListner(store);
     }
 
     getElement() {
