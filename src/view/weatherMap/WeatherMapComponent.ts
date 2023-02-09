@@ -12,7 +12,7 @@ interface WeatherMapProps {
     controller: WeatherMapController;
     router: Router;
 }
-
+const lang = 'en';
 const [latitude, longitude] = await getGeolocation();
 
 const options = {
@@ -44,6 +44,7 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
     private async drawWeatherMap(windyDiv: HTMLDivElement) {
         windyInit(options, (windyAPI: IWindyAPI) => {
             const { picker, utils, broadcast, store, overlays, map } = windyAPI;
+            store.set('lang', lang);
 
             const mapControls = new MapControls(store, overlays);
             this.element.append(mapControls.getElement());
