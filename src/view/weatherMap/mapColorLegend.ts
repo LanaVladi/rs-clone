@@ -1,13 +1,4 @@
-type Day = {
-    display: string;
-    displayLong: DisplayLongDay;
-    day: number;
-    middayTs: number;
-    start: number;
-    year: number;
-};
-
-type DisplayLongDay = 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SUN' | 'SAT';
+import { ICalendarData, IStore } from '../../types';
 
 const dayName = new Map([
     ['MON', 'ПН'],
@@ -19,8 +10,7 @@ const dayName = new Map([
     ['SAT', 'ВС'],
 ]);
 
-let lang = 'en';
-
+const lang = 'en';
 
 class MapColorLegend {
     private element: HTMLDivElement = document.createElement('div');
@@ -28,16 +18,16 @@ class MapColorLegend {
     constructor() {
         this.element.id = 'accTime-legend';
     }
-    //@ts-ignore
-    createCalendar(store) {
-        const calendar = store.get('calendar');
-        calendar.days.forEach((day: Day) => {
+
+    createLegend(store: IStore) {
+        const calendar = store.get('calendar') as ICalendarData;
+        calendar.days.forEach((day) => {
             const dayDiv = document.createElement('div');
-            dayDiv.style.width = `${100 / calendar.days.length}%`
+            dayDiv.style.width = `${100 / calendar.days.length}%`;
             dayDiv.innerText = lang === 'en' ? day.displayLong : dayName.get(day.displayLong) || '';
             this.element.append(dayDiv);
         });
-        
+
         const progressBar = document.getElementById('progress-bar');
         progressBar?.append(this.element);
     }

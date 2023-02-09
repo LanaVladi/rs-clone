@@ -1,14 +1,16 @@
+import { IStore } from "../../types";
+
 class LayersButtons {
     private element: HTMLDivElement = document.createElement('div');
     private windLayerBtn: HTMLButtonElement = document.createElement('button');
     private tempLayerBtn: HTMLButtonElement = document.createElement('button');
     private pressLayerBtn: HTMLButtonElement = document.createElement('button');
 
-    constructor() {
-        this.render();
+    constructor(store: IStore) {
+        this.render(store);
     }
 
-    private render() {
+    private render(store: IStore) {
         this.element.className = 'layers-buttons';
         this.windLayerBtn.className = 'button layer-button active';
         this.windLayerBtn.innerText = 'Wind';
@@ -20,10 +22,11 @@ class LayersButtons {
         this.pressLayerBtn.innerText = 'Pressure';
 
         this.element.append(this.windLayerBtn, this.tempLayerBtn, this.pressLayerBtn);
+
+        this.addListner(store)
     }
 
-    // @ts-ignore
-    addListner(store) {
+    private addListner(store: IStore) {
         this.windLayerBtn.addEventListener('click', () => {
             if (store.get('overlay') !== 'wind') {
                 this.windLayerBtn.classList.add('active');

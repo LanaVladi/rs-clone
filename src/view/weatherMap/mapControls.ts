@@ -1,3 +1,4 @@
+import { IStore } from "../../types";
 import AltitudeInput from "./altitudeInput";
 import LayersButtons from "./layersButtons";
 import WindAnimToggler from "./windAnimToggler";
@@ -8,10 +9,10 @@ class MapControls {
     private altitudeInput: AltitudeInput;
     private windAnimToggler: WindAnimToggler;
 
-    constructor() {
-        this.layersButtons = new LayersButtons();
-        this.altitudeInput = new AltitudeInput();
-        this.windAnimToggler = new WindAnimToggler();
+    constructor(store: IStore) {
+        this.layersButtons = new LayersButtons(store);
+        this.altitudeInput = new AltitudeInput(store);
+        this.windAnimToggler = new WindAnimToggler(store);
 
         this.render();
     }
@@ -23,13 +24,6 @@ class MapControls {
             this.altitudeInput.getElement(),
             this.windAnimToggler.getElement(),
         );
-    }
-
-    // @ts-ignore
-    addListner(store) {
-        this.layersButtons.addListner(store);
-        this.altitudeInput.addListner(store);
-        this.windAnimToggler.addListner(store);
     }
 
     getElement() {

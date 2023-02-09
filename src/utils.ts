@@ -24,7 +24,7 @@ export async function getGeolocation(): Promise<[number, number]> {
 
 export function convertToDMS(degrees: number) {
     let d = Math.floor(degrees);
-    let minfloat = (degrees - d) * 60;
+    const minfloat = (degrees - d) * 60;
     let m = Math.floor(minfloat);
     let s = Math.round((minfloat - m) * 60);
 

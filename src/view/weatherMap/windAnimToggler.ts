@@ -1,27 +1,29 @@
-let lang = 'en';
+import { IStore } from '../../types';
+
+const lang = 'en';
 
 class WindAnimToggler {
     private element: HTMLDivElement = document.createElement('div');
     private toggler: HTMLDivElement = document.createElement('div');
     private label: HTMLDivElement = document.createElement('div');
 
-    constructor() {
-        this.render();
+    constructor(store: IStore) {
+        this.render(store);
     }
 
-    private render() {
+    private render(store: IStore) {
         this.element.className = 'wind-anim-toggler';
         this.toggler.id = 'windAnim';
         this.toggler.className = 'switch-btn';
 
         this.label.className = 'wind-anim-label';
         this.label.innerText = lang === 'en' ? 'Wind animation' : 'Анимация ветра';
-
         this.element.append(this.toggler, this.label);
+
+        this.addListner(store);
     }
 
-    // @ts-ignore
-    addListner(store) {
+    private addListner(store: IStore) {
         if (store.get('particlesAnim') === 'on') {
             this.toggler.classList.add('switch-on');
         }

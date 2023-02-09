@@ -1,5 +1,6 @@
 import { Map } from 'leaflet';
 import { WeatherMapController } from '../../controller/WeatherMapController';
+import { IPicker, IWindyAPI } from '../../types';
 import { apiKeyMapForecast, displayPosition, getGeolocation, latLonToDMS } from '../../utils';
 import { BaseComponent } from '../BaseComponent';
 import { Router } from '../Router';
@@ -26,8 +27,6 @@ const options = {
 
 class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
     private windyDiv!: HTMLDivElement;
-    private mapControls!: MapControls;
-    private mapColorLegend!: MapColorLegend;
 
     constructor(controller: WeatherMapController, router: Router) {
         super('weather-map', { controller, router }, 'div');
@@ -37,25 +36,26 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
         this.windyDiv = document.createElement('div');
         this.windyDiv.id = 'windy';
 
-        this.mapControls = new MapControls();
-        this.mapColorLegend = new MapColorLegend();
-        this.element.append(this.windyDiv, this.mapControls.getElement());
+        this.element.append(this.windyDiv);
 
-        this.drawWeatherMap(this.windyDiv, this.mapControls, this.mapColorLegend);
+        this.drawWeatherMap(this.windyDiv);
     }
 
-    private async drawWeatherMap(windyDiv: HTMLDivElement, mapControls: MapControls, mapColorLegend: MapColorLegend) {
-        // @ts-ignore
-        windyInit(options, (windyAPI) => {
-            const { picker, utils, broadcast, store, overlays } = windyAPI;
-            const map: Map = windyAPI.map;
+    private async drawWeatherMap(windyDiv: HTMLDivElement) {
+        windyInit(options, (windyAPI: IWindyAPI) => {
+            const { picker, utils, broadcast, store, overlays, map } = windyAPI;
 
-            this.addListenersToMap(windyDiv, mapControls, picker, store, map);
-            mapColorLegend.createCalendar(store);
+            const mapControls = new MapControls(store);
+            this.element.append(mapControls.getElement());
+
+            const mapColorLegend = new MapColorLegend();
+            mapColorLegend.createLegend(store);
+
+            this.addListenersToMap(windyDiv, picker, map);
         });
     }
 
-    private addListenersToMap(windyDiv: HTMLDivElement, mapControls: MapControls, picker: any, store: any, map: Map) {
+    private addListenersToMap(windyDiv: HTMLDivElement, picker: IPicker, map: Map) {
         windyDiv.addEventListener('pointerup', (event) => {
             if (event.target !== document.getElementById('map-container')) {
                 return;
@@ -84,8 +84,6 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
                 document.getElementById('weather-data-value-display')?.remove();
             }
         });
-
-        mapControls.addListner(store);
     }
 }
 
