@@ -11,8 +11,8 @@ class MapControls {
 
     constructor(store: IStore, overlays: IOverlays) {
         this.layersButtons = new LayersButtons(store, overlays);
-        this.altitudeInput = new AltitudeInput(store);
         this.windAnimToggler = new WindAnimToggler(store);
+        this.altitudeInput = new AltitudeInput(store);
 
         this.render();
     }
@@ -21,8 +21,8 @@ class MapControls {
         this.element.className = 'weatherMap-controls';
         this.element.append(
             this.layersButtons.getElement(),
-            this.altitudeInput.getElement(),
             this.windAnimToggler.getElement(),
+            this.altitudeInput.getElement(),
         );
     }
 
