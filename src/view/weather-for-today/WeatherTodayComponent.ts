@@ -9,7 +9,6 @@ interface WeatherForTodayProps {
 export class WeatherTodayComponent extends BaseComponent<WeatherForTodayProps> {
     private currentConditionsHeaderLocation!: HTMLHeadingElement;
     private boxTempValue!: HTMLSpanElement;
-    private boxTempLabel!: HTMLSpanElement;
     private boxTempPhrase!: HTMLSpanElement;
     private todayWeatherCardTitle!: HTMLHeadingElement;
     private title!: HTMLHeadingElement;
@@ -49,10 +48,6 @@ export class WeatherTodayComponent extends BaseComponent<WeatherForTodayProps> {
         this.boxTempValue.className = 'box-temp-value';
         this.boxTempValue.textContent = '+5 ';
 
-        this.boxTempLabel = document.createElement('span');
-        this.boxTempLabel.className = 'box-temp-label';
-        this.boxTempLabel.textContent = 'День -13° • Ночь -28°';
-
         this.boxTempPhrase = document.createElement('div');
         this.boxTempPhrase.className = 'box-temp-phrase';
         this.boxTempPhrase.textContent = 'Ясно';
@@ -60,7 +55,7 @@ export class WeatherTodayComponent extends BaseComponent<WeatherForTodayProps> {
         currentConditionsHeader.append(this.currentConditionsHeaderLocation, currentConditionsHeaderTimestamp);
 
         currentConditionsBoxIcon.append(currentConditionsIcon);
-        currentConditionsBoxTemp.append(this.boxTempValue, this.boxTempPhrase, this.boxTempLabel);
+        currentConditionsBoxTemp.append(this.boxTempValue, this.boxTempPhrase);
         currentConditionsBox.append(currentConditionsBoxTemp, currentConditionsBoxIcon);
         currentConditions.append(currentConditionsHeader, currentConditionsBox);
 
