@@ -1,17 +1,17 @@
 import AltitudeInput from "./altitudeInput";
 import LayersButtons from "./layersButtons";
-import WindAnimCheckbox from "./windAnimCheckbox";
+import WindAnimToggler from "./windAnimToggler";
 
 class MapControls {
     private element: HTMLDivElement = document.createElement('div');
     private layersButtons: LayersButtons;
     private altitudeInput: AltitudeInput;
-    private windAnimCheckbox: WindAnimCheckbox;
+    private windAnimToggler: WindAnimToggler;
 
     constructor() {
         this.layersButtons = new LayersButtons();
         this.altitudeInput = new AltitudeInput();
-        this.windAnimCheckbox = new WindAnimCheckbox();
+        this.windAnimToggler = new WindAnimToggler();
 
         this.render();
     }
@@ -21,7 +21,7 @@ class MapControls {
         this.element.append(
             this.layersButtons.getElement(),
             this.altitudeInput.getElement(),
-            this.windAnimCheckbox.getElement(),
+            this.windAnimToggler.getElement(),
         );
     }
 
@@ -29,7 +29,7 @@ class MapControls {
     addListner(store) {
         this.layersButtons.addListner(store);
         this.altitudeInput.addListner(store);
-        this.windAnimCheckbox.addListner(store);
+        this.windAnimToggler.addListner(store);
     }
 
     getElement() {
