@@ -1,4 +1,4 @@
-import { IStore } from "../../types";
+import { IOverlays, IStore } from "../../types";
 import AltitudeInput from "./altitudeInput";
 import LayersButtons from "./layersButtons";
 import WindAnimToggler from "./windAnimToggler";
@@ -9,8 +9,8 @@ class MapControls {
     private altitudeInput: AltitudeInput;
     private windAnimToggler: WindAnimToggler;
 
-    constructor(store: IStore) {
-        this.layersButtons = new LayersButtons(store);
+    constructor(store: IStore, overlays: IOverlays) {
+        this.layersButtons = new LayersButtons(store, overlays);
         this.altitudeInput = new AltitudeInput(store);
         this.windAnimToggler = new WindAnimToggler(store);
 

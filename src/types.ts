@@ -39,11 +39,18 @@ export interface IBroadcast {
 }
 
 export interface IOverlays {
+    wind: IOverlaysMethods;
+    temp: IOverlaysMethods;
+    pressure: IOverlaysMethods
+}
+
+export interface IOverlaysMethods {
     convertNumber(value: unknown): number;
     convertValue(value: unknown): string;
     cycleMetric(): void;
-    listMetrics(): void;
+    listMetrics(): string[];
     setMetric(metric: string): void;
+    metric: string;
 }
 
 export interface IUtils {
@@ -112,3 +119,5 @@ export interface IMinifestFile {
     primary_refs: number[];
     secondary_refs: number[];
 }
+
+export type Layer = 'wind' | 'temp' | 'pressure';

@@ -45,7 +45,7 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
         windyInit(options, (windyAPI: IWindyAPI) => {
             const { picker, utils, broadcast, store, overlays, map } = windyAPI;
 
-            const mapControls = new MapControls(store);
+            const mapControls = new MapControls(store, overlays);
             this.element.append(mapControls.getElement());
 
             const mapColorLegend = new MapColorLegend();
