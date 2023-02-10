@@ -3,6 +3,7 @@ import AltitudeInput from './altitudeInput';
 import FindMeButton from './findMeButton';
 import LayersButtons from './layersButtons';
 import MapSearchForm from './mapSearchForm';
+import ScreenSizeButtons from './screenSizeButtnos';
 import WindAnimToggler from './windAnimToggler';
 
 class MapControls {
@@ -12,6 +13,7 @@ class MapControls {
     private altitudeInput: AltitudeInput;
     private windAnimToggler: WindAnimToggler;
     private findMeButton: FindMeButton;
+    private screenSizeButtnos: ScreenSizeButtons;
 
     constructor(windyAPI: IWindyAPI) {
         const { picker, store, overlays, map } = windyAPI;
@@ -20,6 +22,7 @@ class MapControls {
         this.windAnimToggler = new WindAnimToggler(store);
         this.altitudeInput = new AltitudeInput(store);
         this.findMeButton = new FindMeButton(map);
+        this.screenSizeButtnos = new ScreenSizeButtons(map);
 
         this.render();
     }
@@ -30,7 +33,8 @@ class MapControls {
             this.layersButtons.getElement(),
             this.windAnimToggler.getElement(),
             this.altitudeInput.getElement(),
-            this.findMeButton.getElement()
+            this.findMeButton.getElement(),
+            ...this.screenSizeButtnos.getElements()
         );
     }
 
