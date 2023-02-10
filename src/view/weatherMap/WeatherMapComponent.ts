@@ -13,15 +13,15 @@ interface WeatherMapProps {
     router: Router;
 }
 const lang = 'en';
-const [latitude, longitude] = await getGeolocation();
+const [startLat, startLon] = await getGeolocation();
 
 const options = {
     key: apiKeyMapForecast,
 
     verbose: true,
 
-    lat: latitude,
-    lon: longitude,
+    lat: startLat,
+    lon: startLon,
     zoom: 5,
 };
 
@@ -43,11 +43,11 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
 
     private async drawWeatherMap(windyDiv: HTMLDivElement) {
         windyInit(options, (windyAPI: IWindyAPI) => {
-            const { picker, utils, broadcast, store, overlays, map } = windyAPI;
+            const { picker, store, map } = windyAPI;
             store.set('lang', lang);
 
-            const mapControls = new MapControls(store, overlays);
-            this.element.append(mapControls.getElement());
+            const mapControls = new MapControls(windyAPI);
+            this.element.append(...mapControls.getElements());
 
             const mapColorLegend = new MapColorLegend();
             mapColorLegend.createLegend(store);

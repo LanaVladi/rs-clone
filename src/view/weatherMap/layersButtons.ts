@@ -1,4 +1,6 @@
-import { IOverlays, IStore, Layer } from "../../types";
+import { IOverlays, IStore, Layer } from '../../types';
+
+const lang = 'en';
 class LayersButtons {
     private element: HTMLDivElement = document.createElement('div');
     private windLayerBtn: HTMLButtonElement = document.createElement('button');
@@ -15,15 +17,15 @@ class LayersButtons {
         this.layerMetricSelect.className = 'layer-metric-select';
         this.windLayerBtn.className = 'button layer-button active';
         this.windLayerBtn.id = 'wind';
-        this.windLayerBtn.innerText = 'Wind';
+        this.windLayerBtn.innerText = lang === 'en' ? 'Wind' : 'Ветер';
 
         this.tempLayerBtn.className = 'button layer-button';
         this.tempLayerBtn.id = 'temp';
-        this.tempLayerBtn.innerText = 'Temperature';
+        this.tempLayerBtn.innerText = lang === 'en' ? 'Temperature' : 'Температура';
 
         this.pressLayerBtn.className = 'button layer-button';
         this.pressLayerBtn.id = 'pressure';
-        this.pressLayerBtn.innerText = 'Pressure';
+        this.pressLayerBtn.innerText = lang === 'en' ? 'Pressure' : 'Давление';
 
         this.element.append(this.windLayerBtn, this.tempLayerBtn, this.pressLayerBtn, this.layerMetricSelect);
 
@@ -44,7 +46,7 @@ class LayersButtons {
                 this.addMetricSelect('wind', overlays);
             }
         });
-    
+
         this.tempLayerBtn.addEventListener('click', () => {
             if (store.get('overlay') !== 'temp') {
                 this.windLayerBtn.classList.remove('active');
@@ -55,7 +57,7 @@ class LayersButtons {
                 this.addMetricSelect('temp', overlays);
             }
         });
-    
+
         this.pressLayerBtn.addEventListener('click', () => {
             if (store.get('overlay') !== 'pressure') {
                 this.windLayerBtn.classList.remove('active');
@@ -71,13 +73,13 @@ class LayersButtons {
             const value = this.layerMetricSelect.value;
             const layer = this.getLayer();
             overlays[layer].setMetric(value);
-        })
+        });
     }
 
     private getLayer(): Layer {
         if (this.element.querySelector('.active')) {
             const activeElem = this.element.querySelector('.active');
-            
+
             if (activeElem) {
                 const layer = activeElem.id as Layer;
                 return layer;

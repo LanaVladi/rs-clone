@@ -41,7 +41,7 @@ export interface IBroadcast {
 export interface IOverlays {
     wind: IOverlaysMethods;
     temp: IOverlaysMethods;
-    pressure: IOverlaysMethods
+    pressure: IOverlaysMethods;
 }
 
 export interface IOverlaysMethods {
