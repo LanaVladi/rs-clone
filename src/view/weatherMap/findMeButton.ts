@@ -1,7 +1,6 @@
 import { Map } from 'leaflet';
 import { getGeolocation } from '../../utils';
 
-const [startLat, startLon] = await getGeolocation(true);
 const ZOOM_TO_SELF_POSITION = 10;
 
 class FindMeButton {
@@ -18,7 +17,8 @@ class FindMeButton {
     }
 
     private addListner(map: Map) {
-        this.element.addEventListener('click', () => {
+        this.element.addEventListener('click', async () => {
+            const [startLat, startLon] = await getGeolocation(true);
             map.panTo([startLat, startLon]);
             map.setZoom(ZOOM_TO_SELF_POSITION);
         });
