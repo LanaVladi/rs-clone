@@ -1,6 +1,6 @@
 import { BaseController } from './BaseController';
-import { SearcherComponent } from '../view/components/header/SearcherComponent';
 import { ObserverToModel } from '../model/ObserverToModel';
+import { SearcherComponent } from '../view/components/header/SearcherComponent';
 
 export class SearcherController extends BaseController<SearcherComponent> {
     public component: SearcherComponent;
