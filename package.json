@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-       "url": "git+https://github.com/LanaVladi/rs-clone.git"
+    "url": "git+https://github.com/LanaVladi/rs-clone.git"
   },
   "keywords": [],
   "author": "",
@@ -41,5 +41,8 @@
   "bugs": {
     "url": "https://github.com/LanaVladi/rs-clone/issues"
   },
-  "homepage": "https://github.com/LanaVladi/rs-clone#readme"
+  "homepage": "https://github.com/LanaVladi/rs-clone#readme",
+  "dependencies": {
+    "@types/dom-speech-recognition": "^0.0.1"
+  }
 }
