@@ -2,6 +2,11 @@ const SPEECH_RATE = 0.75;
 const NUMBER_ALTERNATIVE_MATCHES = 1;
 const WEIGHT_VALUE_THIS_GRAMMAR = 1;
 
+const enum lang {
+    ru = 'ru-RU',
+    en = 'en-US'
+}
+
 const words = {
     weather: 'погода',
     forecast: 'прогноз',
@@ -20,9 +25,9 @@ class VoiceControl {
     private recognition: SpeechRecognition;
     private speechRecognitionList!: SpeechGrammarList;
     private synthesis: SpeechSynthesis;
-    private lang: string;
+    private lang: lang;
 
-    constructor(lang: string) {
+    constructor(lang: lang) {
         this.lang = lang;
         this.recognition = new webkitSpeechRecognition();
         this.speechRecognitionList = new webkitSpeechGrammarList();
@@ -38,7 +43,7 @@ class VoiceControl {
     }
 
     private init(): void {
-        const wordsList = this.lang === 'en-US' ? Object.keys(words) : Object.values(words);
+        const wordsList = this.lang === lang.en ? Object.keys(words) : Object.values(words);
         const grammar = `#JSGF V1.0; grammar words; public <word> = ${wordsList.join(' | ')} ;`;
         this.speechRecognitionList.addFromString(grammar, WEIGHT_VALUE_THIS_GRAMMAR);
         this.recognition.lang = this.lang;
