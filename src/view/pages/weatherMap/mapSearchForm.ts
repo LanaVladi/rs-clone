@@ -1,8 +1,7 @@
 import { Map } from 'leaflet';
-import { IPicker } from '../../types';
-import { getCoordinates } from '../../utils';
-
-const lang = 'en';
+import { textToSearchButton, textToSearchInputPlaceholder } from '../../../constants';
+import { IPicker } from '../../../types';
+import { getCoordinates } from '../../../utils';
 
 class MapSearchForm {
     private element: HTMLDivElement = document.createElement('div');
@@ -20,11 +19,11 @@ class MapSearchForm {
         this.form.id = 'mapSearchForm';
         this.input.className = 'map-search-input';
         this.input.type = 'text';
-        this.input.placeholder = lang === 'en' ? 'e.g. Bangkok...' : 'например, Бангкок...';
+        this.input.placeholder = textToSearchInputPlaceholder;
         this.input.id = 'location';
         this.button.className = 'button map-search-button';
         this.button.type = 'submit';
-        this.button.innerText = lang === 'en' ? 'Search' : 'Поиск';
+        this.button.innerText = textToSearchButton;
 
         this.form.append(this.input, this.button);
         this.element.append(this.form);

@@ -1,7 +1,6 @@
 import { Map } from 'leaflet';
-import { getGeolocation } from '../../utils';
-
-const ZOOM_TO_SELF_POSITION = 10;
+import { ZOOM_TO_SELF_POSITION } from '../../../constants';
+import { getGeolocation } from '../../../utils';
 
 class FindMeButton {
     private element: HTMLDivElement = document.createElement('div');

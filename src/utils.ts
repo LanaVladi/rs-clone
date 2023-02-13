@@ -57,15 +57,6 @@ export function latLonToDMS(lat: number, lon: number): ICoordinates {
     };
 }
 
-export function displayPosition(coord: ICoordinates, event: MouseEvent): void {
-    const valueDisplay = document.createElement('div');
-    valueDisplay.id = 'weather-data-value-display';
-    valueDisplay.innerHTML = `${coord.lat.degrees}°${coord.lat.minutes}'${coord.lat.seconds}", ${coord.lon.degrees}°${coord.lon.minutes}'${coord.lon.seconds}"`;
-    document.body.appendChild(valueDisplay);
-    valueDisplay.style.left = `${event.clientX + 10}px`;
-    valueDisplay.style.top = `${event.clientY + 10}px`;
-}
-
 export async function getCoordinates(location: string): Promise<[number, number]> {
     try {
         const response = await fetch(

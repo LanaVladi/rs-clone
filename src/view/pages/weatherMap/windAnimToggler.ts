@@ -1,6 +1,5 @@
-import { IStore } from '../../types';
-
-const lang = 'en';
+import { textToWindAnimToggler } from '../../../constants';
+import { IStore } from '../../../types';
 
 class WindAnimToggler {
     private element: HTMLDivElement = document.createElement('div');
@@ -17,7 +16,7 @@ class WindAnimToggler {
         this.toggler.className = 'switch-btn';
 
         this.label.className = 'wind-anim-label';
-        this.label.innerText = lang === 'en' ? 'Wind animation' : 'Анимация ветра';
+        this.label.innerText = textToWindAnimToggler;
         this.element.append(this.toggler, this.label);
 
         this.addListner(store);

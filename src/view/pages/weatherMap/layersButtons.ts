@@ -1,6 +1,6 @@
-import { IOverlays, IStore, Layer } from '../../types';
+import { enTextToLayersButtons, lang, ruTextToLayersButtons } from '../../../constants';
+import { IOverlays, IStore, Layer } from '../../../types';
 
-const lang = 'en';
 class LayersButtons {
     private element: HTMLDivElement = document.createElement('div');
     private windLayerBtn: HTMLButtonElement = document.createElement('button');
@@ -17,15 +17,15 @@ class LayersButtons {
         this.layerMetricSelect.className = 'layer-metric-select';
         this.windLayerBtn.className = 'button layer-button active';
         this.windLayerBtn.id = 'wind';
-        this.windLayerBtn.innerText = lang === 'en' ? 'Wind' : 'Ветер';
+        this.windLayerBtn.innerText = lang === 'en' ? enTextToLayersButtons.wind : ruTextToLayersButtons.wind;
 
         this.tempLayerBtn.className = 'button layer-button';
         this.tempLayerBtn.id = 'temp';
-        this.tempLayerBtn.innerText = lang === 'en' ? 'Temperature' : 'Температура';
+        this.tempLayerBtn.innerText = lang === 'en' ? enTextToLayersButtons.temp : ruTextToLayersButtons.temp;
 
         this.pressLayerBtn.className = 'button layer-button';
         this.pressLayerBtn.id = 'pressure';
-        this.pressLayerBtn.innerText = lang === 'en' ? 'Pressure' : 'Давление';
+        this.pressLayerBtn.innerText = lang === 'en' ? enTextToLayersButtons.press : ruTextToLayersButtons.press;
 
         this.element.append(this.windLayerBtn, this.tempLayerBtn, this.pressLayerBtn, this.layerMetricSelect);
 

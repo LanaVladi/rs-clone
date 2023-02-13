@@ -1,16 +1,5 @@
-import { ICalendarData, IStore } from '../../types';
-
-const dayName = new Map([
-    ['MON', 'ПН'],
-    ['TUE', 'ВТ'],
-    ['WED', 'СР'],
-    ['THU', 'ЧТ'],
-    ['FRI', 'ПТ'],
-    ['SUN', 'СБ'],
-    ['SAT', 'ВС'],
-]);
-
-const lang = 'en';
+import { dayName, lang } from '../../../constants';
+import { ICalendarData, IStore } from '../../../types';
 
 class MapColorLegend {
     private element: HTMLDivElement = document.createElement('div');

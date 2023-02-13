@@ -1,4 +1,4 @@
-import { IWindyAPI } from '../../types';
+import { IWindyAPI } from '../../../types';
 import AltitudeInput from './altitudeInput';
 import FindMeButton from './findMeButton';
 import LayersButtons from './layersButtons';

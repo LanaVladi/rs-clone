@@ -1,9 +1,10 @@
 import { Map } from 'leaflet';
-import { WeatherMapController } from '../../controller/WeatherMapController';
-import { IPicker, IWindyAPI } from '../../types';
-import { apiKeyMapForecast, displayPosition, getGeolocation, latLonToDMS } from '../../utils';
-import { BaseComponent } from '../BaseComponent';
-import { Router } from '../Router';
+import { lang } from '../../../constants';
+import { WeatherMapController } from '../../../controller/WeatherMapController';
+import { ICoordinates, IPicker, IWindyAPI } from '../../../types';
+import { apiKeyMapForecast, getGeolocation, latLonToDMS } from '../../../utils';
+import { BaseComponent } from '../../BaseComponent';
+import { Router } from '../../Router';
 import MapColorLegend from './mapColorLegend';
 import MapControls from './mapControls';
 import './weatherMap.css';
@@ -12,7 +13,6 @@ interface WeatherMapProps {
     controller: WeatherMapController;
     router: Router;
 }
-const lang = 'en';
 const [startLat, startLon] = await getGeolocation();
 
 const options = {
@@ -56,6 +56,15 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
         });
     }
 
+    private displayPosition(coord: ICoordinates, event: MouseEvent): void {
+        const valueDisplay = document.createElement('div');
+        valueDisplay.id = 'weather-data-value-display';
+        valueDisplay.innerHTML = `${coord.lat.degrees}°${coord.lat.minutes}'${coord.lat.seconds}", ${coord.lon.degrees}°${coord.lon.minutes}'${coord.lon.seconds}"`;
+        document.body.appendChild(valueDisplay);
+        valueDisplay.style.left = `${event.clientX + 10}px`;
+        valueDisplay.style.top = `${event.clientY + 10}px`;
+    }
+
     private addListenersToMap(windyDiv: HTMLDivElement, picker: IPicker, map: Map) {
         windyDiv.addEventListener('pointerup', (event) => {
             if (event.target !== document.getElementById('map-container')) {
@@ -77,7 +86,7 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
 
             const { lat, lng: lon } = map.mouseEventToLatLng(event);
             const coord = latLonToDMS(lat, lon);
-            displayPosition(coord, event);
+            this.displayPosition(coord, event);
         });
 
         windyDiv.addEventListener('mouseout', () => {

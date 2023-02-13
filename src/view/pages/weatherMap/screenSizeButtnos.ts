@@ -1,6 +1,5 @@
 import { Map } from 'leaflet';
-
-const lang = 'en';
+import { textToScreenSizeButton } from '../../../constants';
 
 class ScreenSizeButtons {
     private elements: Array<HTMLElement> = [];
@@ -14,7 +13,7 @@ class ScreenSizeButtons {
     private render(map: Map) {
         this.openFullScreen.className = 'open-fullscreen-button';
         this.closeFullScreen.className = 'close-fullscreen-button';
-        this.openFullScreen.innerText = lang === 'en' ? 'Full screen' : 'Во весь экран';
+        this.openFullScreen.innerText = textToScreenSizeButton;
         this.closeFullScreen.innerText = '╳';
         this.elements.push(this.openFullScreen, this.closeFullScreen);
 

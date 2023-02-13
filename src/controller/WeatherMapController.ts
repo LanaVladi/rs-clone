@@ -1,5 +1,5 @@
 import { Router } from "../view/Router";
-import WeatherMapComponent from "../view/weatherMap/WeatherMapComponent";
+import WeatherMapComponent from "../view/pages/weatherMap/WeatherMapComponent";
 import { BaseController } from "./BaseController";
 
 export class WeatherMapController extends BaseController<WeatherMapComponent> {

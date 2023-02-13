@@ -1,42 +1,5 @@
-import { IStore } from '../../types';
-
-const lang = 'en';
-const textValuesEn = [
-    'surface',
-    '100m',
-    '300m',
-    '600m',
-    '750m',
-    '1km',
-    '1.5km',
-    '2km',
-    '3km',
-    '4.2km',
-    '5.5km',
-    '7km',
-    '9km',
-    '10km',
-    '11.7km',
-    '13.5km',
-];
-const textValuesRu = [
-    'поверхность',
-    '100м',
-    '300м',
-    '600м',
-    '750м',
-    '1км',
-    '1,5км',
-    '2км',
-    '3км',
-    '4,2км',
-    '5,5км',
-    '7км',
-    '9км',
-    '10км',
-    '11,7км',
-    '13,5км',
-];
+import { lang, textValuesToAltitude } from '../../../constants';
+import { IStore } from '../../../types';
 
 class AltitudeInput {
     private element: HTMLDivElement = document.createElement('div');
@@ -75,9 +38,8 @@ class AltitudeInput {
             const val = +this.altitudeRange.value;
 
             this.altitudeRange.style.backgroundSize = `${(val * 100) / max}% 100%`;
-
-            const textValues = lang === 'en' ? textValuesEn : textValuesRu;
-            this.altitudeValue.innerText = textValues[+this.altitudeRange.value];
+            const valuesList = lang === 'en' ? Object.keys(textValuesToAltitude) : Object.values(textValuesToAltitude);
+            this.altitudeValue.innerText = valuesList[+this.altitudeRange.value];
         });
     }
 
