@@ -1,4 +1,4 @@
-import { FooterComponent } from '../view/footer/FooterComponent';
+import { FooterComponent } from '../view/components/footer/FooterComponent';
 import { BaseController } from './BaseController';
 
 export class FooterController extends BaseController<FooterComponent> {
