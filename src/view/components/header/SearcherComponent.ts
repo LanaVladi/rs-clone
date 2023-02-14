@@ -5,14 +5,14 @@ import { BaseComponent } from '../../BaseComponent';
 
 interface SearcherComponentProps {
     controller: SearcherController;
-    observerGetData: ObserverToModel;
+    observerToModel: ObserverToModel;
 }
 export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     public searchInput!: HTMLInputElement;
     public searchIcon!: HTMLDivElement;
 
-    constructor(controller: SearcherController, observable: ObserverToModel) {
-       super('searcher-container', { controller, observerGetData: observable }, 'div');
+    constructor(controller: SearcherController, observerToModel: ObserverToModel) {
+        super('searcher-container', { controller, observerToModel }, 'div');
     }
 
     protected render(): void {
@@ -20,7 +20,6 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         this.searchInput.classList.add('searcher-input');
         this.searchInput.setAttribute('autofocus', 'autofocus');
         this.searchInput.placeholder = 'Поиск по городу';
-        this.searchInput.type = 'text';
 
         this.searchIcon = document.createElement('div');
         this.searchIcon.className = 'searcher-icon';
@@ -30,8 +29,8 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
 
     protected addListeners(): void {
         this.searchInput.addEventListener('change', () => {
-            const cityName = (this.searchInput as HTMLInputElement).value.replace(/[^a-zа-яё\s]/gi, '');
-            this.props.observerGetData.notify({
+            const cityName = (this.searchInput as HTMLInputElement).value;
+            this.props.observerToModel.notify({
                 message: cityName,
                 typeEvents: APIEvent.todayWeather || APIEvent.fiveDaysWeather,
             });
