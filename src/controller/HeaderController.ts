@@ -9,9 +9,9 @@ export class HeaderController extends BaseController<HeaderComponent> {
     public component: HeaderComponent;
     public searcherController: SearcherController;
 
-    constructor(router: Router, observerGetData: ObserverToModel, observerToView: ObserverToView) {
+    constructor(router: Router, observerToModel: ObserverToModel, observerToView: ObserverToView) {
         super();
-        this.searcherController = new SearcherController(observerGetData);
+        this.searcherController = new SearcherController(observerToModel);
         this.component = new HeaderComponent(this, router, observerToView);
     }
 }
