@@ -1,3 +1,4 @@
+import { lang, langObj } from '../../../constants';
 import { VoiceControlController } from '../../../controller/VoiceControlController';
 import { BaseComponent } from '../../BaseComponent';
 import '../voiceControl/voiceControl.css'
@@ -27,7 +28,7 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
 
         this.modalInner = document.createElement('div');
         this.modalInner.className = 'modal-inner';
-        this.modalInner.innerText = 'Please speak';
+        this.modalInner.innerText = langObj[lang].pleaseSpeak;
         
         this.voiceRecordAnimation = document.createElement('div');
         this.voiceRecordAnimation.className = 'voice-record-animation';
