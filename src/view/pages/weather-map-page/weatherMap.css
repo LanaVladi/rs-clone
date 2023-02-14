@@ -3,12 +3,10 @@
     /*header-color rgb(156 194 209) */
 }
 
-
-
 .weather-map {
     margin: 0 auto;
     width: 80%;
-    height: 800px;
+    height: 600px;
     position: relative;
 }
 
@@ -19,20 +17,20 @@
     width: 100%;
 }
 
-#windy {
+.weather-map #windy {
     width: 100%;
-    height: 70%;
+    height: 100%;
 }
 
 .fullscreen #windy {
     height: 100vh;
 }
 
-#windy #mobile-ovr-select {
+.weather-map #windy #mobile-ovr-select {
     display: none;
 }
 
-#windy #logo {
+.weather-map #windy #logo {
     transform: scale(0.6, 0.6);
     left: 7%;
     top: -5px;
@@ -51,15 +49,15 @@
     z-index: 1000;
 }
 
-#windy #bottom #progress-bar {
+.weather-map #windy #bottom #progress-bar {
     bottom: 15px;
 }
 
-#windy #bottom #progress-bar .progress-line {
+.weather-map #windy #bottom #progress-bar .progress-line {
     height: 40px;
 }
 
-#accTime-legend {
+.weather-map #accTime-legend {
     position: absolute;
     left: 45px;
     right: 0;
@@ -74,7 +72,7 @@
     box-shadow: 0 0 4px 0 black;
 }
 
-#accTime-legend div {
+.weather-map #accTime-legend div {
     display: inline-block;
     box-sizing: border-box;
     text-align: center;
@@ -86,11 +84,11 @@
     overflow: hidden;
 }
 
-#accTime-legend div:not(:first-child) {
+.weather-map #accTime-legend div:not(:first-child) {
     border-left: 1px solid rgba(68, 65, 65, 0.84);
 }
 
-#windy #legend-mobile {
+.weather-map #windy #legend-mobile {
     position: absolute;
     width: 40%;
     left: auto;
@@ -104,21 +102,21 @@
     box-shadow: 0 0 4px 0 black;
 }
 
-#windy #bottom #accumulations {
+.weather-map #windy #bottom #accumulations {
     left: 8px;
     bottom: 0;
     margin-bottom: 0;
 }
 
-#windy .timecode {
+.weather-map #windy .timecode {
     font-size: 1.2rem;
 }
 
-#windy #embed-zoom {
+.weather-map #windy #embed-zoom {
     top: 0;
 }
 
-#windy #embed-zoom .zoom-ctrl {
+.weather-map #windy #embed-zoom .zoom-ctrl {
     font-size: 2rem;
     width: 35px;
     height: 35px;
@@ -267,6 +265,7 @@
 }
 
 .altitude-range[type="range"] {
+    appearance: none;
     -webkit-appearance: none;
     margin: 60px -50px 0 -60px;
     width: 13rem;
