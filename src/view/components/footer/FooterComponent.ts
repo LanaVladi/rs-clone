@@ -1,5 +1,5 @@
-import { FooterController } from '../../controller/FooterController';
-import { BaseComponent } from '../BaseComponent';
+import { FooterController } from '../../../controller/FooterController';
+import { BaseComponent } from '../../BaseComponent';
 import './footer.css';
 
 interface FooterComponentProps {

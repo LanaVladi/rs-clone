@@ -1,22 +1,36 @@
-import { WeatherTodayController } from '../../controller/WeatherTodayController';
-import { BaseComponent } from '../BaseComponent';
-import './WeatherTodayComponent.css';
+import { WeatherTodayPageController } from '../../../controller/WeatherTodayPageController';
+import { ObserverToView } from '../../../model/ObserverToView';
+import { NotifyParameters, WeatherTodayData } from '../../../types';
+import { BaseComponent } from '../../BaseComponent';
+import { Router } from '../../Router';
+import './weather-today-page.css';
 
-interface WeatherForTodayProps {
-    controller: WeatherTodayController;
+interface WeatherTodayPageProps {
+    controller: WeatherTodayPageController;
+    router: Router;
+    observerToView: ObserverToView;
 }
 
-export class WeatherTodayComponent extends BaseComponent<WeatherForTodayProps> {
+export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPageProps> {
     private currentConditionsHeaderLocation!: HTMLHeadingElement;
     private boxTempValue!: HTMLSpanElement;
     private boxTempPhrase!: HTMLSpanElement;
     private todayWeatherCardTitle!: HTMLHeadingElement;
     private title!: HTMLHeadingElement;
     private feelsLikeTempValue!: HTMLSpanElement;
+    private observerToView: ObserverToView;
 
-    constructor(controller: WeatherTodayController) {
-        super('weather-for-today', { controller }, 'div');
+    constructor(controller: WeatherTodayPageController, router: Router, observerToView: ObserverToView) {
+        super('weather-today', { controller, router, observerToView }, 'div');
+        this.observerToView = observerToView;
+        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsToday(params));
     }
+
+    setWeatherIndicatorsToday<T>(params: NotifyParameters<T>) {
+        const weatherData = <WeatherTodayData>params.message;
+        this.title.innerText = `Погода на сегодня: ${weatherData.name}`;
+    }
+
     protected render(): void {
         const currentConditions = document.createElement('div');
         currentConditions.className = 'current-conditions';
