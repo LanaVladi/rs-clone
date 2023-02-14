@@ -8,6 +8,7 @@ import './weather-today-page.css';
 interface WeatherTodayPageProps {
     controller: WeatherTodayPageController;
     router: Router;
+    observerToView: ObserverToView;
 }
 
 export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPageProps> {
@@ -20,12 +21,12 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
     private observerToView: ObserverToView;
 
     constructor(controller: WeatherTodayPageController, router: Router, observerToView: ObserverToView) {
-        super('weather-today', { controller, router }, 'div');
+        super('weather-today', { controller, router, observerToView }, 'div');
         this.observerToView = observerToView;
-        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicators(params));
+        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsToday(params));
     }
 
-    setWeatherIndicators<T>(params: NotifyParameters<T>) {
+    setWeatherIndicatorsToday<T>(params: NotifyParameters<T>) {
         const weatherData = <WeatherTodayData>params.message;
         this.title.innerText = `Погода на сегодня: ${weatherData.name}`;
     }
