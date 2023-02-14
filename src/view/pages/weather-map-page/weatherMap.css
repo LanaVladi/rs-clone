@@ -305,6 +305,7 @@
 }
 
 .map-search-container {
+    display: none;
     position: absolute;
     top: 37px;
     left: 11px;
@@ -314,6 +315,10 @@
     -moz-transition: width .5s;
     -ms-transition: width .5s;
     -o-transition: width .5s;
+}
+
+.fullscreen .map-search-container {
+    display: block;
 }
 
 .active-form {
