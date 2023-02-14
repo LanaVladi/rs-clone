@@ -14,7 +14,7 @@ class RenderView {
 
         const observerToModel = new ObserverToModel();
         const observerToView = new ObserverToView();
-        const weatherApis = new ApiOpenWeather(observerToModel, observerToView);
+        const weatherApis = new ApiOpenWeather(observerToModel, observerToView, 'Ташкент');
         const router = new Router(main, observerToView);
 
         const headerController = new HeaderController(router, observerToModel, observerToView);
