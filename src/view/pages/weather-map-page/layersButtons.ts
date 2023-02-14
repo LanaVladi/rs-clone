@@ -1,4 +1,4 @@
-import { enTextToLayersButtons, lang, ruTextToLayersButtons } from '../../../constants';
+import { lang, langObj, unitName } from '../../../constants';
 import { IOverlays, IStore, Layer } from '../../../types';
 
 class LayersButtons {
@@ -17,15 +17,15 @@ class LayersButtons {
         this.layerMetricSelect.className = 'layer-metric-select';
         this.windLayerBtn.className = 'button layer-button active';
         this.windLayerBtn.id = 'wind';
-        this.windLayerBtn.innerText = lang === 'en' ? enTextToLayersButtons.wind : ruTextToLayersButtons.wind;
+        this.windLayerBtn.innerText = langObj[lang].wind;
 
         this.tempLayerBtn.className = 'button layer-button';
         this.tempLayerBtn.id = 'temp';
-        this.tempLayerBtn.innerText = lang === 'en' ? enTextToLayersButtons.temp : ruTextToLayersButtons.temp;
+        this.tempLayerBtn.innerText = langObj[lang].temp;
 
         this.pressLayerBtn.className = 'button layer-button';
         this.pressLayerBtn.id = 'pressure';
-        this.pressLayerBtn.innerText = lang === 'en' ? enTextToLayersButtons.press : ruTextToLayersButtons.press;
+        this.pressLayerBtn.innerText = langObj[lang].pressure;
 
         this.element.append(this.windLayerBtn, this.tempLayerBtn, this.pressLayerBtn, this.layerMetricSelect);
 
@@ -94,7 +94,8 @@ class LayersButtons {
         const currentMetric = overlays[layer].metric;
         const arrMetric = overlays[layer].listMetrics();
         arrMetric.forEach((elem, i) => {
-            this.layerMetricSelect.options[i] = new Option(elem);
+            const optionText = lang === 'en' ? elem : unitName.get(elem);
+            this.layerMetricSelect.options[i] = new Option(optionText, elem);
             if (currentMetric === elem) {
                 this.layerMetricSelect.options[i].selected = true;
             }

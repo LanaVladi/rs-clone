@@ -1,5 +1,5 @@
 import { Map } from 'leaflet';
-import { textToSearchButton, textToSearchInputPlaceholder } from '../../../constants';
+import { lang, langObj } from '../../../constants';
 import { IPicker } from '../../../types';
 import { getCoordinates } from '../../../utils';
 
@@ -19,11 +19,11 @@ class MapSearchForm {
         this.form.id = 'mapSearchForm';
         this.input.className = 'map-search-input';
         this.input.type = 'text';
-        this.input.placeholder = textToSearchInputPlaceholder;
+        this.input.placeholder = langObj[lang].searchByCity;
         this.input.id = 'location';
         this.button.className = 'button map-search-button';
         this.button.type = 'submit';
-        this.button.innerText = textToSearchButton;
+        this.button.innerText = langObj[lang].search;
 
         this.form.append(this.input, this.button);
         this.element.append(this.form);

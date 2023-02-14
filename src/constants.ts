@@ -11,10 +11,77 @@ export const baseLinkOpenWeatherFiveDays = 'api.openweathermap.org/data/2.5/fore
 
 export const celsius = 'metric';
 export const fahrenheit = 'imperial';
-export const lang = 'en';
+export const lang: 'en' | 'ru' = 'ru';
 
 export const weatherIconUrl = `http://openweathermap.org/img/wn/`;
 // export weatherIconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+
+export const langObj = {
+    en: {
+        nigth: 'Nigth',
+        morning: 'Morning',
+        afternoon: 'Afternoon',
+        evening: 'Evening',
+        today: 'Today',
+        fiveDay: '5 days',
+        forecastFiveDay: 'Forecast for 5 days',
+        weatherToday: 'Weather for today',
+        forecastToday: 'Forecast for today',
+        map: 'Map',
+        otherForecasts: 'Other forecasts',
+        searchByCity: 'Search by city',
+        airQuality: 'Air quality',
+        airQualityToday: 'Air quality today',
+        asOf: 'As of',
+        nextHours: 'Next hours',
+        feelsLike: 'Feels like',
+        high: 'High',
+        low: 'Low',
+        wind: 'Wind',
+        temp: 'Temperature',
+        humidity: 'Humidity',
+        cloudiness: 'Cloudiness',
+        pressure: 'Pressure',
+        visibility: 'Visibility',
+        search: 'Search',
+        fullScreen: 'Full screen',
+        windAnimation: 'Wind animation',
+        pleaseSpeak: 'Please speak',
+        surface: 'surface',
+    },
+    ru: {
+        nigth: 'Ночь',
+        morning: 'Утро',
+        afternoon: 'День',
+        evening: 'Вечер',
+        today: 'Сегодня',
+        fiveDay: 'На 5 дней',
+        forecastFiveDay: 'Прогноз на 5 дней',
+        weatherToday: 'Погода на сегодня',
+        forecastToday: 'Погода на сегодня',
+        map: 'Карта',
+        otherForecasts: 'Другие прогнозы',
+        searchByCity: 'Поиск по городу',
+        airQuality: 'Качество воздуха',
+        airQualityToday: 'Качество воздуха сегодня',
+        asOf: 'По состоянию на',
+        nextHours: 'На ближайшие часы',
+        feelsLike: 'Ощущается как',
+        high: 'Макс.',
+        low: 'Мин.',
+        wind: 'Ветер',
+        temp: 'Температура',
+        humidity: 'Влажность',
+        cloudiness: 'Облачность',
+        pressure: 'Давление',
+        visibility: 'Видимость',
+        search: 'Поиск',
+        fullScreen: 'На весь экран',
+        windAnimation: 'Анимация ветра',
+        pleaseSpeak: 'Говорите',
+        surface: 'поверхность',
+    },
+};
 
 export const textValuesToAltitude = {
     'surface': 'поверхность',
@@ -37,18 +104,6 @@ export const textValuesToAltitude = {
 
 export const ZOOM_TO_SELF_POSITION = 10;
 
-export const enum enTextToLayersButtons {
-    wind = 'Wind',
-    temp = 'Temperature',
-    press = 'Pressure'
-}
-
-export const enum ruTextToLayersButtons {
-    wind = 'Ветер',
-    temp = 'Температура',
-    press = 'Давление'
-}
-
 export const dayName = new Map([
     ['MON', 'ПН'],
     ['TUE', 'ВТ'],
@@ -59,10 +114,15 @@ export const dayName = new Map([
     ['SAT', 'ВС'],
 ]);
 
-export const textToSearchInputPlaceholder = lang === 'en' ? 'e.g. Bangkok...' : 'например, Бангкок...';
-
-export const textToSearchButton = lang === 'en' ? 'Search' : 'Поиск';
-
-export const textToScreenSizeButton = lang === 'en' ? 'Full screen' : 'Во весь экран';
-
-export const textToWindAnimToggler = lang === 'en' ? 'Wind animation' : 'Анимация ветра';
+export const unitName = new Map([
+    ['kt', 'Узел'],
+    ['bft', 'Шк.Бофорта'],
+    ['m/s', 'м/с'],
+    ['km/h', 'км/ч'],
+    ['mph', 'миль/ч'],
+    ['°C', '°C'],
+    ['°F', '°F'],
+    ['hPa', 'гПа'],
+    ['mmHg', 'мм.рт.ст.'],
+    ['inHg', 'дюйм рт.ст.'],
+]);

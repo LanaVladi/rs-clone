@@ -1,4 +1,4 @@
-import { textToWindAnimToggler } from '../../../constants';
+import { lang, langObj } from '../../../constants';
 import { IStore } from '../../../types';
 
 class WindAnimToggler {
@@ -16,7 +16,7 @@ class WindAnimToggler {
         this.toggler.className = 'switch-btn';
 
         this.label.className = 'wind-anim-label';
-        this.label.innerText = textToWindAnimToggler;
+        this.label.innerText = langObj[lang].windAnimation;
         this.element.append(this.toggler, this.label);
 
         this.addListner(store);

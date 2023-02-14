@@ -1,5 +1,5 @@
 import { Map } from 'leaflet';
-import { apiKeyMapForecast, lang } from '../../../constants';
+import { apiKeyMapForecast, lang, langObj } from '../../../constants';
 import { WeatherMapPageController } from '../../../controller/WeatherMapPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { ICoordinates, IPicker, IWindyAPI, NotifyParameters } from '../../../types';
@@ -31,7 +31,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         // const weatherData = <weatherMapData>params.message;
         // console.log('weatherData :', weatherData);
         // this.title.innerText = `Прогноз на 5 дней: ${weatherData.city.name}`;
-        this.title.innerText = `Карта:`;
+        this.title.innerText = `${langObj[lang].map}:`;
     }
 
     protected render(): void {

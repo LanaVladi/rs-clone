@@ -1,4 +1,4 @@
-import { lang, textValuesToAltitude } from '../../../constants';
+import { lang, langObj, textValuesToAltitude } from '../../../constants';
 import { IStore } from '../../../types';
 
 class AltitudeInput {
@@ -19,7 +19,7 @@ class AltitudeInput {
         this.altitudeRange.className = 'altitude-range';
 
         this.altitudeValue.className = 'altitude-value';
-        this.altitudeValue.innerText = store.get('level') as string;
+        this.altitudeValue.innerText = langObj[lang].surface;
 
         this.element.append(this.altitudeRange, this.altitudeValue);
 
