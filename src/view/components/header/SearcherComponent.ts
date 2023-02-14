@@ -1,3 +1,4 @@
+import { langObj, lang } from '../../../constants';
 import { SearcherController } from '../../../controller/SearchController';
 import { ObserverToModel } from '../../../model/ObserverToModel';
 import { APIEvent } from '../../../types';
@@ -21,7 +22,7 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         this.searchInput = document.createElement('input');
         this.searchInput.classList.add('searcher-input');
         this.searchInput.setAttribute('autofocus', 'autofocus');
-        this.searchInput.placeholder = 'Поиск по городу';
+        this.searchInput.placeholder = langObj[lang].searchByCity;
 
         this.searchIcon = document.createElement('div');
         this.searchIcon.className = 'searcher-icon';
