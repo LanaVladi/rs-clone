@@ -10,9 +10,11 @@ interface SearcherComponentProps {
 export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     public searchInput!: HTMLInputElement;
     public searchIcon!: HTMLDivElement;
+    private observerToModel: ObserverToModel;
 
     constructor(controller: SearcherController, observerToModel: ObserverToModel) {
         super('searcher-container', { controller, observerToModel }, 'div');
+        this.observerToModel = observerToModel;
     }
 
     protected render(): void {
@@ -30,7 +32,7 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     protected addListeners(): void {
         this.searchInput.addEventListener('change', () => {
             const cityName = (this.searchInput as HTMLInputElement).value;
-            this.props.observerToModel.notify({
+            this.observerToModel.notify({
                 message: cityName,
                 typeEvents: APIEvent.todayWeather || APIEvent.fiveDaysWeather,
             });
