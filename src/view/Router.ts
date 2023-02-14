@@ -1,8 +1,9 @@
 import { AirQualityPageController } from '../controller/AirQualityPageController';
 import { BaseController } from '../controller/BaseController';
-// import { WeatherMapController } from '../controller/WeatherMapController';
+import { WeatherFiveDaysPageController } from '../controller/WeatherFiveDaysPageController';
 import { WeatherTodayPageController } from '../controller/WeatherTodayPageController';
 import { ObserverToView } from '../model/ObserverToView';
+import { WeatherMapPageController } from './../controller/WeatherMapPageController';
 
 type routes = Map<string, () => BaseController>;
 
@@ -16,9 +17,9 @@ export class Router {
         this.container = container;
         this.routes = new Map<string, () => BaseController>([
             ['today', () => new WeatherTodayPageController(this, observerToView)],
-            // ['five-day', () => new WeatherTenDayController(this)],
-            // ['map', () => new WeatherMapController(this)],
-            ['forecast/air-quality', () => new AirQualityPageController(this, observerToView)],
+            ['five-days', () => new WeatherFiveDaysPageController(this, observerToView)],
+            ['map', () => new WeatherMapPageController(this, observerToView)],
+            ['air-quality', () => new AirQualityPageController(this, observerToView)],
         ]);
 
         const currentRoute = this.getCurrentRoute();
