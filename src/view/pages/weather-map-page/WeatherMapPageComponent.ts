@@ -1,38 +1,40 @@
 import { Map } from 'leaflet';
-import { lang } from '../../../constants';
-import { WeatherMapController } from '../../../controller/WeatherMapController';
-import { ICoordinates, IPicker, IWindyAPI } from '../../../types';
-import { apiKeyMapForecast, getGeolocation, latLonToDMS } from '../../../utils';
+import { apiKeyMapForecast, lang } from '../../../constants';
+import { WeatherMapPageController } from '../../../controller/WeatherMapPageController';
+import { ObserverToView } from '../../../model/ObserverToView';
+import { ICoordinates, IPicker, IWindyAPI, NotifyParameters } from '../../../types';
+import { getGeolocation, latLonToDMS } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import MapColorLegend from './mapColorLegend';
 import MapControls from './mapControls';
 import './weatherMap.css';
 
-interface WeatherMapProps {
-    controller: WeatherMapController;
+interface WeatherMapPageComponentProps {
+    controller: WeatherMapPageController;
     router: Router;
+    observerToView: ObserverToView;
 }
-const [startLat, startLon] = await getGeolocation();
 
-const options = {
-    key: apiKeyMapForecast,
-
-    verbose: true,
-
-    lat: startLat,
-    lon: startLon,
-    zoom: 5,
-};
-
-class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
+export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageComponentProps> {
+    private title!: HTMLHeadingElement;
     private windyDiv!: HTMLDivElement;
+    private observerToView: ObserverToView;
 
-    constructor(controller: WeatherMapController, router: Router) {
-        super('weather-map', { controller, router }, 'div');
+    constructor(controller: WeatherMapPageController, router: Router, observerToView: ObserverToView) {
+        super('weather-map', { controller, router, observerToView }, 'div');
+        this.observerToView = observerToView;
+        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsMap(params));
     }
 
-    protected render() {
+    setWeatherIndicatorsMap<T>(params: NotifyParameters<T>) {
+        // const weatherData = <weatherMapData>params.message;
+        // console.log('weatherData :', weatherData);
+        // this.title.innerText = `Прогноз на 5 дней: ${weatherData.city.name}`;
+        this.title.innerText = `Карта:`;
+    }
+
+    protected render(): void {
         this.windyDiv = document.createElement('div');
         this.windyDiv.id = 'windy';
 
@@ -42,6 +44,15 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
     }
 
     private async drawWeatherMap(windyDiv: HTMLDivElement) {
+        const [startLat, startLon] = await getGeolocation();
+        const options = {
+            key: apiKeyMapForecast,
+            verbose: true,
+            lat: startLat,
+            lon: startLon,
+            zoom: 5,
+        };
+
         windyInit(options, (windyAPI: IWindyAPI) => {
             const { picker, store, map } = windyAPI;
             store.set('lang', lang);
@@ -96,5 +107,3 @@ class WeatherMapComponent extends BaseComponent<WeatherMapProps> {
         });
     }
 }
-
-export default WeatherMapComponent;
