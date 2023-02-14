@@ -4,11 +4,11 @@ import { SearcherComponent } from '../view/components/header/SearcherComponent';
 
 export class SearcherController extends BaseController<SearcherComponent> {
     public component: SearcherComponent;
-    private observerGetData: ObserverToModel;
+    private observerToModel: ObserverToModel;
 
-    constructor(observerGetData: ObserverToModel) {
+    constructor(observerToModel: ObserverToModel) {
         super();
-        this.observerGetData = observerGetData;
-        this.component = new SearcherComponent(this, observerGetData);
+        this.observerToModel = observerToModel;
+        this.component = new SearcherComponent(this, observerToModel);
     }
 }
