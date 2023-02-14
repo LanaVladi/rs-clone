@@ -70,6 +70,13 @@
 .header-location {
     display: inline-flex;
     gap: 1rem;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.header__weather-icon {
+    width: 3rem;
+    height: 3rem;
 }
 
 .temperature-unit {
