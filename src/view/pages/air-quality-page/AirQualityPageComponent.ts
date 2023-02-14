@@ -16,17 +16,18 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     constructor(controller: AirQualityPageController, router: Router, observerToView: ObserverToView) {
         super('other-forecast-air-quality', { controller, router }, 'div');
         this.observerToView = observerToView;
-        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicators(params));
+        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsOther(params));
     }
 
-    setWeatherIndicators<T>(params: NotifyParameters<T>) {
+    setWeatherIndicatorsOther<T>(params: NotifyParameters<T>) {
         const weatherData = <WeatherTodayData>params.message;
-        this.title.innerText = `Качество воздуха сегодня: `;
+        this.title.innerText = `Качество воздуха сегодня:`;
     }
 
     protected render(): void {
         this.title = document.createElement('h2');
         this.title.className = 'component__title';
+        this.title.innerText = `Качество воздуха сегодня:`;
 
         this.element.append(this.title);
     }
