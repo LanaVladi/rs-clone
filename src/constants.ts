@@ -100,6 +100,29 @@ export const textValuesToAltitude = {
     '10km': '10км',
     '11.7km': '11,7км',
     '13.5km': '13,5км',
+}
+
+export const SPEECH_RATE = 0.75;
+export const NUMBER_ALTERNATIVE_MATCHES = 1;
+export const WEIGHT_VALUE_THIS_GRAMMAR = 1;
+
+export const enum langForSpeechAPI {
+    ru = 'ru-RU',
+    en = 'en-US'
+}
+
+export const wordsForGrammar = {
+    weather: 'погода',
+    forecast: 'прогноз',
+    today: 'сегодня',
+    hourly: 'почасовой',
+    day: 'день',
+    holydays: 'выходные',
+    month: 'месяц',
+    show: 'покажи',
+    tell: 'расскажи',
+    speak: 'скажи',
+    tomorrow: 'завтра',
 };
 
 export const ZOOM_TO_SELF_POSITION = 10;
