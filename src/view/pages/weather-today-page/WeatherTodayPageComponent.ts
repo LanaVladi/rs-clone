@@ -1,3 +1,4 @@
+import { lang, langObj } from '../../../constants';
 import { WeatherTodayPageController } from '../../../controller/WeatherTodayPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { NotifyParameters, WeatherTodayData } from '../../../types';
@@ -28,7 +29,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
     setWeatherIndicatorsToday<T>(params: NotifyParameters<T>) {
         const weatherData = <WeatherTodayData>params.message;
-        this.title.innerText = `Погода на сегодня: ${weatherData.name}`;
+        this.title.innerText = `${langObj[lang].weatherToday}: ${weatherData.name}`;
     }
 
     protected render(): void {
@@ -47,7 +48,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         const currentConditionsHeaderTimestamp = document.createElement('span');
         currentConditionsHeaderTimestamp.className = 'current-conditions-header__timestamp';
-        currentConditionsHeaderTimestamp.textContent = `По состоянию на time, GMT`;
+        currentConditionsHeaderTimestamp.textContent = `${langObj[lang].asOf} time, GMT`;
 
         const currentConditionsBoxTemp = document.createElement('div');
         currentConditionsBoxTemp.className = 'current-conditions-box-temp';
@@ -78,7 +79,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         this.todayWeatherCardTitle = document.createElement('h2');
         this.todayWeatherCardTitle.className = 'today-weather-card-title';
-        this.todayWeatherCardTitle.textContent = 'Прогноз на сегодня: town, country';
+        this.todayWeatherCardTitle.textContent = `${langObj[lang].forecastToday}: town, country`;
 
         const todayWeatherCardTableWrapper = document.createElement('div');
         todayWeatherCardTableWrapper.className = 'today-weather-card--tableWrapper';
@@ -90,7 +91,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
             'beforeend',
             `
         <li class="colomn-times-of-day">
-            <h3 class="colomn-label">Утро</h3>
+            <h3 class="colomn-label">${langObj[lang].morning}</h3>
             <div class="colomn-label">-23</div>
             <div class="colomn-icon"></div>
             <div class="colomn-precip">
@@ -99,7 +100,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
             </div>
         </li>
         <li class="colomn-times-of-day">
-            <h3 class="colomn-label">День</h3>
+            <h3 class="colomn-label">${langObj[lang].afternoon}</h3>
             <div class="colomn-label">-23</div>
             <div class="colomn-icon"></div>
             <div class="colomn-precip">
@@ -108,7 +109,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         </li>
         <li class="colomn-times-of-day">
-            <h3 class="colomn-label">Вечер</h3>
+            <h3 class="colomn-label">${langObj[lang].evening}</h3>
             <div class="colomn-label">-23</div>
             <div class="colomn-icon"></div>
             <div class="colomn-precip">
@@ -117,7 +118,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         </li>
         <li class="colomn-times-of-day">
-            <h3 class="colomn-label">Ночь</h3>
+            <h3 class="colomn-label">${langObj[lang].nigth}</h3>
             <div class="colomn-label">-23</div>
             <div class="colomn-icon"></div>
             <div class="colomn-precip">
@@ -133,7 +134,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         const buttonPrimery = document.createElement('a');
         buttonPrimery.className = 'button-primery';
-        buttonPrimery.textContent = 'На ближайшие часы';
+        buttonPrimery.textContent = langObj[lang].nextHours;
 
         cardFooter.append(buttonPrimery);
         todayWeatherCard.append(this.todayWeatherCardTitle, todayWeatherCardTableWrapper, cardFooter);
@@ -141,7 +142,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         this.title = document.createElement('h2');
         this.title.className = 'component__title';
 
-        this.title.innerText = `Погода на сегодня: town, country`;
+        this.title.innerText = `${langObj[lang].forecastToday}: town, country`;
 
         const todaysDetails = document.createElement('div');
         todaysDetails.className = 'today-details';
@@ -158,7 +159,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         const feelsLikeTempLabel = document.createElement('span');
         feelsLikeTempLabel.className = 'todays-details-header__feels-like-temp_label';
-        feelsLikeTempLabel.textContent = 'Ощущается как';
+        feelsLikeTempLabel.textContent = langObj[lang].feelsLike;
 
         const sunriseSunsetBox = document.createElement('div');
         sunriseSunsetBox.className = 'sunrise-sunset-box';
@@ -198,7 +199,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
             `
         <div class='todays-details-item'>
             <svg class='weather-details-item-icon'></svg>
-            <div class='weather-details-item-label'>Макс./Мин.</div>
+            <div class='weather-details-item-label'>${langObj[lang].high}/${langObj[lang].low}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
                 /
@@ -207,7 +208,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         <div class='todays-details-item'>
             <svg class='weather-details-item-icon'></svg>
-            <div class='weather-details-item-label'>Ветер.</div>
+            <div class='weather-details-item-label'>${langObj[lang].wind}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
                  /
@@ -216,7 +217,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         <div class='todays-details-item'>
             <svg class='weather-details-item-icon'></svg>
-            <div class='weather-details-item-label'>Влажность</div>
+            <div class='weather-details-item-label'>${langObj[lang].humidity}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
                 /
@@ -225,7 +226,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         <div class='todays-details-item'>
             <svg class='weather-details-item-icon'></svg>
-            <div class='weather-details-item-label'>Облачность</div>
+            <div class='weather-details-item-label'>${langObj[lang].cloudiness}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
                 /
@@ -234,7 +235,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         <div class='todays-details-item'>
             <svg class='weather-details-item-icon'></svg>
-            <div class='weather-details-item-label'>Давление</div>
+            <div class='weather-details-item-label'>${langObj[lang].pressure}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
                 /
@@ -243,7 +244,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         <div class='todays-details-item'>
             <svg class='weather-details-item-icon'></svg>
-            <div class='weather-details-item-label'>Видимость</div>
+            <div class='weather-details-item-label'>${langObj[lang].visibility}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
                 /

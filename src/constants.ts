@@ -10,7 +10,7 @@ export const baseLinkOpenWeatherFiveDays = 'api.openweathermap.org/data/2.5/fore
 
 export const celsius = 'metric';
 export const fahrenheit = 'imperial';
-export const lang = 'en';
+export const lang = 'ru';
 
 export const weatherIconUrl = `http://openweathermap.org/img/wn/`;
 // export weatherIconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
@@ -79,3 +79,5 @@ export const langObj = {
         pleaseSpeak: 'Говорите',
     },
 };
+
+
