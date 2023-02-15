@@ -106,8 +106,3 @@ img {
     flex-direction: column;
     background-color: var(--color-bg-outer);
 }
-
-#windy {
-    width: 100%;
-    height: 100vh;
-}

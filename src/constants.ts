@@ -1,3 +1,4 @@
+
 export const apiKeyMapForecast = 'xXzWFyvlQ5v6hx3VoAyja2ss9hpFgVRi'; // windy.com Map Forecast API
 export const baseLinkMapForecast = `https://api.windy.com/assets/map-forecast/`;
 
@@ -10,7 +11,7 @@ export const baseLinkOpenWeatherFiveDays = 'api.openweathermap.org/data/2.5/fore
 
 export const celsius = 'metric';
 export const fahrenheit = 'imperial';
-export const lang = 'ru';
+export const lang: 'en' | 'ru' = 'ru';
 
 export const weatherIconUrl = `http://openweathermap.org/img/wn/`;
 // export weatherIconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
@@ -46,6 +47,7 @@ export const langObj = {
         fullScreen: 'Full screen',
         windAnimation: 'Wind animation',
         pleaseSpeak: 'Please speak',
+        surface: 'surface',
     },
     ru: {
         nigth: 'Ночь',
@@ -77,8 +79,28 @@ export const langObj = {
         fullScreen: 'На весь экран',
         windAnimation: 'Анимация ветра',
         pleaseSpeak: 'Говорите',
+        surface: 'поверхность',
     },
 };
+
+export const textValuesToAltitude = {
+    'surface': 'поверхность',
+    '100m': '100м',
+    '300m': '300м',
+    '600m': '600м',
+    '750m': '750м',
+    '1km': '1км',
+    '1.5km': '1,5км',
+    '2km': '2км',
+    '3km': '3км',
+    '4.2km': '4,2км',
+    '5.5km': '5,5км',
+    '7km': '7км',
+    '9km': '9км',
+    '10km': '10км',
+    '11.7km': '11,7км',
+    '13.5km': '13,5км',
+}
 
 export const SPEECH_RATE = 0.75;
 export const NUMBER_ALTERNATIVE_MATCHES = 1;
@@ -103,3 +125,27 @@ export const wordsForGrammar = {
     tomorrow: 'завтра',
 };
 
+export const ZOOM_TO_SELF_POSITION = 10;
+
+export const dayName = new Map([
+    ['MON', 'ПН'],
+    ['TUE', 'ВТ'],
+    ['WED', 'СР'],
+    ['THU', 'ЧТ'],
+    ['FRI', 'ПТ'],
+    ['SUN', 'СБ'],
+    ['SAT', 'ВС'],
+]);
+
+export const unitName = new Map([
+    ['kt', 'Узел'],
+    ['bft', 'Шк.Бофорта'],
+    ['m/s', 'м/с'],
+    ['km/h', 'км/ч'],
+    ['mph', 'миль/ч'],
+    ['°C', '°C'],
+    ['°F', '°F'],
+    ['hPa', 'гПа'],
+    ['mmHg', 'мм.рт.ст.'],
+    ['inHg', 'дюйм рт.ст.'],
+]);
