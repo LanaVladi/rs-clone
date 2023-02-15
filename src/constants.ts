@@ -80,4 +80,26 @@ export const langObj = {
     },
 };
 
+export const SPEECH_RATE = 0.75;
+export const NUMBER_ALTERNATIVE_MATCHES = 1;
+export const WEIGHT_VALUE_THIS_GRAMMAR = 1;
+
+export const enum langForSpeechAPI {
+    ru = 'ru-RU',
+    en = 'en-US'
+}
+
+export const wordsForGrammar = {
+    weather: 'погода',
+    forecast: 'прогноз',
+    today: 'сегодня',
+    hourly: 'почасовой',
+    day: 'день',
+    holydays: 'выходные',
+    month: 'месяц',
+    show: 'покажи',
+    tell: 'расскажи',
+    speak: 'скажи',
+    tomorrow: 'завтра',
+};
 
