@@ -1,3 +1,4 @@
+import { lang, langObj } from '../../../constants';
 import { AirQualityPageController } from '../../../controller/AirQualityPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { NotifyParameters, WeatherTodayData } from '../../../types';
@@ -21,13 +22,13 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     setWeatherIndicatorsOther<T>(params: NotifyParameters<T>) {
         const weatherData = <WeatherTodayData>params.message;
-        this.title.innerText = `Качество воздуха сегодня:`;
+        this.title.innerText = `${langObj[lang].airQualityToday}:`;
     }
 
     protected render(): void {
         this.title = document.createElement('h2');
         this.title.className = 'component__title';
-        this.title.innerText = `Качество воздуха сегодня:`;
+        this.title.innerText = `${langObj[lang].airQualityToday}:`;
 
         this.element.append(this.title);
     }

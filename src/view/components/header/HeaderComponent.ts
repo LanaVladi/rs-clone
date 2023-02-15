@@ -4,7 +4,7 @@ import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './header.css';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { weatherIconUrl } from '../../../constants';
+import { lang, langObj, weatherIconUrl } from '../../../constants';
 
 interface HeaderComponentProps {
     controller: HeaderController;
@@ -88,16 +88,16 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
         this.headerNav.classList.add('header-nav');
 
         this.componentToday = document.createElement('li');
-        this.componentToday.textContent = 'Сегодня';
+        this.componentToday.textContent = langObj[lang].today;
 
         this.componentFiveDays = document.createElement('li');
-        this.componentFiveDays.textContent = 'На 5 дней';
+        this.componentFiveDays.textContent = langObj[lang].fiveDay;
 
         this.componentMap = document.createElement('li');
-        this.componentMap.textContent = 'Карта';
+        this.componentMap.textContent = langObj[lang].map;
 
         this.componentAirQuality = document.createElement('li');
-        this.componentAirQuality.textContent = 'Качество воздуха';
+        this.componentAirQuality.textContent = langObj[lang].airQuality;
 
         this.headerNav.append(
             this.componentToday,

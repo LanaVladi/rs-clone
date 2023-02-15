@@ -1,3 +1,4 @@
+import { lang, langObj } from '../../../constants';
 import { WeatherFiveDaysPageController } from '../../../controller/WeatherFiveDaysPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { NotifyParameters, weatherFiveDaysData } from '../../../types';
@@ -24,7 +25,7 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
         const weatherData = <weatherFiveDaysData>params.message;
         console.log('weatherData :', weatherData);
         // this.title.innerText = `Прогноз на 5 дней: ${weatherData.city.name}`;
-        this.title.innerText = `Прогноз на 5 дней: ${weatherData.city.name}`;
+        this.title.innerText = `${langObj[lang].forecastFiveDay}: ${weatherData.city.name}`;
     }
 
     protected render(): void {
