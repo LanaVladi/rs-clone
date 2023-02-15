@@ -1,25 +1,10 @@
-const SPEECH_RATE = 0.75;
-const NUMBER_ALTERNATIVE_MATCHES = 1;
-const WEIGHT_VALUE_THIS_GRAMMAR = 1;
-
-const enum langForSpeechAPI {
-    ru = 'ru-RU',
-    en = 'en-US'
-}
-
-const wordsForGrammar = {
-    weather: 'погода',
-    forecast: 'прогноз',
-    today: 'сегодня',
-    hourly: 'почасовой',
-    day: 'день',
-    holydays: 'выходные',
-    month: 'месяц',
-    show: 'покажи',
-    tell: 'расскажи',
-    speak: 'скажи',
-    tomorrow: 'завтра',
-};
+import {
+    langForSpeechAPI,
+    wordsForGrammar,
+    WEIGHT_VALUE_THIS_GRAMMAR,
+    NUMBER_ALTERNATIVE_MATCHES,
+    SPEECH_RATE,
+} from '../constants';
 
 class VoiceControl {
     private recognition: SpeechRecognition;
@@ -43,7 +28,8 @@ class VoiceControl {
     }
 
     private init(): void {
-        const wordsList = this.lang === langForSpeechAPI.en ? Object.keys(wordsForGrammar) : Object.values(wordsForGrammar);
+        const wordsList =
+            this.lang === langForSpeechAPI.en ? Object.keys(wordsForGrammar) : Object.values(wordsForGrammar);
         const grammar = `#JSGF V1.0; grammar words; public <word> = ${wordsList.join(' | ')} ;`;
         this.speechRecognitionList.addFromString(grammar, WEIGHT_VALUE_THIS_GRAMMAR);
         this.recognition.lang = this.lang;

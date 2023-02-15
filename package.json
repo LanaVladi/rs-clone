@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "devDependencies": {
+    "@types/dom-speech-recognition": "^0.0.1",
     "@types/node": "^18.11.15",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
@@ -41,8 +42,5 @@
   "bugs": {
     "url": "https://github.com/LanaVladi/rs-clone/issues"
   },
-  "homepage": "https://github.com/LanaVladi/rs-clone#readme",
-  "dependencies": {
-    "@types/dom-speech-recognition": "^0.0.1"
-  }
+  "homepage": "https://github.com/LanaVladi/rs-clone#readme"
 }
