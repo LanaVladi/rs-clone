@@ -190,3 +190,6 @@
 .weather-details-item-label {
     flex-grow: 1;
 }
+.weather-details-item-icon{
+    margin-right: 1rem;
+}
