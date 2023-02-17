@@ -1,0 +1,338 @@
+import { ObserverToModel } from './ObserverToModel';
+import { ObserverToView } from './ObserverToView';
+import INotify, {
+    airQualityForecastData,
+    ModelEvent,
+    NotifyParameters,
+    weatherFiveDaysData,
+    WeatherTodayData,
+} from '../types';
+
+export class Store implements INotify {
+    private observerToModel: ObserverToModel;
+    private observerToView: ObserverToView;
+
+    private weatherIndicators = {};
+    private weatherTodayData!: WeatherTodayData;
+    private weatherFiveDaysData!: weatherFiveDaysData;
+    private airQualityForecastData!: airQualityForecastData;
+
+    private kilometer = 1000;
+    private minute = 60;
+    public temp!: number;
+    public temp_min!: number;
+    public temp_max!: number;
+    public feels_like!: number;
+    public humidity!: number;
+    public pressure!: number;
+    public visibility!: number;
+    public wind_speed!: number;
+    public clouds!: number;
+    public sunrise!: string;
+    public sunset!: string;
+    public icon!: string;
+    public id!: number;
+    public description!: string;
+    public main!: string;
+    public timezone!: number;
+    public name!: string;
+    public countryCode!: string;
+    public country!: string;
+    public dataCalcTime!: string;
+
+    constructor(observerToModel: ObserverToModel, observerToView: ObserverToView) {
+        this.observerToModel = observerToModel;
+        this.observerToView = observerToView;
+        this.observerToView.subscribe(ModelEvent.today_weather, this);
+        this.observerToView.subscribe(ModelEvent.five_days_weather, this);
+        this.observerToView.subscribe(ModelEvent.air_quality_forecast, this);
+    }
+
+    notify<T>(params: NotifyParameters<T>): void {
+        console.log('params :', params);
+        switch (params.typeEvents) {
+            case ModelEvent.today_weather: {
+                const WeatherTodayData = <WeatherTodayData>params.message;
+                // console.log('weatherData :', weatherData);
+                this.setTemp(WeatherTodayData);
+                const temp = this.getTemp();
+                this.setTempMin(WeatherTodayData);
+                const tempMin = this.getTempMin();
+                this.setTempMax(WeatherTodayData);
+                const tempMax = this.getTempMax();
+                this.setFeelsLike(WeatherTodayData);
+                const feelsLike = this.getFeelsLike();
+                this.setHumidity(WeatherTodayData);
+                const humidity = this.getHumidity();
+                this.setPressure(WeatherTodayData);
+                const pressure = this.getPressure();
+                this.setVisibility(WeatherTodayData);
+                const visibility = this.getVisibility();
+                this.setWindSpeed(WeatherTodayData);
+                const windSpeed = this.getWindSpeed();
+                this.setClouds(WeatherTodayData);
+                const clouds = this.getClouds();
+                this.setSunrise(WeatherTodayData);
+                const sunrise = this.getSunrise();
+                this.setSunset(WeatherTodayData);
+                const sunset = this.getSunset();
+                this.setIcon(WeatherTodayData);
+                const icon = this.getIcon();
+
+                this.setId(WeatherTodayData);
+                const id = this.getId();
+                this.setDescription(WeatherTodayData);
+                const description = this.getDescription();
+                this.setMainWeather(WeatherTodayData);
+                const mainWeather = this.getMainWeather();
+
+                this.setTimezone(WeatherTodayData);
+                const timezone = this.getTimezone();
+                this.setCityName(WeatherTodayData);
+                const cityName = this.getCityName();
+
+                this.setCountryCode(WeatherTodayData);
+                const countryCode = this.getCountryCode();
+
+                this.setDataCalcTime(WeatherTodayData);
+                const dataCalcTime = this.getDataCalcTime();
+
+                // this.setCountry(WeatherTodayData);
+                // const country = this.getCountry();
+
+                this.observerToView.notify(ModelEvent.today_weather_indicators, {
+                    message: {
+                        temp,
+                        tempMin,
+                        tempMax,
+                        feelsLike,
+                        humidity,
+                        pressure,
+                        visibility,
+                        windSpeed,
+                        clouds,
+                        sunrise,
+                        sunset,
+                        icon,
+                        description,
+                        id,
+                        mainWeather,
+                        timezone,
+                        cityName,
+                        countryCode,
+                        dataCalcTime,
+                        // country,
+                    },
+                    typeEvents: ModelEvent.today_weather_indicators,
+                });
+                break;
+            }
+            case ModelEvent.five_days_weather: {
+                const weatherFiveDaysData = <weatherFiveDaysData>params.message;
+                // console.log('weatherData :', weatherData);
+                // this.setTemp(weatherFiveDaysData);
+                // const temp = this.getTemp();
+                // this.setTempMin(weatherFiveDaysData);
+                // const tempMin = this.getTempMin();
+                this.observerToView.notify(ModelEvent.five_days_weather, { message: {} });
+                break;
+            }
+            case ModelEvent.air_quality_forecast: {
+                const airQualityForecastData = <airQualityForecastData>params.message;
+
+                this.observerToView.notify(ModelEvent.air_quality_forecast, { message: {} });
+                break;
+            }
+        }
+    }
+
+    getStore() {
+        return this;
+    }
+
+    getWeatherTodayData() {
+        return this.weatherTodayData;
+    }
+
+    setWeatherTodayData(data: WeatherTodayData) {
+        this.weatherTodayData = data;
+    }
+
+    getWeatherFiveDaysData() {
+        return this.weatherFiveDaysData;
+    }
+
+    setWeatherFiveDaysData(data: weatherFiveDaysData) {
+        this.weatherFiveDaysData = data;
+    }
+
+    getAirQualityForecastData() {
+        return this.airQualityForecastData;
+    }
+
+    setAirQualityForecastData(data: airQualityForecastData) {
+        this.airQualityForecastData = data;
+    }
+
+    getTemp() {
+        return this.temp;
+    }
+
+    setTemp(data: WeatherTodayData) {
+        this.temp = Math.floor(data.main.temp);
+    }
+
+    getTempMin() {
+        return this.temp_min;
+    }
+
+    setTempMin(data: WeatherTodayData) {
+        this.temp_min = Math.floor(data.main.temp_min);
+    }
+
+    getTempMax() {
+        return this.temp_max;
+    }
+
+    setTempMax(data: WeatherTodayData) {
+        this.temp_max = Math.floor(data.main.temp_max);
+    }
+
+    getFeelsLike() {
+        return this.feels_like;
+    }
+
+    setFeelsLike(data: WeatherTodayData) {
+        this.feels_like = Math.floor(data.main.feels_like);
+    }
+
+    getHumidity() {
+        return this.humidity;
+    }
+
+    setHumidity(data: WeatherTodayData) {
+        this.humidity = data.main.humidity;
+    }
+
+    getPressure() {
+        return this.pressure;
+    }
+
+    setPressure(data: WeatherTodayData) {
+        this.pressure = data.main.pressure;
+    }
+
+    getVisibility() {
+        return this.visibility;
+    }
+
+    setVisibility(data: WeatherTodayData) {
+        this.visibility = data.visibility / this.kilometer;
+    }
+
+    getWindSpeed() {
+        return this.wind_speed;
+    }
+
+    setWindSpeed(data: WeatherTodayData) {
+        this.wind_speed = Math.floor(data.wind.speed);
+    }
+
+    getClouds() {
+        return this.clouds;
+    }
+
+    setClouds(data: WeatherTodayData) {
+        this.clouds = Math.floor(data.clouds.all);
+    }
+
+    getSunrise() {
+        return this.sunrise;
+    }
+
+    setSunrise(data: WeatherTodayData) {
+        this.sunrise = `${new Date(data.sys.sunrise).getHours()}:${new Date(data.sys.sunrise).getMinutes()}`;
+    }
+
+    getSunset() {
+        return this.sunset;
+    }
+
+    setSunset(data: WeatherTodayData) {
+        this.sunset = `${new Date(data.sys.sunset).getHours()}:${new Date(data.sys.sunset).getMinutes()}`;
+    }
+
+    getIcon() {
+        return this.icon;
+    }
+
+    setIcon(data: WeatherTodayData) {
+        this.icon = data.weather[0].icon;
+    }
+
+    getId() {
+        return this.id;
+    }
+
+    setId(data: WeatherTodayData) {
+        this.id = data.weather[0].id;
+    }
+
+    getDescription() {
+        return this.description;
+    }
+
+    setDescription(data: WeatherTodayData) {
+        this.description = data.weather[0].description;
+    }
+
+    getMainWeather() {
+        return this.main;
+    }
+
+    setMainWeather(data: WeatherTodayData) {
+        this.main = data.weather[0].main;
+    }
+
+    getTimezone() {
+        return this.timezone;
+    }
+
+    setTimezone(data: WeatherTodayData) {
+        this.timezone = -new Date(data.timezone).getTimezoneOffset() / this.minute;
+    }
+
+    getCityName() {
+        return this.name;
+    }
+
+    setCityName(data: WeatherTodayData) {
+        this.name = data.name;
+    }
+
+    getCountryCode() {
+        return this.countryCode;
+    }
+
+    setCountryCode(data: WeatherTodayData) {
+        this.countryCode = data.sys.country;
+    }
+
+    // getCountry() {
+    //     return this.country;
+    // }
+
+    // setCountry(data: WeatherTodayData) {
+    //     this.country = `${(data)}`;
+    // }
+
+    getDataCalcTime() {
+        return this.dataCalcTime;
+    }
+
+    setDataCalcTime(data: WeatherTodayData) {
+        this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
+    }
+}
+
+// export const store = new Store();
