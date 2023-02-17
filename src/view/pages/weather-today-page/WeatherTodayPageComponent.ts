@@ -1,7 +1,8 @@
 import { lang, langObj } from '../../../constants';
 import { WeatherTodayPageController } from '../../../controller/WeatherTodayPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { NotifyParameters, WeatherTodayData } from '../../../types';
+import { TranslatorModel } from '../../../model/TranslatorModel';
+import INotify, { ModelEvent, NotifyParameters, pagesLang, weatherIndicators } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './weather-today-page.css';
@@ -10,45 +11,102 @@ interface WeatherTodayPageProps {
     controller: WeatherTodayPageController;
     router: Router;
     observerToView: ObserverToView;
+    language: TranslatorModel;
 }
 
-export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPageProps> {
-    private currentConditionsHeaderLocation!: HTMLHeadingElement;
+export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPageProps> implements INotify {
+    private currentConditionsTitleLocation!: HTMLHeadingElement;
+    private currentConditionsTitleTimestampTitle!: HTMLSpanElement;
+    private currentConditionsTitleTimestampValue!: HTMLSpanElement;
+
     private boxTempValue!: HTMLSpanElement;
     private boxTempPhrase!: HTMLSpanElement;
     private todayWeatherCardTitle!: HTMLHeadingElement;
     private title!: HTMLHeadingElement;
     private feelsLikeTempValue!: HTMLSpanElement;
     private observerToView: ObserverToView;
+    private language: TranslatorModel;
 
-    constructor(controller: WeatherTodayPageController, router: Router, observerToView: ObserverToView) {
-        super('weather-today', { controller, router, observerToView }, 'div');
+    constructor(
+        controller: WeatherTodayPageController,
+        router: Router,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
+        super('weather-today', { controller, router, observerToView, language }, 'div');
         this.observerToView = observerToView;
-        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsToday(params));
+        this.language = language;
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
+        this.observerToView.subscribe(ModelEvent.language, this);
+        this.observerToView.subscribe(ModelEvent.temp_unit, this);
     }
 
-    setWeatherIndicatorsToday<T>(params: NotifyParameters<T>) {
-        const weatherData = <WeatherTodayData>params.message;
-        this.title.innerText = `${langObj[lang].weatherToday}: ${weatherData.name}`;
+    notify<T>(params: NotifyParameters<T>): void {
+        switch (params.typeEvents) {
+            case ModelEvent.language: {
+                const langObject = <pagesLang>params.message;
+                this.currentConditionsTitleTimestampTitle.textContent = langObject.asOf;
+                break;
+            }
+            case ModelEvent.today_weather_indicators: {
+                const {
+                    temp,
+                    tempMin,
+                    tempMax,
+                    feelsLike,
+                    humidity,
+                    pressure,
+                    visibility,
+                    windSpeed,
+                    clouds,
+                    sunrise,
+                    sunset,
+                    icon,
+                    description,
+                    id,
+                    mainWeather,
+                    timezone,
+                    cityName,
+                    countryCode,
+                    dataCalcTime,
+                    country,
+                } = <weatherIndicators>params.message;
+
+                this.currentConditionsTitleLocation.textContent = `${cityName}, ${country}`;
+                this.currentConditionsTitleTimestampValue.textContent = `${dataCalcTime}, GMT +0${timezone}:00`;
+            }
+        }
     }
 
     protected render(): void {
         const currentConditions = document.createElement('div');
         currentConditions.className = 'current-conditions';
 
-        const currentConditionsHeader = document.createElement('div');
-        currentConditionsHeader.className = 'current-conditions-header';
+        const currentConditionsTitle = document.createElement('div');
+        currentConditionsTitle.className = 'current-conditions-title';
+
+        this.currentConditionsTitleLocation = document.createElement('h2');
+        this.currentConditionsTitleLocation.className = 'current-conditions-title__location';
+        this.currentConditionsTitleLocation.textContent = `town, country`;
+
+        const currentConditionsTitleTimestamp = document.createElement('div');
+        currentConditionsTitleTimestamp.className = 'current-conditions-title__timestamp';
+
+        this.currentConditionsTitleTimestampTitle = document.createElement('span');
+        this.currentConditionsTitleTimestampTitle.className = 'current-conditions-title__timestamp_title';
+        this.currentConditionsTitleTimestampTitle.textContent = `По состоянию на: `;
+
+        this.currentConditionsTitleTimestampValue = document.createElement('span');
+        this.currentConditionsTitleTimestampValue.className = 'current-conditions-title__timestamp_value';
+
+        currentConditionsTitleTimestamp.append(
+            this.currentConditionsTitleTimestampTitle,
+            this.currentConditionsTitleTimestampValue
+        );
+        currentConditionsTitle.append(this.currentConditionsTitleLocation, currentConditionsTitleTimestamp);
 
         const currentConditionsBox = document.createElement('div');
         currentConditionsBox.className = 'current-conditions-box';
-
-        this.currentConditionsHeaderLocation = document.createElement('h2');
-        this.currentConditionsHeaderLocation.className = 'current-conditions-header__location';
-        this.currentConditionsHeaderLocation.textContent = `town, country`;
-
-        const currentConditionsHeaderTimestamp = document.createElement('span');
-        currentConditionsHeaderTimestamp.className = 'current-conditions-header__timestamp';
-        currentConditionsHeaderTimestamp.textContent = `${langObj[lang].asOf} time, GMT`;
 
         const currentConditionsBoxTemp = document.createElement('div');
         currentConditionsBoxTemp.className = 'current-conditions-box-temp';
@@ -67,12 +125,11 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         this.boxTempPhrase.className = 'box-temp-phrase';
         this.boxTempPhrase.textContent = 'Ясно';
 
-        currentConditionsHeader.append(this.currentConditionsHeaderLocation, currentConditionsHeaderTimestamp);
-
         currentConditionsBoxIcon.append(currentConditionsIcon);
         currentConditionsBoxTemp.append(this.boxTempValue, this.boxTempPhrase);
         currentConditionsBox.append(currentConditionsBoxTemp, currentConditionsBoxIcon);
-        currentConditions.append(currentConditionsHeader, currentConditionsBox);
+
+        currentConditions.append(currentConditionsTitle, currentConditionsBox);
 
         const todayWeatherCard = document.createElement('div');
         todayWeatherCard.className = 'today-weather-card';
@@ -118,7 +175,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         </div>
         </li>
         <li class="colomn-times-of-day">
-            <h3 class="colomn-label">${langObj[lang].nigth}</h3>
+            <h3 class="colomn-label">${langObj[lang].night}</h3>
             <div class="colomn-label">-23</div>
             <div class="colomn-icon"></div>
             <div class="colomn-precip">
@@ -198,7 +255,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
             'beforeend',
             `
         <div class='todays-details-item'>
-            <svg class='weather-details-item-icon'></svg>
+            <img class='weather-details-item-icon' src="" alt=""></img>
             <div class='weather-details-item-label'>${langObj[lang].high}/${langObj[lang].low}</div>
             <div class='weather-details-item-info'>
                 <span >-13°</span>
@@ -255,12 +312,13 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         );
 
         feelsLikeTempBox.append(this.feelsLikeTempValue, feelsLikeTempLabel);
-
         sunriseSunsetBox.append(sunriseSunsetSvgBox);
-
         todaysDetailsHeader.append(feelsLikeTempBox, sunriseSunsetBox);
-
         todaysDetails.append(this.title, todaysDetailsHeader, todaysDetailsCard);
         this.element.append(currentConditions, todayWeatherCard, todaysDetails);
+    }
+
+    public show() {
+        return this.element;
     }
 }
