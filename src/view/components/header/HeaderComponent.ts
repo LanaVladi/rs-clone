@@ -1,52 +1,67 @@
 import { HeaderController } from '../../../controller/HeaderController';
-import { NotifyParameters, WeatherTodayData } from '../../../types';
+import INotify, { ModelEvent, NotifyParameters, pagesLang, weatherIndicators } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
-import './header.css';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { lang, langObj, weatherIconUrl } from '../../../constants';
+import { weatherIconUrl, weatherIconImgFormat } from '../../../constants';
+import './header.css';
+import { TranslatorModel } from './../../../model/TranslatorModel';
 
 interface HeaderComponentProps {
     controller: HeaderController;
-    router: Router;
     observerToView: ObserverToView;
+    router: Router;
+    language: TranslatorModel;
 }
 
-export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
-    private logo!: HTMLDivElement;
+export class HeaderComponent extends BaseComponent<HeaderComponentProps> implements INotify {
+    private logo!: HTMLImageElement;
     private conversion!: HTMLDivElement;
-    private langName!: HTMLDivElement;
-    private langLogo!: HTMLDivElement;
-    private temperatureUnit!: HTMLSelectElement;
     private headerLocation!: HTMLDivElement;
     private locationName!: HTMLSpanElement;
-    private celsius!: HTMLOptionElement;
-    private fahrenheit!: HTMLOptionElement;
     private temperature!: HTMLSpanElement;
     private headerNav!: HTMLUListElement;
     public componentToday!: HTMLLIElement;
     private componentFiveDays!: HTMLLIElement;
     public componentMap!: HTMLLIElement;
     private componentAirQuality!: HTMLLIElement;
-    private observerToView: ObserverToView;
     private weatherIcon!: HTMLImageElement;
+    private observerToView: ObserverToView;
+    private language: TranslatorModel;
 
-    constructor(controller: HeaderController, router: Router, observerToView: ObserverToView) {
-        super('header', { controller, router, observerToView }, 'header');
+    constructor(
+        controller: HeaderController,
+        router: Router,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
+        super('header', { controller, router, observerToView, language }, 'header');
+        this.language = language;
         this.observerToView = observerToView;
-        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsHeader(params));
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
+        this.observerToView.subscribe(ModelEvent.language, this);
+        this.observerToView.subscribe(ModelEvent.temp_unit, this);
     }
 
-    setWeatherIndicatorsHeader<T>(params: NotifyParameters<T>) {
-        const weatherData = <WeatherTodayData>params.message;
-        console.log('weatherData :', weatherData);
+    notify<T>(params: NotifyParameters<T>): void {
+        switch (params.typeEvents) {
+            case ModelEvent.language: {
+                const langObject = <pagesLang>params.message;
 
-        this.temperature.innerText = `${Math.round(weatherData.main.temp)}°`;
-        console.log(' this.temperature.innerText  :',  this.temperature.innerText );
+                this.componentToday.textContent = langObject.today;
+                this.componentFiveDays.innerText = langObject.fiveDay;
+                this.componentMap.innerText = langObject.map;
+                this.componentAirQuality.textContent = langObject.airQuality;
+                break;
+            }
+            case ModelEvent.today_weather_indicators: {
+                const { temp, icon, timezone, cityName, countryCode } = <weatherIndicators>params.message;
 
-        this.locationName.innerText = `${weatherData.name}`;
-
-        this.weatherIcon.src = `${weatherIconUrl}${weatherData.weather[0].icon}@2x.png`;
+                this.temperature.innerText = `${temp}°`;
+                this.locationName.innerText = `${cityName}, ${countryCode}, ${timezone}`;
+                this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
+            }
+        }
     }
 
     protected render(): void {
@@ -56,60 +71,43 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
         const headerTools = document.createElement('div');
         headerTools.className = 'header-tools';
 
-        this.logo = document.createElement('div');
-        this.logo.textContent = 'Logo';
+        this.logo = document.createElement('img');
         this.logo.classList.add('header-logo');
 
         this.conversion = document.createElement('div');
         this.conversion.className = 'conversion';
 
-        this.langName = document.createElement('div');
-        this.langName.className = 'lang-name';
-        this.langName.textContent = 'RU';
+        this.conversion.append(
+            this.props.controller.languageController.component.element,
+            this.props.controller.tempUnitController.component.element
+        );
 
-        this.langLogo = document.createElement('div');
-        this.langLogo.className = 'lang-logo';
-
-        this.temperatureUnit = document.createElement('select');
-        this.temperatureUnit.className = 'temperature-unit';
-
-        this.celsius = document.createElement('option');
-        this.celsius.text = 'C°';
-
-        this.fahrenheit = document.createElement('option');
-        this.fahrenheit.text = '°F';
-
-        this.temperatureUnit.append(this.celsius, this.fahrenheit);
-
-        this.conversion.append(this.langLogo, this.langName, this.temperatureUnit);
-        headerTools.append(this.logo, this.props.controller.searcherController.component.element, this.conversion);
+        headerTools.append(
+            this.logo,
+            this.props.controller.searcherController.component.element,
+            this.props.controller.geolocationController.component.element,
+            this.conversion
+        );
 
         this.headerNav = document.createElement('ul');
         this.headerNav.classList.add('header-nav');
 
         this.componentToday = document.createElement('li');
-        this.componentToday.textContent = langObj[lang].today;
+        this.componentToday.textContent = this.props.language.getTranslateRu().today;
 
         this.componentFiveDays = document.createElement('li');
-        this.componentFiveDays.textContent = langObj[lang].fiveDay;
+        this.componentFiveDays.textContent = this.props.language.getTranslateRu().fiveDay;
 
         this.componentMap = document.createElement('li');
-        this.componentMap.textContent = langObj[lang].map;
+        this.componentMap.textContent = this.props.language.getTranslateRu().map;
 
         this.componentAirQuality = document.createElement('li');
-        this.componentAirQuality.textContent = langObj[lang].airQuality;
+        this.componentAirQuality.textContent = this.props.language.getTranslateRu().airQuality;
 
-        this.headerNav.append(
-            this.componentToday,
-            this.componentFiveDays,
-            this.componentMap,
-            this.componentAirQuality
-        );
+        this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
 
         this.headerLocation = document.createElement('div');
         this.headerLocation.className = 'header-location';
-
-        // this.headerLocation.textContent = ' this.headerLocation'
 
         this.weatherIcon = document.createElement('img');
         this.weatherIcon.className = 'header__weather-icon';
@@ -140,7 +138,6 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> {
         });
 
         this.logo.addEventListener('click', (): void => {
-            // console.log(' this.logo :', this.logo);
             this.props.router.goTo('today');
         });
     }
