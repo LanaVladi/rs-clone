@@ -1,15 +1,24 @@
-import { NotifyParameters } from '../types';
+import INotify, { NotifyParameters, ViewEvent } from '../types';
 
 export class ObserverToModel {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    private subscribers: Array<Function> = new Array<Function>();
+    private subscribers = new Map<ViewEvent, Array<INotify>>();
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    subscribe(subscriber: Function) {
-        this.subscribers.push(subscriber);
+    subscribe(event: ViewEvent, subscriber: INotify) {
+        if (this.subscribers.has(event)) {
+            const subscribers = this.subscribers.get(event);
+            subscribers?.push(subscriber);
+        } else {
+            this.subscribers.set(event, new Array<INotify>(subscriber));
+        }
+        return this;
     }
 
-    public notify<T>(params: NotifyParameters<T>): void {
-        this.subscribers.forEach((subscriber) => subscriber(params));
+    notify<T>(event: ViewEvent, params: NotifyParameters<T>) {
+        const subscribers = this.subscribers.get(event);
+        if (subscribers) {
+            subscribers.forEach((subscriber) => {
+                subscriber.notify(params);
+            });
+        }
     }
 }
