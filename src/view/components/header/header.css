@@ -19,13 +19,18 @@
 
 .header-tools {
     width: 80%;
-    justify-content: space-between;
+    justify-content: space-evenly;
     display: flex;
     align-items: center;
 }
 
 .header-logo {
-    margin-top: 1em;
+    width: 5rem;
+    height: 5rem;
+    background-image: url(/src/assets/img/logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
 }
 
 .searcher-container {
@@ -37,7 +42,7 @@
 }
 
 .searcher-input:focus {
-    outline: 5px auto black;
+    outline: 5px auto var(--color-logo-border);
 }
 
 .searcher-input {
@@ -79,11 +84,24 @@
     height: 3rem;
 }
 
-.temperature-unit {
-    background-color: var(--color-bg-footer-header);
+.temperature-unit-container {
+    background-color: transparent;
+    cursor: pointer;
 }
 
-.lang-logo {
+.option {
+    cursor: pointer;
+}
+
+.language-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.lang-icon {
     background-image: url("https://www.svgrepo.com/show/116369/earth-globe-tool.svg");
     background-size: contain;
     background-repeat: no-repeat;
@@ -105,4 +123,21 @@ li {
 li:hover {
     opacity: 0.5;
     cursor: pointer;
+}
+
+/*  ============== geolocation button =============== */
+
+.geolocation-button {
+    transform: rotate(315deg);
+    font-size: 1.7rem;
+    border-radius: 2rem;
+    padding: 0.3rem 0 0.5rem 0.3rem;
+    width: 3rem;
+    height: 3rem;
+    color: var(--color-white);
+    background-color: var(--color-btn);
+}
+
+.geolocation-button:hover {
+    background-color: var(--color-btn-hover);
 }
