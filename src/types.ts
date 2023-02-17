@@ -5,7 +5,6 @@ import { Map } from 'leaflet';
 export type NotifyParameters<T> = {
     message: T;
     typeEvents?: ModelEvent | ViewEvent;
-    // weatherIndicators?: WeatherTodayData;
 };
 
 export default interface INotify {
@@ -20,6 +19,10 @@ export const enum ModelEvent {
     language = 'language',
     temp_unit = 'temp-unit',
     input = 'input',
+
+    today_weather_indicators = 'today-weather-indicators',
+    five_days_weather_indicators  = 'five-days-weather',
+    air_quality_forecast_indicators  = 'air-quality-forecast',
 }
 
 export const enum ViewEvent {
@@ -32,6 +35,29 @@ export const enum ViewEvent {
 // =========== Observer ===================== //
 
 // =========== open Weather ===================== //
+
+export type weatherIndicators = {
+    temp: number;
+    tempMin: number;
+    tempMax: number;
+    feelsLike: number;
+    pressure: number;
+    humidity: number;
+    windSpeed: number;
+    visibility: number;
+    clouds: number;
+    sunrise: string;
+    sunset: string;
+    icon: string;
+    id: number;
+    mainWeather: string;
+    description: string;
+    timezone: number;
+    cityName: string;
+    countryCode: string;
+    country: string;
+    dataCalcTime: string;
+};
 
 export type WeatherTodayData = {
     coord: {
