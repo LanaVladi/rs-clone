@@ -4,7 +4,8 @@ import { TranslatorModel } from '../../../model/TranslatorModel';
 import INotify, { ModelEvent, NotifyParameters, pagesLang } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
-
+import './WeatherFiveDaysPageComponent.css';
+import { WeatherDayComponent } from './WeatherDayComponent';
 interface WeatherFiveDaysPageComponentProps {
     controller: WeatherFiveDaysPageController;
     router: Router;
@@ -65,10 +66,31 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
     }
 
     protected render(): void {
-        this.title = document.createElement('h2');
-        this.title.className = 'component__title';
-        this.title.innerText = `Прогноз на 5 дней: `;
+        const daysConatainer = document.createElement('div');
+        daysConatainer.className = 'five-days-container';
 
-        this.element.append(this.title);
+        const pageName = document.createElement('span');
+        pageName.textContent = 'Прогноз на 5 дней  ';
+        pageName.className = 'page-name';
+
+        const locationPageTitle = document.createElement('h1');
+        const locationTitle = document.createElement('span');
+        locationTitle.className = 'location-title';
+        locationTitle.textContent = 'Location';
+
+        const dailyForecastTimestamp = document.createElement('div');
+        dailyForecastTimestamp.className = 'daily-forecast-timestamp';
+        dailyForecastTimestamp.textContent = 'По состоянию на ';
+
+        const dailyForecastTime = document.createElement('span');
+        dailyForecastTime.textContent='time'
+        dailyForecastTimestamp.append(dailyForecastTime)
+        const dailyForecastDisclosureList = document.createElement('div');
+        dailyForecastDisclosureList.className = 'daily-forecast-disclosure-list';
+
+        locationPageTitle.append(pageName, locationTitle);
+
+        daysConatainer.append(locationPageTitle, dailyForecastTimestamp, dailyForecastDisclosureList);
+        this.element.append(daysConatainer);
     }
 }
