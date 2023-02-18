@@ -190,6 +190,37 @@
 .weather-details-item-label {
     flex-grow: 1;
 }
-.weather-details-item-icon{
+
+.weather-details-item-icon {
+    margin-right: 1rem;
+}
+
+.wind-item {
+    background: url('../../../assets/svg/wind-icon.svg') no-repeat center;
+}
+
+.humidity-item {
+    background: url('../../../assets/svg/humidity-icon.svg') no-repeat center;
+}
+
+.cloud-item {
+    background: url('../../../assets/svg/cloud-icon.svg') no-repeat center;
+}
+
+.pressure-item {
+    background: url('../../../assets/svg/pressure-icon.svg') no-repeat center;
+}
+
+.visibility-item {
+    background: url('../../../assets/svg/visibility-icon.svg') no-repeat center;
+}
+
+.temp-item {
+    background: url('../../../assets/svg/temp-icon.svg') no-repeat center;
+}
+
+.icon-container {
+    width: 1.2rem;
+    height: 1.2rem;
     margin-right: 1rem;
 }
