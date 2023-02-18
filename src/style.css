@@ -88,6 +88,11 @@ img {
     vertical-align: top;
 }
 
+h2 {
+    font-size: 1.8rem;
+    font-weight: 900;
+}
+
 :root {
     --color-textDefault: #0d0b0b;
     --color-light-grey: rgb(193, 189, 189, 0.5);
@@ -98,6 +103,9 @@ img {
     --color-logo-border: rgb(9, 84, 113);
     --color-bg-outer: #e1ecf0;
     --color-white: #ffffff;
+
+    --color-btn: rgba(9, 84, 113, 0.3);
+    --color-btn-hover: rgba(183, 183, 183, 0.6);
 }
 
 

@@ -7,18 +7,23 @@ export const baseLinkPointForecast = 'https://api.windy.com/api/point-forecast/v
 
 export const apiKeyOpenWeather = 'cb5257dbb6329ba1752a8bea5ea623e5'; // openweathermap.org
 export const baseLinkOpenWeatherToday = 'https://api.openweathermap.org/data/2.5/weather'; //openweathermap.org today weather
-export const baseLinkOpenWeatherFiveDays = 'api.openweathermap.org/data/2.5/forecast'; //openweathermap.org 5 days weather
+export const baseLinkOpenWeatherFiveDays = 'https://api.openweathermap.org/data/2.5/forecast'; //openweathermap.org 5 days weather
+export const baseLinkOpenWeatherAirQuality = 'http://api.openweathermap.org/data/2.5/air_pollution'; //openweathermap.org air quality
+export const baseLinkOpenWeatherDirectGeocoding = 'http://api.openweathermap.org/geo/1.0/direct'; //openweathermap.org direct geocoding
+export const baseLinkDirectGeocoding = 'https://nominatim.openstreetmap.org/search/${encodeURIComponent(location)}?format=json';
 
 export const celsius = 'metric';
 export const fahrenheit = 'imperial';
 export const lang: 'en' | 'ru' = 'ru';
 
 export const weatherIconUrl = `http://openweathermap.org/img/wn/`;
+export const weatherIconImgFormat = `.png`;
+
 // export weatherIconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
 export const langObj = {
     en: {
-        nigth: 'Nigth',
+        night: 'Nigth',
         morning: 'Morning',
         afternoon: 'Afternoon',
         evening: 'Evening',
@@ -50,7 +55,7 @@ export const langObj = {
         surface: 'surface',
     },
     ru: {
-        nigth: 'Ночь',
+        night: 'Ночь',
         morning: 'Утро',
         afternoon: 'День',
         evening: 'Вечер',

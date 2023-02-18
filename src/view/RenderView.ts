@@ -4,6 +4,9 @@ import { ApiOpenWeather } from '../model/ApiOpenWeather';
 import { Router } from './Router';
 import { ObserverToModel } from '../model/ObserverToModel';
 import { ObserverToView } from '../model/ObserverToView';
+import { GeolocationModel } from '../model/GeolocationModel';
+import { TranslatorModel } from '../model/TranslatorModel';
+import { Store } from '../model/Store';
 
 class RenderView {
     constructor() {
@@ -14,10 +17,14 @@ class RenderView {
 
         const observerToModel = new ObserverToModel();
         const observerToView = new ObserverToView();
-        const weatherApis = new ApiOpenWeather(observerToModel, observerToView, 'Ташкент');
-        const router = new Router(main, observerToView);
+        const geolocation = new GeolocationModel();
+        const language = new TranslatorModel(observerToModel, observerToView, 'ru');
+        const store = new Store(observerToModel, observerToView);
+        new ApiOpenWeather(observerToModel, observerToView, geolocation, store, 'Ташкент');
 
-        const headerController = new HeaderController(router, observerToModel, observerToView);
+        const router = new Router(main, observerToView, language);
+
+        const headerController = new HeaderController(router, observerToModel, observerToView, geolocation, language);
         const footerController = new FooterController();
 
         root.append(headerController.component.element, main, footerController.component.element);
