@@ -1,8 +1,10 @@
 import { Map } from 'leaflet';
 import { apiKeyMapForecast, lang, langObj } from '../../../constants';
 import { WeatherMapPageController } from '../../../controller/WeatherMapPageController';
+import { GeolocationModel } from '../../../model/GeolocationModel';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { IBroadcast, ICoordinates, IPicker, IWindyAPI, NotifyParameters } from '../../../types';
+import { TranslatorModel } from '../../../model/TranslatorModel';
+import INotify, { IBroadcast, ICoordinates, IPicker, IWindyAPI, ModelEvent, NotifyParameters } from '../../../types';
 import { getGeolocation, latLonToDMS } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
@@ -14,25 +16,36 @@ interface WeatherMapPageComponentProps {
     controller: WeatherMapPageController;
     router: Router;
     observerToView: ObserverToView;
+    language: TranslatorModel;
+    // private geolocation: GeolocationModel;
 }
 
-export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageComponentProps> {
+export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageComponentProps> implements INotify {
     private title!: HTMLHeadingElement;
     private windyDiv!: HTMLDivElement;
     private observerToView: ObserverToView;
+    private language: TranslatorModel;
+    // private geolocation: GeolocationModel;
     private isOpen = false;
 
-    constructor(controller: WeatherMapPageController, router: Router, observerToView: ObserverToView) {
-        super('weather-map', { controller, router, observerToView }, 'div');
+    constructor(
+        controller: WeatherMapPageController,
+        router: Router,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
+        super('weather-map', { controller, router, observerToView, language }, 'div');
+        // this.geolocation  = geolocation;
         this.observerToView = observerToView;
-        this.observerToView.subscribe(<T>(params: NotifyParameters<T>) => this.setWeatherIndicatorsMap(params));
+        this.language = language;
+        this.observerToView.subscribe(ModelEvent.weather_map, this);
     }
 
-    setWeatherIndicatorsMap<T>(params: NotifyParameters<T>) {
-        // const weatherData = <weatherMapData>params.message;
-        // console.log('weatherData :', weatherData);
-        // this.title.innerText = `Прогноз на 5 дней: ${weatherData.city.name}`;
-        this.title.innerText = `${langObj[lang].map}:`;
+    notify<T>(params: NotifyParameters<T>): void {
+        const weatherData = <IWindyAPI>params.message;
+        console.log('weatherData IWindyAPI:', weatherData);
+
+        // this.title.innerText = `Карта:`;
     }
 
     protected render(): void {
@@ -67,16 +80,16 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             this.addListenersToMap(windyDiv, broadcast, picker, map);
         });
     }
-    
+
     private addListenersToMap(windyDiv: HTMLDivElement, broadcast: IBroadcast, picker: IPicker, map: Map) {
         const openPickerCallback = (event: MouseEvent) => {
-            this.openPicker(event, picker, map)
-        }
+            this.openPicker(event, picker, map);
+        };
 
-        picker.on('pickerClosed', () => this.isOpen = false);
+        picker.on('pickerClosed', () => (this.isOpen = false));
         broadcast.on('redrawFinished', () => {
             windyDiv.addEventListener('click', openPickerCallback);
-        })
+        });
 
         windyDiv.addEventListener('click', openPickerCallback);
 
@@ -115,13 +128,13 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         valueDisplay.style.top = `${event.clientY + 10}px`;
     }
 
-    private openPicker (event: MouseEvent, picker: IPicker, map: Map) {
+    private openPicker(event: MouseEvent, picker: IPicker, map: Map) {
         if (event.target !== document.getElementById('map-container')) return;
 
         if (!this.isOpen) {
             const { lat, lng: lon } = map.mouseEventToLatLng(event);
             picker.open({ lat, lon });
-            this.isOpen = true
+            this.isOpen = true;
         } else {
             picker.close();
             this.isOpen = false;
