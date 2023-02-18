@@ -79,7 +79,7 @@ export class Store implements INotify {
     notify<T>(params: NotifyParameters<T>): void {
         console.log('params :', params);
         switch (params.typeEvents) {
-            case ModelEvent.today_weather: {
+            case ModelEvent.today_weather_indicators: {
                 const WeatherTodayData = <WeatherTodayData>params.message;
                 // console.log('weatherData :', weatherData);
                 this.setTemp(WeatherTodayData);
@@ -155,7 +155,7 @@ export class Store implements INotify {
                 });
                 break;
             }
-            case ModelEvent.five_days_weather: {
+            case ModelEvent.five_days_weather_indicators: {
                 const weatherFiveDaysData = <weatherFiveDaysData>params.message;
                 console.log('weatherFiveDaysData :', weatherFiveDaysData);
 
@@ -214,6 +214,7 @@ export class Store implements INotify {
                         cityName,
                         countryCode,
                     },
+                    typeEvents: ModelEvent.five_days_weather_indicators,
                 });
                 break;
             }
