@@ -4,6 +4,7 @@ import INotify, {
     airQualityForecastData,
     ModelEvent,
     NotifyParameters,
+    Pollutants,
     weatherFiveDaysData,
     WeatherTodayData,
 } from '../types';
@@ -39,6 +40,8 @@ export class Store implements INotify {
     public countryCode!: string;
     public country!: string;
     public dataCalcTime!: string;
+
+    public pollutants!: Pollutants;
 
     constructor(observerToModel: ObserverToModel, observerToView: ObserverToView) {
         this.observerToModel = observerToModel;
@@ -127,7 +130,7 @@ export class Store implements INotify {
                 });
                 break;
             }
-            case ModelEvent.five_days_weather: {
+            /* case ModelEvent.five_days_weather: {
                 const weatherFiveDaysData = <weatherFiveDaysData>params.message;
                 // console.log('weatherData :', weatherData);
                 // this.setTemp(weatherFiveDaysData);
@@ -136,11 +139,19 @@ export class Store implements INotify {
                 // const tempMin = this.getTempMin();
                 this.observerToView.notify(ModelEvent.five_days_weather, { message: {} });
                 break;
-            }
+            } */
             case ModelEvent.air_quality_forecast: {
                 const airQualityForecastData = <airQualityForecastData>params.message;
+                this.setPollutants(airQualityForecastData);
+                const pollutants = this.getPollutants();
 
-                this.observerToView.notify(ModelEvent.air_quality_forecast, { message: {} });
+                this.observerToView.notify(ModelEvent.air_quality_forecast_indicators, {
+                    message: {
+                        pollutants,
+                    },
+                    typeEvents: ModelEvent.air_quality_forecast_indicators,
+                });
+                
                 break;
             }
         }
@@ -332,6 +343,14 @@ export class Store implements INotify {
 
     setDataCalcTime(data: WeatherTodayData) {
         this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
+    }
+
+    getPollutants() {
+        return this.pollutants;
+    }
+
+    setPollutants(data: airQualityForecastData) {
+        this.pollutants = data.list[0].components;
     }
 }
 

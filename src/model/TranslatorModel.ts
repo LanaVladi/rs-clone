@@ -65,6 +65,13 @@ export class TranslatorModel implements INotify {
             windAnimation: 'Анимация ветра',
             pleaseSpeak: 'Говорите',
             surface: 'поверхность',
+            allPollutants: 'Все загрязняющие вещества',
+            primaryPollutant: 'Первичный загрязнитель:',
+            pollutantUnits: 'мкг/м3',
+            moreDetailsText: 'ИНДЕКС КАЧЕСТВА ВОЗДУХА',
+            airQualityLevelsCaption: 'Уровни',
+            AirQualityPopOverTitle: 'Источник',
+            AirQualityPopOverBody: 'Содержит данные службы мониторинга атмосферы Copernicus Atmosphere Monitoring Service за 2023 г. и/или измененные данные службы Copernicus Atmosphere Monitoring Service за 2023 г. Европейская комиссия и ЕЦСПП не несут ответственность за любое использование данной информации.',
         };
 
         return langObjRu;
@@ -102,6 +109,13 @@ export class TranslatorModel implements INotify {
             windAnimation: 'Wind animation',
             pleaseSpeak: 'Please speak',
             surface: 'surface',
+            allPollutants: 'All pollutants',
+            primaryPollutant: 'Primary pollutant:',
+            pollutantUnits: 'µg/m3',
+            moreDetailsText: 'Air Quality Index',
+            airQualityLevelsCaption: 'Levels',
+            AirQualityPopOverTitle: 'Sourse',
+            AirQualityPopOverBody: 'Contains Copernicus Atmosphere Monitoring Service information 2023 and/or modified Copernicus Atmosphere Monitoring Service information 2023. Neither the European Commission nor ECMWF is responsible for any use of this information.',
         };
 
         return langObjEn;

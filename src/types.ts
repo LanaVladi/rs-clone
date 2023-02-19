@@ -21,8 +21,8 @@ export const enum ModelEvent {
     input = 'input',
 
     today_weather_indicators = 'today-weather-indicators',
-    five_days_weather_indicators  = 'five-days-weather',
-    air_quality_forecast_indicators  = 'air-quality-forecast',
+    five_days_weather_indicators  = 'five-days-weather-indicators',
+    air_quality_forecast_indicators  = 'air-quality-forecast-indicators',
 }
 
 export const enum ViewEvent {
@@ -225,6 +225,13 @@ export type pagesLang = {
     windAnimation: string;
     pleaseSpeak: string;
     surface: string;
+    allPollutants: string,
+    primaryPollutant: string,
+    pollutantUnits: string,
+    moreDetailsText: string,
+    airQualityLevelsCaption: string,
+    AirQualityPopOverTitle: string,
+    AirQualityPopOverBody: string,
 };
 
 // =========== language ===================== //
@@ -353,3 +360,31 @@ export interface IMinifestFile {
 export type Layer = 'wind' | 'temp' | 'pressure';
 
 // =========== Windy map ===================== //
+
+// =========== AirQuality ===================== //
+
+export type Pollutants = {
+    co: number;
+    no: number;
+    no2: number;
+    o3: number;
+    so2: number;
+    pm2_5: number;
+    pm10: number;
+    nh3: number;
+};
+
+export type PollutantsIndicator = {
+    pollutants :{
+        co: number;
+        no: number;
+        no2: number;
+        o3: number;
+        so2: number;
+        pm2_5: number;
+        pm10: number;
+        nh3: number;
+    }
+};
+
+// =========== AirQuality ===================== //
