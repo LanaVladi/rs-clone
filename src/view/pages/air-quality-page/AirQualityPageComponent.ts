@@ -34,7 +34,7 @@ const levelInfoObj = {
         'У любого человека могут начаться проблемы со здоровьем, воздействие на чувствительных людей может быть более серьезным.',
     veryUnhealthyInfo:
         'Предупреждения касательно здоровья, означающие экстренную ситуацию. Вполне возможно, что это повлияет на все население.',
-    hazardousInfo: 'НУЖЕН ТЕКСТ',
+    hazardousInfo: 'Оповещение в отношении здоровья: все люди могут испытывать более серьезные проблемы со здоровьем.',
 };
 
 type PollutantSettings = {
@@ -71,7 +71,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private title!: HTMLElement;
     private locationPageTitle!: HTMLSpanElement;
-    private allPollutantsHeader!: HTMLDivElement;
+    private allPollutantsTitle!: HTMLDivElement;
     private primaryPollutantInfoTitle!: HTMLHeadingElement;
     private allPollutantCharts!: HTMLDivElement;
     private primaryPollutantContainer!: HTMLDivElement;
@@ -82,7 +82,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     private pollutantName!: HTMLSpanElement;
     private moreDetailsText!: HTMLSpanElement;
     private airQualityLevelsCaption!: HTMLHeadingElement;
-    private AirQualityPopOverTitle!: HTMLSpanElement;
+    private AirQualityPopOverTitle!: HTMLHeadingElement;
     private AirQualityPopOverBody!: HTMLParagraphElement;
     private airQualityLevelsList!: HTMLDListElement;
 
@@ -105,7 +105,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             case ModelEvent.language: {
                 const langObject = <pagesLang>params.message;
                 this.title.textContent = langObject.airQualityToday;
-                this.allPollutantsHeader.textContent = langObject.allPollutants;
+                this.allPollutantsTitle.textContent = langObject.allPollutants;
                 this.primaryPollutantInfoTitle.textContent = langObject.primaryPollutant;
                 this.moreDetailsText.textContent = langObject.moreDetailsText;
                 this.airQualityLevelsCaption.textContent = langObject.airQualityLevelsCaption;
@@ -146,13 +146,15 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const allPollutantsContainer = document.createElement('div');
         allPollutantsContainer.className = 'all-pollutants-container';
 
-        this.allPollutantsHeader = document.createElement('h2');
+        this.allPollutantsTitle = document.createElement('h2');
+        this.allPollutantsTitle.className = 'all-pollutants-title';
+        this.allPollutantsTitle.textContent = 'Все загрязняющие вещества';
 
         this.allPollutantCharts = document.createElement('div');
         this.allPollutantCharts.className = 'all-pollutant-charts';
 
         airQualityContainer.append(titleContainer, this.primaryPollutantContainer);
-        allPollutantsContainer.append(this.allPollutantsHeader, this.allPollutantCharts, this.getAllPollutantsFooter());
+        allPollutantsContainer.append(this.allPollutantsTitle, this.allPollutantCharts, this.getAllPollutantsFooter());
         this.element.append(airQualityContainer, allPollutantsContainer);
     }
 
@@ -192,7 +194,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const AirQualityPopOverText = document.createElement('div');
         AirQualityPopOverText.className = 'air-Quality-popover-text';
 
-        this.AirQualityPopOverTitle = document.createElement('span');
+        this.AirQualityPopOverTitle = document.createElement('h4');
         this.AirQualityPopOverTitle.className = 'air-Quality-popover-title';
         this.AirQualityPopOverTitle.textContent = 'Источник';
 
@@ -217,6 +219,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
         this.airQualityLevelsCaption = document.createElement('h4');
         this.airQualityLevelsCaption.className = 'air-quality-levels-caption';
+        this.airQualityLevelsCaption.textContent = 'Уровни';
 
         this.airQualityLevelsList = document.createElement('ul');
         this.airQualityLevelsList.className = 'air-quality-levels-list';
@@ -231,7 +234,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
                 'Опасно',
             ];
             const airQualityLevel = document.createElement('li');
-            airQualityLevel.className = 'air-quality-level;';
+            airQualityLevel.className = 'air-quality-level';
 
             const airQualityLevelColor = document.createElement('div');
             airQualityLevelColor.className = 'air-quality-levelColor';
@@ -395,7 +398,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             <svg width="54" height="54" style="border-radius: 50%;display: block;">
                 <circle r="27" cx="27" cy="27" transform="rotate(90 27 27)" style="stroke-width:10;stroke: #e7ecf1;" fill='#0000'></circle>
                 <circle r="27" cx="27" cy="27" transform="rotate(90 27 27)" style="stroke-width:10;stroke-dasharray:${currentSector} 169.64600329384882;stroke: ${color};transition: stroke-dasharray .3s ease;" fill='#0000'></circle>
-                <text x="50%" y="55%" dominant-baseline="middle" alignment-baseline="middle" text-anchor="middle">${aqi}</text>
+                <text x="50%" y="55%" dominant-baseline="middle" alignment-baseline="middle" text-anchor="middle" style="font-size: 1.6rem">${aqi}</text>
             </svg>
         `;
     }
