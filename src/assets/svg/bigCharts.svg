@@ -1,5 +1,0 @@
-<svg width="102" height="102" style="border-radius: 50%;display: block;">
-    <circle r="51" cx="51" cy="51" transform="rotate(90 51 51)" style="stroke-width:10;stroke: #e7ecf1;" fill='#0000'></circle>
-    <circle r="51" cx="51" cy="51" transform="rotate(90 51 51)" style="stroke-width:10;stroke-dasharray:0 320.4424506661589;stroke: #e7ecf1;;transition: stroke-dasharray .3s ease;" fill='#0000'></circle>
-    <text x="50%" y="55%" dominant-baseline="middle" alignment-baseline="middle" text-anchor="middle">1</text>
-</svg>

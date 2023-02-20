@@ -225,13 +225,31 @@ export type pagesLang = {
     windAnimation: string;
     pleaseSpeak: string;
     surface: string;
-    allPollutants: string,
-    primaryPollutant: string,
-    pollutantUnits: string,
-    moreDetailsText: string,
-    airQualityLevelsCaption: string,
-    AirQualityPopOverTitle: string,
-    AirQualityPopOverBody: string,
+    allPollutants: string;
+    primaryPollutant: string;
+    pollutantUnits: string;
+    moreDetailsText: string;
+    airQualityLevelsCaption: string;
+    AirQualityPopOverTitle: string;
+    AirQualityPopOverBody: string;
+    good: string;
+    moderate: string;
+    unhealthyForGroups: string;
+    unhealthy: string;
+    veryUnhealthy: string;
+    hazardous: string;
+    goodInfo: string;
+    moderateInfo: string;
+    unhealthyForGroupsInfo: string;
+    unhealthyInfo: string;
+    veryUnhealthyInfo: string;
+    hazardousInfo: string;
+    co: string;
+    no2: string;
+    o3: string;
+    so2: string;
+    pm2_5: string;
+    pm10: string;
 };
 
 // =========== language ===================== //
@@ -375,16 +393,7 @@ export type Pollutants = {
 };
 
 export type PollutantsIndicator = {
-    pollutants :{
-        co: number;
-        no: number;
-        no2: number;
-        o3: number;
-        so2: number;
-        pm2_5: number;
-        pm10: number;
-        nh3: number;
-    }
+    pollutants : Pollutants;
 };
 
 // =========== AirQuality ===================== //

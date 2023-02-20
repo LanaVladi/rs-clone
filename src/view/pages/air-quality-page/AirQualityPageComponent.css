@@ -3,6 +3,7 @@
     box-sizing: border-box;
     height: 100%;
     width: 80%;
+    max-width: 100rem
 }
 
 .air-quality-container{
@@ -53,7 +54,7 @@
 
 .primary-pollutant__info {
     border-left: 1px solid #dedede;
-    padding: 2.6rem 1.6rem 2.6rem 2.6rem;
+    padding: 2rem 1.6rem 2rem 2.6rem;
     flex: 1 0 25%;
     font-size: 1.4rem;
 }
@@ -108,9 +109,9 @@
 
 .info-icon {
     display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    background-image: url('../../../assets/svg/info-icon.svg');
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url(/src/assets/svg/info-icon.svg);
 }
 
 

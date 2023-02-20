@@ -1,7 +1,14 @@
-import './AirQualityPageComponent.css'
+import './AirQualityPageComponent.css';
 import { AirQualityPageController } from '../../../controller/AirQualityPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
-import INotify, { ModelEvent, NotifyParameters, pagesLang, Pollutants, PollutantsIndicator, WeatherTodayData } from '../../../types';
+import INotify, {
+    ModelEvent,
+    NotifyParameters,
+    pagesLang,
+    Pollutants,
+    PollutantsIndicator,
+    WeatherTodayData,
+} from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import { TranslatorModel } from '../../../model/TranslatorModel';
@@ -17,12 +24,36 @@ const BIG_CYRCLE_LENGTH = 320.4424506661589;
 const CYRCLE_LENGTH = 169.64600329384882;
 const SEGMENT_COUNT = 6;
 
+const levelInfoObj = {
+    goodInfo: 'Качество воздуха удовлетворительное, уровень загрязнений почти не вызывает опасений.',
+    moderateInfo:
+        'Качество воздуха приемлемое, однако для некоторых типов загрязнений есть средний риск воздействия на самочувствие малой части людей, чувствительных к загрязнению воздуха.',
+    unhealthyForGroupsInfo:
+        'Чувствительные люди могут испытывать проблемы со здоровьем. Вероятно, это не повлияет на остальные слои населения.',
+    unhealthyInfo:
+        'У любого человека могут начаться проблемы со здоровьем, воздействие на чувствительных людей может быть более серьезным.',
+    veryUnhealthyInfo:
+        'Предупреждения касательно здоровья, означающие экстренную ситуацию. Вполне возможно, что это повлияет на все население.',
+    hazardousInfo: 'НУЖЕН ТЕКСТ',
+};
+
 type PollutantSettings = {
     color: string;
     factor: number;
     level: string;
     levelInfo: string;
-}
+    levelAttribute: string;
+};
+
+type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';
+type PollutantNameKey = 'co' | 'no2' | 'o3' | 'so2' | 'pm2_5' | 'pm10';
+type LevelInfoKey =
+    | 'goodInfo'
+    | 'moderateInfo'
+    | 'unhealthyForGroupsInfo'
+    | 'unhealthyInfo'
+    | 'veryUnhealthyInfo'
+    | 'hazardousInfo';
 
 interface AirQualityPageComponentProps {
     controller: AirQualityPageController;
@@ -31,43 +62,13 @@ interface AirQualityPageComponentProps {
     language: TranslatorModel;
 }
 
-const language = {
-    "Today's Air Quality": "",
-    "Primary Pollutant:": "",
-    "All Pollutants": "",
-    "Air Quality Index": "",
-    "Levels": "",
-    "Good": "Хорошее",
-    "Moderate": "Среднее",
-    "Unhealthy for Sensitive Groups": "Вредное для чувствительных людей",
-    "Unhealthy": "Вредные условия",
-    "Very Unhealthy": "Очень вредные условия",
-    "Hazardous": "Опасно",
-    "Contains Copernicus Atmosphere Monitoring Service information 2023 and/or modified Copernicus Atmosphere Monitoring Service information 2023": "",
-    "Neither the European Commission nor ECMWF is responsible for any use of this information": "",
-    "Ozone": "",
-    "Carbon Monoxide": "",
-    "Nitrogen Dioxide": "",
-    "Particulate matter less than 10 microns": "",
-    "PM2.5 (Particulate matter less than 2.5 microns": "",
-    "Sulfur Dioxide": "",
-    "µg/m3": "",
-    "Air quality is considered satisfactory, and air pollution poses little or no risk.": "",
-    "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people who are unusually sensitive to air pollution.": "Качество воздуха приемлемое, однако для некоторых типов загрязнений есть средний риск воздействия на самочувствие малой части людей, чувствительных к загрязнению воздуха.",
-    "Members of sensitive groups may experience health effects. The general public is not likely to be affected.": "",
-    "Everyone may begin to experience health effects; members of sensitive groups may experience more serious health effects.": "Предупреждения касательно здоровья, означающие экстренную ситуацию. Вполне возможно, что это повлияет на все население.",
-    "Health warnings of emergency conditions. The entire population is more likely to be affected.": "",
-
-}
-
 export class AirQualityPageComponent extends BaseComponent<AirQualityPageComponentProps> implements INotify {
     private observerToView: ObserverToView;
     private airQualityMoreDetails!: HTMLDivElement;
     private popover!: HTMLDivElement;
     private popoverClose!: HTMLDivElement;
     private language: TranslatorModel;
-    
-    
+
     private title!: HTMLElement;
     private locationPageTitle!: HTMLSpanElement;
     private allPollutantsHeader!: HTMLDivElement;
@@ -79,13 +80,11 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     private bigChart!: HTMLDivElement;
     private primaryPollutantName!: HTMLSpanElement;
     private pollutantName!: HTMLSpanElement;
-    private units!: HTMLSpanElement;
     private moreDetailsText!: HTMLSpanElement;
     private airQualityLevelsCaption!: HTMLHeadingElement;
     private AirQualityPopOverTitle!: HTMLSpanElement;
     private AirQualityPopOverBody!: HTMLParagraphElement;
-
-
+    private airQualityLevelsList!: HTMLDListElement;
 
     constructor(
         controller: AirQualityPageController,
@@ -105,14 +104,17 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         switch (params.typeEvents) {
             case ModelEvent.language: {
                 const langObject = <pagesLang>params.message;
-                this.title.textContent = langObject.airQualityToday
+                this.title.textContent = langObject.airQualityToday;
                 this.allPollutantsHeader.textContent = langObject.allPollutants;
                 this.primaryPollutantInfoTitle.textContent = langObject.primaryPollutant;
-                this.units.textContent = langObject.pollutantUnits;
                 this.moreDetailsText.textContent = langObject.moreDetailsText;
                 this.airQualityLevelsCaption.textContent = langObject.airQualityLevelsCaption;
                 this.AirQualityPopOverTitle.textContent = langObject.AirQualityPopOverTitle;
                 this.AirQualityPopOverBody.textContent = langObject.AirQualityPopOverBody;
+
+                this.translatePrimaryPollutant(langObject);
+                this.translateAllPollutantCharts(langObject);
+                this.translateLevelList(langObject);
                 break;
             }
             case ModelEvent.air_quality_forecast_indicators: {
@@ -123,6 +125,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         }
     }
 
+    
     protected render(): void {
         const airQualityContainer = document.createElement('div');
         airQualityContainer.className = 'air-quality-container';
@@ -131,9 +134,10 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         titleContainer.className = 'air-quality-title';
 
         this.title = document.createElement('strong');
+        this.title.textContent = 'Качество воздуха сегодня';
 
         this.locationPageTitle = document.createElement('span');
-        this.locationPageTitle.textContent = 'Location';//////DATA FROM HEADER
+        this.locationPageTitle.textContent = 'Location'; //////DATA FROM HEADER
         titleContainer.append(this.title, ' - ', this.locationPageTitle);
 
         this.primaryPollutantContainer = document.createElement('div');
@@ -152,7 +156,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         this.element.append(airQualityContainer, allPollutantsContainer);
     }
 
-    getAllPollutantsFooter(): HTMLDivElement {
+    private getAllPollutantsFooter(): HTMLDivElement {
         const element = document.createElement('div');
         element.className = 'all-pollutants-footer';
 
@@ -163,6 +167,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         infoIcon.className = 'info-icon';
 
         this.moreDetailsText = document.createElement('span');
+        this.moreDetailsText.textContent = 'Индекс качества воздуха';
 
         this.airQualityMoreDetails.append(infoIcon, this.moreDetailsText);
         this.airQualityMoreDetails.addEventListener('click', this.openMoreDetails.bind(this));
@@ -183,15 +188,18 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
         const airQualityPopOverContent = document.createElement('div');
         airQualityPopOverContent.className = 'air-quality-popover-content';
-        
+
         const AirQualityPopOverText = document.createElement('div');
         AirQualityPopOverText.className = 'air-Quality-popover-text';
 
         this.AirQualityPopOverTitle = document.createElement('span');
         this.AirQualityPopOverTitle.className = 'air-Quality-popover-title';
+        this.AirQualityPopOverTitle.textContent = 'Источник';
 
         this.AirQualityPopOverBody = document.createElement('p');
         this.AirQualityPopOverBody.className = 'air-Quality-popover-body';
+        this.AirQualityPopOverBody.textContent =
+            'Содержит данные службы мониторинга атмосферы Copernicus Atmosphere Monitoring Service за 2023 г. и/или измененные данные службы Copernicus Atmosphere Monitoring Service за 2023 г. Европейская комиссия и ЕЦСПП не несут ответственность за любое использование данной информации.';
 
         AirQualityPopOverText.append(this.AirQualityPopOverTitle, this.AirQualityPopOverBody);
         airQualityPopOverContent.append(this.getAirQualityLevels(), AirQualityPopOverText);
@@ -210,14 +218,21 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         this.airQualityLevelsCaption = document.createElement('h4');
         this.airQualityLevelsCaption.className = 'air-quality-levels-caption';
 
-        const airQualityLevelsList = document.createElement('ul');
-        airQualityLevelsList.className = 'air-quality-levels-list';
+        this.airQualityLevelsList = document.createElement('ul');
+        this.airQualityLevelsList.className = 'air-quality-levels-list';
 
         for (let i = 0; i < 6; i++) {
-            const levels = ['Хорошее', 'Среднее', 'Вредное для чувствительных людей', 'Вредные условия', 'Очень вредные условия', 'Опасно' ];
+            const levels = [
+                'Хорошее',
+                'Среднее',
+                'Вредное для чувствительных людей',
+                'Вредные условия',
+                'Очень вредные условия',
+                'Опасно',
+            ];
             const airQualityLevel = document.createElement('li');
-            airQualityLevel.className = 'air-quality-level;'
-            
+            airQualityLevel.className = 'air-quality-level;';
+
             const airQualityLevelColor = document.createElement('div');
             airQualityLevelColor.className = 'air-quality-levelColor';
 
@@ -225,18 +240,18 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             airQualityLevelText.textContent = levels[i];
 
             airQualityLevel.append(airQualityLevelColor, airQualityLevelText);
-            airQualityLevelsList.append(airQualityLevel);
+            this.airQualityLevelsList.append(airQualityLevel);
         }
 
-        airQualityLevels.append(this.airQualityLevelsCaption, airQualityLevelsList);
+        airQualityLevels.append(this.airQualityLevelsCaption, this.airQualityLevelsList);
         return airQualityLevels;
     }
 
-    private openMoreDetails() {
+    private openMoreDetails(): void {
         this.popover.classList.add('popover-active');
     }
 
-    private closeMoreDetails() {
+    private closeMoreDetails(): void {
         this.popover.classList.remove('popover-active');
     }
 
@@ -245,7 +260,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const pollutantShortName = primaryPollutant[0];
         const pollutantFullName = this.getPollutantFullName(pollutantShortName);
         const aqi = primaryPollutant[1];
-        const { level, levelInfo } = this.getPollutantSettings(aqi);
+        const { level, levelInfo, levelAttribute } = this.getPollutantSettings(aqi);
 
         const primaryIndicator = document.createElement('div');
         primaryIndicator.className = 'primary-indicator';
@@ -269,19 +284,22 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         primaryPollutantInfo.className = 'primary-pollutant__info';
 
         this.primaryPollutantInfoTitle = document.createElement('h4');
+        this.primaryPollutantInfoTitle.textContent = 'Первичный загрязнитель:';
 
         this.primaryPollutantName = document.createElement('span');
-        this.primaryPollutantName.textContent = pollutantFullName;/////////
+        this.primaryPollutantName.textContent = pollutantFullName;
 
-        primaryPollutantInfo.append(this.primaryPollutantInfoTitle, this.primaryPollutantName)
+        primaryPollutantInfo.append(this.primaryPollutantInfoTitle, this.primaryPollutantName);
 
+        this.primaryPollutantContainer.setAttribute('data-pollutant', pollutantShortName);
+        this.primaryPollutantContainer.setAttribute('data-level', levelAttribute);
         this.primaryPollutantContainer.append(primaryIndicator, primaryPollutantInfo);
     }
 
     private getPrimaryPollutant(pollutants: Pollutants): [string, number] {
         const prymaryPollutant = Object.entries(pollutants)
-            .filter(pollutant => pollutant[0] !== 'nh3' && pollutant[0] !== 'no')
-            .map(pollutant => {
+            .filter((pollutant) => pollutant[0] !== 'nh3' && pollutant[0] !== 'no')
+            .map((pollutant) => {
                 pollutant[1] = this.convertToAqi(pollutant);
                 return pollutant;
             })
@@ -295,7 +313,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private renderAllPollutants(pollutants: Pollutants): void {
         Object.entries(pollutants)
-            .filter(pollutant => pollutant[0] !== 'nh3' && pollutant[0] !== 'no')
+            .filter((pollutant) => pollutant[0] !== 'nh3' && pollutant[0] !== 'no')
             .forEach((pollutant) => {
                 const airQualityItem = this.getAirQualityItem(pollutant);
                 this.allPollutantCharts.append(airQualityItem);
@@ -304,7 +322,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private getAirQualityItem(pollutant: [string, number]): HTMLDivElement {
         const aqi = this.convertToAqi(pollutant);
-        const { level } = this.getPollutantSettings(aqi)
+        const { level, levelAttribute } = this.getPollutantSettings(aqi);
 
         const item = document.createElement('div');
         item.className = 'air-quality-item';
@@ -318,18 +336,20 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
         this.pollutantName = document.createElement('span');
         this.pollutantName.className = 'pollutant-info__name';
-        this.pollutantName.textContent = `${pollutant[0] === 'pm2_5' ? 'PM2.5' : pollutant[0].toUpperCase()} (${this.getPollutantFullName(pollutant[0])})`;
+        this.pollutantName.textContent = this.getPollutantFullName(pollutant[0]);
 
         const pollutantLevel = document.createElement('span');
         pollutantLevel.className = 'pollutant-info__lavel';
+        pollutantLevel.setAttribute('data-level', levelAttribute);
         pollutantLevel.textContent = level;
 
         const concentration = document.createElement('span');
         concentration.className = 'pollutant-info__concentration';
-        concentration.textContent = `${pollutant[1]} `
+        concentration.textContent = `${pollutant[1]} `;
 
-        this.units = document.createElement('span');
-        concentration.append(this.units);
+        const units = document.createElement('span');
+        units.textContent = 'мкг/м3';
+        concentration.append(units);
 
         pollutantInfo.append(this.pollutantName, pollutantLevel, concentration);
         item.append(chart, pollutantInfo);
@@ -340,17 +360,17 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     private getPollutantFullName(pollutantShortName: string): string {
         switch (pollutantShortName) {
             case 'co':
-                return 'Carbon Monoxide';
+                return 'CO (Монооксид углерода)';
             case 'no2':
-                return 'Nitrogen Dioxide';
+                return 'NO2 (Оксид азота)';
             case 'o3':
-                return 'Ozone';
+                return 'O3 (Озон)';
             case 'pm2_5':
-                return 'Particulate matter less than 2.5 microns';
+                return 'PM2.5 (Взвешенных частиц меньше 2,5 микрона)';
             case 'pm10':
-                return 'Particulate matter less than 10 microns';
+                return 'PM10 (Взвешенных частиц меньше 10 микрон)';
             case 'so2':
-                return 'Sulfur Dioxide';
+                return 'SO2 (Диоксид серы)';
             default:
                 return '';
         }
@@ -358,7 +378,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private getBigChart(aqi: number): string {
         const { color, factor } = this.getPollutantSettings(aqi);
-        const currentSector = BIG_CYRCLE_LENGTH / SEGMENT_COUNT * factor;
+        const currentSector = (BIG_CYRCLE_LENGTH / SEGMENT_COUNT) * factor;
         return `
             <svg width="102" height="102" style="border-radius: 50%;display: block;">
                 <circle r="51" cx="51" cy="51" transform="rotate(90 51 51)" style="stroke-width:10;stroke: #e7ecf1;" fill='#0000'></circle>
@@ -370,7 +390,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private getChart(aqi: number): string {
         const { color, factor } = this.getPollutantSettings(aqi);
-        const currentSector = CYRCLE_LENGTH / SEGMENT_COUNT * factor;
+        const currentSector = (CYRCLE_LENGTH / SEGMENT_COUNT) * factor;
         return `
             <svg width="54" height="54" style="border-radius: 50%;display: block;">
                 <circle r="27" cx="27" cy="27" transform="rotate(90 27 27)" style="stroke-width:10;stroke: #e7ecf1;" fill='#0000'></circle>
@@ -386,39 +406,46 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         let factor: number;
         let level: string;
         let levelInfo: string;
+        let levelAttribute: string;
 
         if (aqi >= 0 && aqi < 50) {
             color = '#00E838';
             factor = 1;
-            level = 'Good';
-            levelInfo = 'goodInfo';
+            level = 'Хорошее';
+            levelInfo = levelInfoObj.goodInfo;
+            levelAttribute = 'good';
         } else if (aqi >= 50 && aqi < 100) {
             color = '#FFFF24';
             factor = 2;
-            level = 'Moderate';
-            levelInfo = 'moderateInfo';
+            level = 'Среднее';
+            levelInfo = levelInfoObj.moderateInfo;
+            levelAttribute = 'moderate';
         } else if (aqi >= 100 && aqi < 150) {
             color = '#FF7200';
             factor = 3;
-            level = 'Unhealthy for Sensitive Groups';
-            levelInfo = 'unhealthyForGroupsInfo';
+            level = 'Вредное для чувствительных людей';
+            levelInfo = levelInfoObj.unhealthyForGroupsInfo;
+            levelAttribute = 'unhealthyForGroups';
         } else if (aqi >= 150 && aqi < 200) {
             color = '#f00';
             factor = 4;
-            level = 'Unhealthy';
-            levelInfo = 'unhealthyInfo';
+            level = 'Вредные условия';
+            levelInfo = levelInfoObj.unhealthyInfo;
+            levelAttribute = 'unhealthy';
         } else if (aqi >= 200 && aqi < 300) {
             color = '#9d3d8c';
             factor = 5;
-            level = 'Very Unhealthy';
-            levelInfo = 'veryUnhealthyInfo';
+            level = 'Очень вредные условия';
+            levelInfo = levelInfoObj.veryUnhealthyInfo;
+            levelAttribute = 'veryUnhealthy';
         } else {
             color = '#8d0021';
             factor = 6;
-            level = 'Hazardous';
-            levelInfo = 'hazardousInfo';
+            level = 'Опасно';
+            levelInfo = levelInfoObj.hazardousInfo;
+            levelAttribute = 'hazardous';
         }
-        return { color, factor, level, levelInfo };
+        return { color, factor, level, levelInfo, levelAttribute };
     }
 
     private convertToAqi(pollutant: [string, number]): number {
@@ -427,13 +454,13 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
         switch (name) {
             case 'co':
-                const co_ppm = VOLUME_BY_NORMAL_CONDITIONS * value / MICRO_G_IN_MILI_G / MOLECULAR_WEIGHT_CO;
+                const co_ppm = (VOLUME_BY_NORMAL_CONDITIONS * value) / MICRO_G_IN_MILI_G / MOLECULAR_WEIGHT_CO;
                 return aqiLib.co(co_ppm);
             case 'no2':
-                const no2_ppb = VOLUME_BY_NORMAL_CONDITIONS * value / MOLECULAR_WEIGHT_NO2;
+                const no2_ppb = (VOLUME_BY_NORMAL_CONDITIONS * value) / MOLECULAR_WEIGHT_NO2;
                 return aqiLib.no2(no2_ppb);
             case 'o3':
-                const o3_ppb = VOLUME_BY_NORMAL_CONDITIONS * value / MOLECULAR_WEIGHT_O3;
+                const o3_ppb = (VOLUME_BY_NORMAL_CONDITIONS * value) / MOLECULAR_WEIGHT_O3;
                 const o3_1hr_aqi = aqiLib.o3_1hr(o3_ppb);
                 const o3_8hr_aqi = aqiLib.o3_8hr(o3_ppb);
                 return o3_1hr_aqi || o3_8hr_aqi;
@@ -442,10 +469,59 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             case 'pm2_5':
                 return aqiLib.pm25(value);
             case 'so2':
-                const so2_ppb = VOLUME_BY_NORMAL_CONDITIONS * value / MOLECULAR_WEIGHT_SO2;
+                const so2_ppb = (VOLUME_BY_NORMAL_CONDITIONS * value) / MOLECULAR_WEIGHT_SO2;
                 return aqiLib.so2(so2_ppb);
             default:
                 return 0;
         }
     }
+
+    private translateLevelList(langObject: pagesLang) {
+        const keys: Array<LevelKey> = [
+            'good',
+            'moderate',
+            'unhealthyForGroups',
+            'unhealthy',
+            'veryUnhealthy',
+            'hazardous',
+        ];
+        const list = this.airQualityLevelsList.childNodes;
+
+        list.forEach((el, i) => {
+            const levelText = el.childNodes[1];
+            levelText.textContent = langObject[keys[i]];
+        });
+    }
+
+    private translateAllPollutantCharts(langObject: pagesLang) {
+        const keys: Array<PollutantNameKey> = ['co', 'no2', 'o3', 'so2', 'pm2_5', 'pm10'];
+        const list = this.allPollutantCharts.childNodes;
+
+        list.forEach((el, i) => {
+            const pollutantName = el.childNodes[1].childNodes[0];
+            const pollutantLevel = el.childNodes[1].childNodes[1] as HTMLSpanElement;
+            const pollutantUnits = el.childNodes[1].childNodes[2].childNodes[1];
+            const levelAttribute = pollutantLevel.getAttribute('data-level') as LevelKey;
+
+            pollutantLevel.textContent = langObject[levelAttribute];
+            pollutantName.textContent = langObject[keys[i]];
+            pollutantUnits.textContent = langObject.pollutantUnits;
+        });
+    }
+
+    private translatePrimaryPollutant(langObject: pagesLang) {
+        const level = this.primaryPollutantContainer.childNodes[0].childNodes[1].childNodes[0];
+        const levelInfo = this.primaryPollutantContainer.childNodes[0].childNodes[1].childNodes[1];
+        const pollutantName = this.primaryPollutantContainer.childNodes[1].childNodes[1];
+
+        const levelKey = this.primaryPollutantContainer.getAttribute('data-level') as LevelKey;
+        const levelInfoKey: LevelInfoKey = `${levelKey}Info`;
+        const pollutantKey = this.primaryPollutantContainer.getAttribute('data-pollutant') as PollutantNameKey;
+        console.log(levelInfoKey);
+
+        level.textContent = langObject[levelKey];
+        levelInfo.textContent = langObject[levelInfoKey];
+        pollutantName.textContent = langObject[pollutantKey];
+    }
+
 }
