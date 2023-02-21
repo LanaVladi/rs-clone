@@ -12,9 +12,13 @@
     display: flex;
     align-items: center;
 }
-
+.details-summary--wind{
+    display: flex;
+    align-items: center;
+}
 .details-summary--condition {
     display: flex;
+    align-items: center;
 }
 
 .precip-svg {
@@ -126,6 +130,7 @@
 .list-item {
     width: 50%;
     margin-top: 1rem;
+    display: flex;
 }
 
 .details-table--label {
@@ -136,7 +141,42 @@
     display: flex;
     flex-direction: column;
 }
+.icon-container {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 1rem;
+}
 
-.details-summary-wind-icon {
-    /* background: url('../../../assets/svg/temp-icon.svg') no-repeat center; */
+.wind-item {
+    background: url('../../../assets/svg/wind-icon.svg') no-repeat center;
+}
+
+.humidity-item {
+    background: url('../../../assets/svg/humidity-icon.svg') no-repeat center;
+}
+
+.cloud-item {
+    background: url('../../../assets/svg/cloud-icon.svg') no-repeat center;
+}
+
+.pressure-item {
+    background: url('../../../assets/svg/pressure-icon.svg') no-repeat center;
+}
+.precip-item {
+    background: url('../../../assets/svg/precip-icon.svg') no-repeat center;
+}
+
+
+.visibility-item {
+    background: url('../../../assets/svg/visibility-icon.svg') no-repeat center;
+}
+
+.temp-item {
+    background: url('../../../assets/svg/temp-icon.svg') no-repeat center;
+}
+
+.icon-container {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 1rem;
 }

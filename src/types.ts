@@ -21,8 +21,8 @@ export const enum ModelEvent {
     input = 'input',
 
     today_weather_indicators = 'today-weather-indicators',
-    five_days_weather_indicators  = 'five-days-weather',
-    air_quality_forecast_indicators  = 'air-quality-forecast',
+    five_days_weather_indicators = 'five-days-weather-indicators',
+    air_quality_forecast_indicators = 'air-quality-forecast',
 }
 
 export const enum ViewEvent {
@@ -109,6 +109,36 @@ export type WeatherTodayData = {
     cod: number;
 };
 
+export type weatherIndicatorsFiveDays = {
+    list: Array<weatherOneDayData>;
+    // sunrise,
+    // sunset,
+    // id,
+    timezone: number;
+    cityName: string;
+    countryCode: string;
+    // tempList: number;
+    // tempMin: number;
+    // tempMax: number;
+    // feelsLike: number;
+    // pressure: number;
+    // humidity: number;
+    // windSpeed: number;
+    // visibility: number;
+    // clouds: number;
+    // sunrise: string;
+    // sunset: string;
+    // icon: string;
+    // id: number;
+    // mainWeather: string;
+    // description: string;
+    // timezone: number;
+    // cityName: string;
+    // countryCode: string;
+    // country: string;
+    dataCalcTime: string;
+};
+
 export type weatherFiveDaysData = {
     cod: string;
     message: number;
@@ -165,7 +195,7 @@ export type weatherOneDayData = {
     sys: {
         pod: string;
     };
-    // dt_txt: '2022-08-30 15:00:00';
+    dt_txt: '2022-08-30 15:00:00';
 };
 
 export type airQualityForecastData = {

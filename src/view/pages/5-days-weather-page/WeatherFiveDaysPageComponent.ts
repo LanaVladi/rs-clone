@@ -1,11 +1,19 @@
 import { WeatherFiveDaysPageController } from '../../../controller/WeatherFiveDaysPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { TranslatorModel } from '../../../model/TranslatorModel';
-import INotify, { ModelEvent, NotifyParameters, pagesLang } from '../../../types';
+import INotify, {
+    ModelEvent,
+    NotifyParameters,
+    pagesLang,
+    weatherFiveDaysData,
+    weatherIndicatorsFiveDays,
+    weatherOneDayData,
+} from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './WeatherFiveDaysPageComponent.css';
 import { WeatherDayComponent } from './WeatherDayComponent';
+import { WeatherOneDayComponent } from './WeatherOneDayComponent';
 interface WeatherFiveDaysPageComponentProps {
     controller: WeatherFiveDaysPageController;
     router: Router;
@@ -14,10 +22,14 @@ interface WeatherFiveDaysPageComponentProps {
 }
 
 export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysPageComponentProps> implements INotify {
-    private title!: HTMLHeadingElement;
+    // private title!: HTMLHeadingElement;
     private observerToView: ObserverToView;
     private language: TranslatorModel;
-
+    private pageName!: HTMLHeadingElement;
+    private dailyForecastTimestamp!: HTMLSpanElement;
+    private locationTitle!: HTMLSpanElement;
+    private dailyForecastTime!: HTMLSpanElement;
+    private dailyForecastDisclosureList!: HTMLDivElement;
     constructor(
         controller: WeatherFiveDaysPageController,
         router: Router,
@@ -28,39 +40,27 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
         this.observerToView = observerToView;
         this.language = language;
         this.observerToView.subscribe(ModelEvent.five_days_weather_indicators, this);
+        this.observerToView.subscribe(ModelEvent.language, this);
     }
 
     notify<T>(params: NotifyParameters<T>): void {
         switch (params.typeEvents) {
             case ModelEvent.language: {
                 const langObject = <pagesLang>params.message;
-
+                this.pageName.textContent = langObject.forecastFiveDay;
+                this.dailyForecastTimestamp.textContent = langObject.asOf;
                 break;
             }
             case ModelEvent.five_days_weather_indicators: {
-                // const {
-                //     temp,
-                //     tempMin,
-                //     tempMax,
-                //     feelsLike,
-                //     humidity,
-                //     pressure,
-                //     visibility,
-                //     windSpeed,
-                //     clouds,
-                //     sunrise,
-                //     sunset,
-                //     icon,
-                //     description,
-                //     id,
-                //     mainWeather,
-                //     timezone,
-                //     cityName,
-                //     countryCode,
-                //     dataCalcTime,
-                //     country,
-                // } = <weatherIndicators>params.message;
-                // this.title.innerText = `Прогноз на 5 дней: ${cityName}`;
+                const { list, timezone, cityName, countryCode, dataCalcTime } = <weatherIndicatorsFiveDays>(
+                    params.message
+                );
+                this.locationTitle.textContent = `${cityName}`;
+                this.dailyForecastTime.textContent = `${dataCalcTime}`;
+                list.forEach((el: weatherOneDayData) => {
+                    const day = new WeatherOneDayComponent(this.observerToView, this.language, el);
+                    this.dailyForecastDisclosureList.append(day.element);
+                });
             }
         }
     }
@@ -68,29 +68,31 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
     protected render(): void {
         const daysConatainer = document.createElement('div');
         daysConatainer.className = 'five-days-container';
+        const locationPageTitle = document.createElement('div');
+        locationPageTitle.className = 'location-page-title';
 
-        const pageName = document.createElement('span');
-        pageName.textContent = 'Прогноз на 5 дней  ';
-        pageName.className = 'page-name';
+        this.pageName = document.createElement('h1');
+        this.pageName.textContent = this.props.language.getTranslateRu().forecastFiveDay;
+        this.pageName.className = 'page-name';
 
-        const locationPageTitle = document.createElement('h1');
-        const locationTitle = document.createElement('span');
-        locationTitle.className = 'location-title';
-        locationTitle.textContent = 'Location';
+        this.locationTitle = document.createElement('span');
+        this.locationTitle.className = 'location-title';
 
-        const dailyForecastTimestamp = document.createElement('div');
-        dailyForecastTimestamp.className = 'daily-forecast-timestamp';
-        dailyForecastTimestamp.textContent = 'По состоянию на ';
+        const dailyForecastTimestampBox = document.createElement('div');
+        this.dailyForecastTimestamp = document.createElement('span');
+        this.dailyForecastTimestamp.className = 'daily-forecast-timestamp';
+        this.dailyForecastTimestamp.textContent = this.props.language.getTranslateRu().asOf;
 
-        const dailyForecastTime = document.createElement('span');
-        dailyForecastTime.textContent='time'
-        dailyForecastTimestamp.append(dailyForecastTime)
-        const dailyForecastDisclosureList = document.createElement('div');
-        dailyForecastDisclosureList.className = 'daily-forecast-disclosure-list';
+        this.dailyForecastTime = document.createElement('span');
 
-        locationPageTitle.append(pageName, locationTitle);
+        this.dailyForecastTimestamp.append(this.dailyForecastTime);
+        this.dailyForecastDisclosureList = document.createElement('div');
+        this.dailyForecastDisclosureList.className = 'daily-forecast-disclosure-list';
+        dailyForecastTimestampBox.append(this.dailyForecastTimestamp, this.dailyForecastTime);
 
-        daysConatainer.append(locationPageTitle, dailyForecastTimestamp, dailyForecastDisclosureList);
+        locationPageTitle.append(this.pageName, this.locationTitle);
+
+        daysConatainer.append(locationPageTitle, dailyForecastTimestampBox, this.dailyForecastDisclosureList);
         this.element.append(daysConatainer);
     }
 }

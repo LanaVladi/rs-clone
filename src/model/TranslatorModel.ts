@@ -65,6 +65,11 @@ export class TranslatorModel implements INotify {
             windAnimation: 'Анимация ветра',
             pleaseSpeak: 'Говорите',
             surface: 'поверхность',
+
+
+
+            //Sasha
+            
         };
 
         return langObjRu;
