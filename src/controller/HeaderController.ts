@@ -9,6 +9,7 @@ import { GeolocationModel } from '../model/GeolocationModel';
 import { LanguageController } from './LanguageController';
 import { TranslatorModel } from '../model/TranslatorModel';
 import { TempUnitController } from './TempUnitController';
+import { VoiceControlController } from './VoiceControlController';
 
 export class HeaderController extends BaseController<HeaderComponent> {
     public component: HeaderComponent;
@@ -16,8 +17,10 @@ export class HeaderController extends BaseController<HeaderComponent> {
     public languageController: LanguageController;
     public geolocationController: GeolocationController;
     public tempUnitController: TempUnitController;
-    private geolocation: GeolocationModel;
-    private language: TranslatorModel;
+    public voiceControl: VoiceControlController;
+
+    public geolocation: GeolocationModel;
+    public language: TranslatorModel;
 
     constructor(
         router: Router,
@@ -29,10 +32,11 @@ export class HeaderController extends BaseController<HeaderComponent> {
         super();
         this.geolocation = geolocation;
         this.language = language;
+        this.voiceControl = new VoiceControlController(observerToModel, observerToView, language);
         this.languageController = new LanguageController(observerToModel);
         this.searcherController = new SearcherController(observerToModel, observerToView, language);
         this.tempUnitController = new TempUnitController(observerToModel);
         this.geolocationController = new GeolocationController(observerToModel, geolocation);
-        this.component = new HeaderComponent(this, router, observerToView, language);
+        this.component = new HeaderComponent(this, router, observerToView);
     }
 }
