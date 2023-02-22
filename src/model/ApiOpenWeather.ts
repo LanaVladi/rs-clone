@@ -24,7 +24,8 @@ export class ApiOpenWeather implements INotify {
     #weatherUrlFiveDays!: string;
     #forecastUrlAirQuality!: string;
     #weatherMap!: string;
-    private readonly storageKey = 'city';
+    private readonly storageKeyCity = 'city';
+    private cityList = new Array<string>();
 
     private observerToModel: ObserverToModel;
     private observerToView: ObserverToView;
@@ -35,20 +36,30 @@ export class ApiOpenWeather implements INotify {
         observerToModel: ObserverToModel,
         observerToView: ObserverToView,
         geolocation: GeolocationModel,
-        store: Store,
-        city: 'Ташкент'
+        store: Store
     ) {
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
         this.geolocation = geolocation;
-        this.notify({ message: city });
+        this.checkLocalStorage();
         this.store = store;
         this.observerToModel.subscribe(ViewEvent.input, this);
         this.observerToModel.subscribe(ViewEvent.geolocation, this);
     }
 
+    protected checkLocalStorage() {
+        if (localStorage.getItem(this.storageKeyCity) !== null) {
+            this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
+        } else {
+            this.cityList = ['Ташкент'];
+            localStorage.setItem(this.storageKeyCity, JSON.stringify(this.cityList));
+        }
+
+        const lastCity = this.cityList[this.cityList.length - 1];
+        this.notify({ message: lastCity || 'Ташкент' });
+    }
+
     public async notify<T>(params: NotifyParameters<T>) {
-        // console.log('params string:', params);
         if (typeof params.message === 'string') {
             const city = params.message;
             this.getAllWeatherData(city);
@@ -61,6 +72,7 @@ export class ApiOpenWeather implements INotify {
 
     private async getAllWeatherData(city: string | number[]) {
         const weatherTodayData: WeatherTodayData = await this.getWeatherTodayData(city);
+        // console.log('weatherTodayData :', weatherTodayData);
 
         this.store.setWeatherTodayData(weatherTodayData);
 
