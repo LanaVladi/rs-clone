@@ -21,8 +21,8 @@ export const enum ModelEvent {
     input = 'input',
 
     today_weather_indicators = 'today-weather-indicators',
-    five_days_weather_indicators = 'five-days-weather',
-    air_quality_forecast_indicators = 'air-quality-forecast',
+    five_days_weather_indicators = 'five-days-weather-indicators',
+    air_quality_forecast_indicators = 'air-quality-forecast-indicators',
 }
 
 export const enum ViewEvent {
@@ -111,32 +111,9 @@ export type WeatherTodayData = {
 
 export type weatherIndicatorsFiveDays = {
     list: Array<weatherOneDayData>;
-    // sunrise,
-    // sunset,
-    // id,
     timezone: number;
     cityName: string;
     countryCode: string;
-    // tempList: number;
-    // tempMin: number;
-    // tempMax: number;
-    // feelsLike: number;
-    // pressure: number;
-    // humidity: number;
-    // windSpeed: number;
-    // visibility: number;
-    // clouds: number;
-    // sunrise: string;
-    // sunset: string;
-    // icon: string;
-    // id: number;
-    // mainWeather: string;
-    // description: string;
-    // timezone: number;
-    // cityName: string;
-    // countryCode: string;
-    // country: string;
-    // dataCalcTime: string;
 };
 
 export type weatherFiveDaysData = {
@@ -222,6 +199,25 @@ export type airQualityForecastData = {
 
 // =========== open Weather ===================== //
 
+// =========== AirQuality ===================== //
+
+export type Pollutants = {
+    co: number;
+    no: number;
+    no2: number;
+    o3: number;
+    so2: number;
+    pm2_5: number;
+    pm10: number;
+    nh3: number;
+};
+
+export type PollutantsIndicator = {
+    pollutants: Pollutants;
+};
+
+// =========== AirQuality ===================== //
+
 // =========== language ===================== //
 
 export type pagesLang = {
@@ -255,6 +251,42 @@ export type pagesLang = {
     windAnimation: string;
     pleaseSpeak: string;
     surface: string;
+
+    // Ilya
+
+    allPollutants: string;
+    primaryPollutant: string;
+    pollutantUnits: string;
+    moreDetailsText: string;
+    airQualityLevelsCaption: string;
+    AirQualityPopOverTitle: string;
+    AirQualityPopOverBody: string;
+    good: string;
+    moderate: string;
+    unhealthyForGroups: string;
+    unhealthy: string;
+    veryUnhealthy: string;
+    hazardous: string;
+    goodInfo: string;
+    moderateInfo: string;
+    unhealthyForGroupsInfo: string;
+    unhealthyInfo: string;
+    veryUnhealthyInfo: string;
+    hazardousInfo: string;
+    co: string;
+    no2: string;
+    o3: string;
+    so2: string;
+    pm2_5: string;
+    pm10: string;
+
+    //Lana
+    kmH: string;
+    mb: string;
+    km: string;
+    recentLocationTitle: string;
+    clearAll: string;
+    recents: string;
 };
 
 // =========== language ===================== //
