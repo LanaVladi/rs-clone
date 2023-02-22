@@ -20,7 +20,7 @@ class RenderView {
         const geolocation = new GeolocationModel();
         const language = new TranslatorModel(observerToModel, observerToView, 'ru');
         const store = new Store(observerToModel, observerToView);
-        new ApiOpenWeather(observerToModel, observerToView, geolocation, store, 'Ташкент');
+        new ApiOpenWeather(observerToModel, observerToView, geolocation, store);
 
         const router = new Router(main, observerToView, language);
 
