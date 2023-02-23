@@ -13,4 +13,8 @@ export class AirQualityPageController extends BaseController<AirQualityPageCompo
         this.language = language;
         this.component = new AirQualityPageComponent(this, router, observerToView, language);
     }
+
+    public show() {
+        this.component.show();
+    }
 }

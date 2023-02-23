@@ -136,7 +136,7 @@ export class Store implements INotify {
                 });
                 break;
             }
-            case ModelEvent.five_days_weather: {
+            /* case ModelEvent.five_days_weather: {
                 const weatherFiveDaysData = <weatherFiveDaysData>params.message;
                 // console.log('weatherFiveDaysData :', weatherFiveDaysData);
 
@@ -192,7 +192,7 @@ export class Store implements INotify {
                     typeEvents: ModelEvent.five_days_weather_indicators,
                 });
                 break;
-            }
+            } */
             case ModelEvent.air_quality_forecast: {
                 const airQualityForecastData = <airQualityForecastData>params.message;
                 this.setPollutants(airQualityForecastData);

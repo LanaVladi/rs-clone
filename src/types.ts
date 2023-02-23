@@ -240,24 +240,6 @@ export type airQualityForecastData = {
 
 // =========== open Weather ===================== //
 
-// =========== AirQuality ===================== //
-
-export type Pollutants = {
-    co: number;
-    no: number;
-    no2: number;
-    o3: number;
-    so2: number;
-    pm2_5: number;
-    pm10: number;
-    nh3: number;
-};
-
-export type PollutantsIndicator = {
-    pollutants: Pollutants;
-};
-
-// =========== AirQuality ===================== //
 
 // =========== language ===================== //
 
@@ -456,3 +438,42 @@ export interface IMinifestFile {
 export type Layer = 'wind' | 'temp' | 'pressure';
 
 // =========== Windy map ===================== //
+
+// =========== AirQuality ===================== //
+
+export type Pollutants = {
+    co: number;
+    no: number;
+    no2: number;
+    o3: number;
+    so2: number;
+    pm2_5: number;
+    pm10: number;
+    nh3: number;
+};
+
+export type PollutantsIndicator = {
+    pollutants : Pollutants;
+};
+
+export type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';
+
+export type PollutantNameKey = 'co' | 'no2' | 'o3' | 'so2' | 'pm2_5' | 'pm10';
+
+export type LevelInfoKey =
+    | 'goodInfo'
+    | 'moderateInfo'
+    | 'unhealthyForGroupsInfo'
+    | 'unhealthyInfo'
+    | 'veryUnhealthyInfo'
+    | 'hazardousInfo';
+
+export type PollutantSettings = {
+    color: string;
+    factor: number;
+    level: string;
+    levelInfo: string;
+    levelAttribute: string;
+};
+
+// =========== AirQuality ===================== //
