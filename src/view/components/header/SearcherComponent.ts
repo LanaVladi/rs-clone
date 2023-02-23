@@ -1,7 +1,8 @@
+import { weatherIconImgFormat, weatherIconUrl } from '../../../constants';
 import { SearcherController } from '../../../controller/SearchController';
 import { ObserverToModel } from '../../../model/ObserverToModel';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { ModelEvent, NotifyParameters, pagesLang, ViewEvent } from '../../../types';
+import { ModelEvent, NotifyParameters, pagesLang, ViewEvent, weatherIndicators } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import './searcher.css';
 interface SearcherComponentProps {
@@ -20,6 +21,12 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     public searchIcon!: HTMLDivElement;
     public cityName!: string;
 
+    private dropDownListInfo!: HTMLDivElement;
+    private locationName!: HTMLSpanElement;
+    private temperature!: HTMLSpanElement;
+    private weatherIcon!: HTMLImageElement;
+    private deleteBtnDotted!: HTMLButtonElement;
+
     private observerToModel: ObserverToModel;
     private observerToView: ObserverToView;
 
@@ -33,7 +40,9 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         super('searcher-container', { controller, observerToModel, observerToView }, 'div');
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
+        this.observerToView.subscribe(ModelEvent.temp_unit, this);
     }
 
     notify<T>(params: NotifyParameters<T>): void {
@@ -43,7 +52,14 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
                 this.searchInput.placeholder = langObject.searchByCity;
                 this.recentLocationTitle.textContent = langObject.recentLocationTitle;
                 this.recentLocationTitleBtnClearAll.textContent = langObject.clearAll;
-                // break;
+                break;
+            }
+            case ModelEvent.today_weather_indicators: {
+                const { temp, icon, cityName, countryCode } = <weatherIndicators>params.message;
+
+                this.temperature.innerText = `${temp}°`;
+                this.locationName.innerText = `${cityName}, ${countryCode}`;
+                this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
             }
         }
     }
@@ -52,6 +68,7 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         this.searchInput = document.createElement('input');
         this.searchInput.classList.add('searcher-input');
         this.searchInput.setAttribute('autofocus', 'autofocus');
+        this.searchInput.setAttribute('autocomplete', 'true');
         this.searchInput.placeholder = this.props.controller.language.getTranslateRu().searchByCity;
 
         this.searchIcon = document.createElement('div');
@@ -85,8 +102,51 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         this.element.append(this.searchInput, this.searchIcon, this.dropDownListBox);
     }
 
+    protected createDropDownList() {
+        this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
+        this.cityListForShow = this.cityList;
+
+        this.cityListForShow.forEach((city) => {
+            this.dropDownListItem = document.createElement('li');
+            this.dropDownListItem.className = 'searcher-input-drop-down-item';
+            // this.dropDownListItem.textContent = `${city}`;
+
+            this.dropDownListInfo = document.createElement('div');
+            this.dropDownListInfo.className = 'drop-down-list-item-info';
+
+            this.weatherIcon = document.createElement('img');
+            this.weatherIcon.className = 'header__weather-icon';
+
+            this.temperature = document.createElement('span');
+            this.locationName = document.createElement('span');
+
+            this.dropDownListInfo.append(this.weatherIcon, this.temperature, this.locationName);
+
+            this.deleteBtnDotted = document.createElement('button');
+            this.deleteBtnDotted.className = 'delete-button-icon-dotted';
+
+            this.dropDownListItem.append(this.dropDownListInfo, this.deleteBtnDotted);
+            this.inputDropDownList.append(this.dropDownListItem);
+
+            // this.observerToModel.notify(ViewEvent.input, { message: city, typeEvents: ModelEvent.input });
+
+            this.deleteBtnDotted.addEventListener('click', (event) => {
+                const target = event.target as HTMLButtonElement;
+                const clickedBtnDelete = target.textContent;
+                console.log('clickedBtnDelete :', clickedBtnDelete);
+                this.dropDownListItem.innerHTML = '';
+                // this.observerToModel.notify(ViewEvent.input, { message: clickedCity, typeEvents: ModelEvent.input });
+            });
+        });
+    }
+
     protected addListeners(): void {
+        window.addEventListener('DOMContentLoaded', () => {
+            this.createDropDownList();
+        });
+
         this.searchInput.addEventListener('change', () => {
+            // event.preventDefault();
             this.cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
 
             if (localStorage.getItem(this.storageKeyCity)?.length === 0) {
@@ -98,6 +158,8 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
             this.hideDropDownList();
             this.alertDropDownList.classList.remove('visible');
             this.inputDropDownList.innerHTML = '';
+            //УДАЛЯЕТ ЗАПРОС И ВМЕСТЕ С ЭТИМ УДАЛЯЕТСЯ ГОРОД, ИКОНКИ, ТЕМПЕРАТУРА,А БЕЗ НЕГО ВСЁ СОЗДАЕТСЯ 5 РАЗ
+            // if(this.sh)
             this.createDropDownList();
 
             this.observerToModel.notify(ViewEvent.input, { message: this.cityName, typeEvents: ModelEvent.input });
@@ -110,13 +172,31 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
             if (localStorage.getItem(this.storageKeyCity) && this.cityList.length === 1) {
                 this.alertDropDownList.classList.add('visible');
                 this.inputDropDownList.classList.remove('visible');
+                // this.dropDownListItem.classList.remove('visible');
+
                 this.showDropDownList();
             } else {
                 this.showDropDownList();
                 this.alertDropDownList.classList.remove('visible');
                 this.inputDropDownList.classList.add('visible');
+                // this.dropDownListItem.classList.add('visible');
             }
         });
+
+        this.inputDropDownList.addEventListener('click', (event) => {
+            const target = event.target as HTMLLIElement;
+            const clickedCity = target.textContent;
+            console.log('clickedCity :', clickedCity);
+            this.observerToModel.notify(ViewEvent.input, { message: clickedCity, typeEvents: ModelEvent.input });
+        });
+
+        // this.deleteBtnDotted.addEventListener('click', (event) => {
+        //     const target = event.target as HTMLButtonElement;
+        //     const clickedBtnDelete = target.textContent;
+        //     console.log('clickedBtnDelete :', clickedBtnDelete);
+        //     this.dropDownListItem.innerHTML = '';
+        //     // this.observerToModel.notify(ViewEvent.input, { message: clickedCity, typeEvents: ModelEvent.input });
+        // });
 
         document.body.addEventListener('click', (event) => {
             const target = event.target as HTMLDivElement;
@@ -134,10 +214,6 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
             this.cityList = [this.cityName];
             localStorage.setItem(this.storageKeyCity, JSON.stringify(this.cityList));
             this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-        });
-
-        window.addEventListener('DOMContentLoaded', () => {
-            this.createDropDownList();
         });
     }
 
@@ -163,17 +239,5 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     }
     showDropDownList() {
         this.dropDownListBox.classList.add('visible');
-    }
-
-    protected createDropDownList() {
-        this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-        this.cityListForShow = this.cityList;
-
-        this.cityListForShow.forEach((city) => {
-            this.dropDownListItem = document.createElement('li');
-            this.dropDownListItem.className = 'searcher-input-drop-down-item';
-            this.dropDownListItem.textContent = `${city}`;
-            this.inputDropDownList.append(this.dropDownListItem);
-        });
     }
 }
