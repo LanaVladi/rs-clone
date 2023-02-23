@@ -18,6 +18,7 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     private alertDropDownList!: HTMLDivElement;
     private dropDownListItem!: HTMLLIElement;
     public searchIcon!: HTMLDivElement;
+    public cityName!: string;
 
     private observerToModel: ObserverToModel;
     private observerToView: ObserverToView;
@@ -86,45 +87,34 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
 
     protected addListeners(): void {
         this.searchInput.addEventListener('change', () => {
-            const cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
+            this.cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
 
             if (localStorage.getItem(this.storageKeyCity)?.length === 0) {
-                this.cityList = [cityName];
+                this.cityList = [this.cityName];
                 localStorage.setItem(this.storageKeyCity, JSON.stringify(this.cityList));
-                // this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
             } else {
-                this.checkLocalStorage(cityName);
+                this.checkLocalStorage(this.cityName);
             }
+            this.hideDropDownList();
+            this.alertDropDownList.classList.remove('visible');
+            this.inputDropDownList.innerHTML = '';
+            this.createDropDownList();
 
-            // this.createDropDownList();
-
-            // this.cityList = [];
-            // this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-
-            // this.cityList.forEach((city) => {
-            //     this.dropDownListItem = document.createElement('li');
-            //     this.dropDownListItem.className = 'searcher-input-drop-down-item';
-            //     this.dropDownListItem.textContent = `${city}`;
-            //     this.inputDropDownList.append(this.dropDownListItem);
-            // });
-
-            this.observerToModel.notify(ViewEvent.input, { message: cityName, typeEvents: ModelEvent.input });
-
+            this.observerToModel.notify(ViewEvent.input, { message: this.cityName, typeEvents: ModelEvent.input });
             (this.searchInput as HTMLInputElement).value = '';
         });
 
         this.searchInput.addEventListener('click', () => {
             this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-            if (localStorage.getItem(this.storageKeyCity) && this.cityList.length >= 2) {
-                this.showDropDownList();
 
-                // this.alertDropDownList.classList.remove('hidden');
-                // this.alertDropDownList.classList.add('visible');
-                // this.createDropDownList();
+            if (localStorage.getItem(this.storageKeyCity) && this.cityList.length === 1) {
+                this.alertDropDownList.classList.add('visible');
+                this.inputDropDownList.classList.remove('visible');
+                this.showDropDownList();
             } else {
-                this.hideDropDownList();
-                // this.alertDropDownList.classList.remove('visible');
-                // this.alertDropDownList.classList.add('hidden');
+                this.showDropDownList();
+                this.alertDropDownList.classList.remove('visible');
+                this.inputDropDownList.classList.add('visible');
             }
         });
 
@@ -132,14 +122,18 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
             const target = event.target as HTMLDivElement;
             if (!target?.closest('.drop-down-list-box') && !target.closest('.searcher-container')) {
                 this.hideDropDownList();
+                this.alertDropDownList.classList.remove('visible');
             }
         });
 
         this.recentLocationTitleBtnClearAll.addEventListener('click', () => {
             this.inputDropDownList.innerHTML = '';
-            this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
             localStorage.removeItem(this.storageKeyCity);
             this.alertDropDownList.classList.add('visible');
+            this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
+            this.cityList = [this.cityName];
+            localStorage.setItem(this.storageKeyCity, JSON.stringify(this.cityList));
+            this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
         });
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -166,74 +160,20 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
 
     hideDropDownList() {
         this.dropDownListBox.classList.remove('visible');
-        // this.cityListForShow = [];
     }
     showDropDownList() {
         this.dropDownListBox.classList.add('visible');
-        // this.cityListForShow = this.cityList;
     }
 
     protected createDropDownList() {
         this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
         this.cityListForShow = this.cityList;
-        if (
-            // this.cityListForShow.length === this.cityList.length &&
-            this.cityListForShow.every((value, index) => value === this.cityList[index])
-        ) {
-            console.log('this.cityListForShow ОДИНАКОВЫЕ ДАННЫЕ:', this.cityListForShow);
-            return;
-        } else {
-            this.cityListForShow = this.cityList;
-            console.log('this.cityListForShow разные ДАННЫЕ:', this.cityListForShow);
-            this.cityListForShow.forEach((city) => {
-                this.dropDownListItem = document.createElement('li');
-                this.dropDownListItem.className = 'searcher-input-drop-down-item';
-                this.dropDownListItem.textContent = `${city}`;
-                console.log('this.dropDownListItem.textContent :', this.dropDownListItem.textContent);
-                this.inputDropDownList.append(this.dropDownListItem);
-            });
-        }
+
+        this.cityListForShow.forEach((city) => {
+            this.dropDownListItem = document.createElement('li');
+            this.dropDownListItem.className = 'searcher-input-drop-down-item';
+            this.dropDownListItem.textContent = `${city}`;
+            this.inputDropDownList.append(this.dropDownListItem);
+        });
     }
-
-    // if (localStorage.getItem(this.storageKeyCity)?.length === 0) {
-    //     const cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
-    //     this.cityList = [cityName];
-    //     this.cityList.forEach((city) => {
-    //         this.dropDownListItem = document.createElement('li');
-    //         this.dropDownListItem.className = 'searcher-input-drop-down-item';
-    //         this.dropDownListItem.textContent = `${city}`;
-    //         this.inputDropDownList.append(this.dropDownListItem);
-    //     });
-    // } else {
-    //     console.log(
-    //         'СЮДА ЗАШЕЛ  localStorage.getItem(this.storageKeyCity) :',
-    //         localStorage.getItem(this.storageKeyCity)
-    //     );
-    //     this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-    //     this.cityList.forEach((city) => {
-    //         this.dropDownListItem = document.createElement('li');
-    //         this.dropDownListItem.className = 'searcher-input-drop-down-item';
-    //         this.dropDownListItem.textContent = `${city}`;
-    //         this.inputDropDownList.append(this.dropDownListItem);
-    //     });
-    // }
-
-    // if (localStorage.getItem(this.storageKeyCity)) {
-    //     this.cityList.forEach((city) => {
-    //         this.dropDownListItem = document.createElement('li');
-    //         this.dropDownListItem.className = 'searcher-input-drop-down-item';
-    //         this.dropDownListItem.textContent = `${city}`;
-    //         this.inputDropDownList.append(this.dropDownListItem);
-    //     });
-    // } else {
-    //     const cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
-    //     this.cityList = [cityName];
-    //     this.cityList.forEach((city) => {
-    //         this.dropDownListItem = document.createElement('li');
-    //         this.dropDownListItem.className = 'searcher-input-drop-down-item';
-    //         this.dropDownListItem.textContent = `${city}`;
-    //         this.inputDropDownList.append(this.dropDownListItem);
-    //     });
-    // }
 }
-// }
