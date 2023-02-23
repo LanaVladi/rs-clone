@@ -114,6 +114,7 @@ export type weatherIndicatorsFiveDays = {
     timezone: number;
     cityName: string;
     countryCode: string;
+    dataCalcTime: string;
 };
 
 export type weatherFiveDaysData = {
@@ -172,12 +173,12 @@ export type night = {
     sys: {
         pod: string;
     };
-    dt_txt: '2022-08-30 15:00:00';
+    dt_txt: string;
 };
 
 export type weatherOneDayData = {
     main: {
-        temp: number[];
+        temp: number;
         feels_like: number;
         temp_min: number;
         temp_max: number;
@@ -212,7 +213,7 @@ export type weatherOneDayData = {
     sys: {
         pod: string;
     };
-    // dt_txt: '2022-08-30 15:00:00';
+    dt_txt: string;
 };
 
 export type airQualityForecastData = {
