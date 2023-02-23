@@ -163,7 +163,7 @@
 .sunrise-sunset-svg-box {
     width: 10rem;
     height: 6rem;
-    background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center;
+    /* background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center; */
 
     transform-origin: 4rem 4rem;
     transform: rotate(180deg);
@@ -177,7 +177,7 @@
 .sunrise-sunset-svg {
     width: 10rem;
     height: 6rem;
-    background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center;
+    /* background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center; */
 
     /* transform-origin: 4rem 4rem;
     transform: rotate(180deg);
