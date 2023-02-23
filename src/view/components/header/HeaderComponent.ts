@@ -18,12 +18,12 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
     private headerLocation!: HTMLDivElement;
     private locationName!: HTMLSpanElement;
     private temperature!: HTMLSpanElement;
+    private weatherIcon!: HTMLImageElement;
     private headerNav!: HTMLUListElement;
     public componentToday!: HTMLLIElement;
     private componentFiveDays!: HTMLLIElement;
     public componentMap!: HTMLLIElement;
     private componentAirQuality!: HTMLLIElement;
-    private weatherIcon!: HTMLImageElement;
     private observerToView: ObserverToView;
 
     constructor(controller: HeaderController, router: Router, observerToView: ObserverToView) {
@@ -85,15 +85,19 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.headerNav.classList.add('header-nav');
 
         this.componentToday = document.createElement('li');
+        this.componentToday.classList.add('header-nav-li');
         this.componentToday.textContent = this.props.controller.language.getTranslateRu().today;
 
         this.componentFiveDays = document.createElement('li');
+        this.componentFiveDays.classList.add('header-nav-li');
         this.componentFiveDays.textContent = this.props.controller.language.getTranslateRu().fiveDay;
 
         this.componentMap = document.createElement('li');
+        this.componentMap.classList.add('header-nav-li');
         this.componentMap.textContent = this.props.controller.language.getTranslateRu().map;
 
         this.componentAirQuality = document.createElement('li');
+        this.componentAirQuality.classList.add('header-nav-li');
         this.componentAirQuality.textContent = this.props.controller.language.getTranslateRu().airQuality;
 
         this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
