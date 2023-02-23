@@ -158,6 +158,10 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         this.element.append(airQualityContainer, allPollutantsContainer);
     }
 
+    public show() {
+        return this.element;
+    }
+
     private getAllPollutantsFooter(): HTMLDivElement {
         const element = document.createElement('div');
         element.className = 'all-pollutants-footer';
@@ -259,6 +263,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     }
 
     private renderPrymaryPollutant(pollutants: Pollutants): void {
+        this.primaryPollutantContainer.innerHTML = '';
         const primaryPollutant = this.getPrimaryPollutant(pollutants);
         const pollutantShortName = primaryPollutant[0];
         const pollutantFullName = this.getPollutantFullName(pollutantShortName);
@@ -315,6 +320,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     }
 
     private renderAllPollutants(pollutants: Pollutants): void {
+        this.allPollutantCharts.innerHTML = '';
         Object.entries(pollutants)
             .filter((pollutant) => pollutant[0] !== 'nh3' && pollutant[0] !== 'no')
             .forEach((pollutant) => {

@@ -61,7 +61,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         const [startLat, startLon] = await getGeolocation();
         const options = {
             key: apiKeyMapForecast,
-            verbose: true,
+            //verbose: true,
             lat: startLat,
             lon: startLon,
             zoom: 5,
