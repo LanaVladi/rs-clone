@@ -22,7 +22,7 @@ class RenderView {
         const store = new Store(observerToModel, observerToView);
         new ApiOpenWeather(observerToModel, observerToView, geolocation, store);
 
-        const router = new Router(main, observerToView, language);
+        const router = new Router(main, observerToModel, observerToView, language);
 
         const headerController = new HeaderController(router, observerToModel, observerToView, geolocation, language);
         const footerController = new FooterController();
