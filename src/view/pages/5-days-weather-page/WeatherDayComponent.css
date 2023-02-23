@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
 }
-.details-summary--wind{
+.details-summary--wind {
     display: flex;
     align-items: center;
 }
@@ -75,17 +75,14 @@
 
 .daypart-details {
     display: none;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 1.7rem;
 }
 
 .daypart-details-active {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 1.7rem;
-    grid-row-gap: 1rem;
+    grid-column-gap: 2rem;
+    grid-row-gap: 0px;
 }
 
 .daily-content--label {
@@ -94,12 +91,7 @@
 }
 
 .daily-content {
-    width: 60rem;
-}
-
-.details-table-container {
-    grid-column: 1/2;
-    grid-row: 2/3;
+    width: 28rem;
 }
 
 .details-table-container-two {
@@ -165,7 +157,6 @@
 .precip-item {
     background: url('../../../assets/svg/precip-icon.svg') no-repeat center;
 }
-
 
 .visibility-item {
     background: url('../../../assets/svg/visibility-icon.svg') no-repeat center;

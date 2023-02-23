@@ -12,7 +12,6 @@ import INotify, {
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './WeatherFiveDaysPageComponent.css';
-import { WeatherDayComponent } from './WeatherDayComponent';
 import { WeatherOneDayComponent } from './WeatherOneDayComponent';
 interface WeatherFiveDaysPageComponentProps {
     controller: WeatherFiveDaysPageController;
@@ -57,7 +56,26 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                 );
                 this.locationTitle.textContent = `${cityName}`;
                 this.dailyForecastTime.textContent = `${dataCalcTime}`;
-                list.forEach((el: weatherOneDayData) => {
+
+                let filteredArrayDay = list.filter(function (el, index) {
+                    let day = new Date(el.dt_txt);
+                    if (day.getHours() === 12) {
+                        return el;
+                    }
+                });
+                let filtredArrayNight = list.filter(function (el, index) {
+                    let day = new Date(el.dt_txt);
+                    if (day.getHours() === 0) {
+                        return el;
+                    }
+                });
+
+                let newRes = filteredArrayDay.map((el, index) => {
+                    el.night = filtredArrayNight[index];
+                    return el;
+                });
+
+                filteredArrayDay.forEach((el: weatherOneDayData) => {
                     const day = new WeatherOneDayComponent(this.observerToView, this.language, el);
                     this.dailyForecastDisclosureList.append(day.element);
                 });
