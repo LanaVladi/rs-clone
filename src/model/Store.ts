@@ -6,6 +6,7 @@ import INotify, {
     NotifyParameters,
     Pollutants,
     weatherFiveDaysData,
+    weatherOneDayData,
     WeatherTodayData,
 } from '../types';
 
@@ -13,34 +14,41 @@ export class Store implements INotify {
     private observerToModel: ObserverToModel;
     private observerToView: ObserverToView;
 
-    private weatherIndicators = {};
     private weatherTodayData!: WeatherTodayData;
     private weatherFiveDaysData!: weatherFiveDaysData;
     private airQualityForecastData!: airQualityForecastData;
 
-    private kilometer = 1000;
     private minute = 60;
-    public temp!: number;
-    public temp_min!: number;
-    public temp_max!: number;
-    public feels_like!: number;
-    public humidity!: number;
-    public pressure!: number;
-    public visibility!: number;
-    public wind_speed!: number;
-    public clouds!: number;
-    public sunrise!: string;
-    public sunset!: string;
-    public icon!: string;
-    public id!: number;
-    public description!: string;
-    public main!: string;
-    public timezone!: number;
-    public name!: string;
-    public countryCode!: string;
-    public country!: string;
-    public dataCalcTime!: string;
+    private millisecondsPerSecond = 1000;
+    private metersPerKilometer = 1000;
+    private secondsPerHour = 3600;
 
+    // ==============TODAY WEATHER INDICATORS
+    private temp!: number;
+    private temp_min!: number;
+    private temp_max!: number;
+    private feels_like!: number;
+    private humidity!: number;
+    private pressure!: number;
+    private visibility!: number;
+    private wind_speed!: number;
+    private clouds!: number;
+    private sunrise!: string;
+    private sunset!: string;
+    private icon!: string;
+    private id!: number;
+    private description!: string;
+    private main!: string;
+    private timezone!: number;
+    private name!: string;
+    private countryCode!: string;
+    private country!: string;
+    private dataCalcTime!: string;
+
+    // ==============5 DAYS WEATHER INDICATORS
+    private list!: Array<weatherOneDayData>;
+
+    // ============== AIR QUALITY INDICATORS
     public pollutants!: Pollutants;
 
     constructor(observerToModel: ObserverToModel, observerToView: ObserverToView) {
@@ -52,11 +60,9 @@ export class Store implements INotify {
     }
 
     notify<T>(params: NotifyParameters<T>): void {
-        console.log('params :', params);
         switch (params.typeEvents) {
             case ModelEvent.today_weather: {
                 const WeatherTodayData = <WeatherTodayData>params.message;
-                // console.log('weatherData :', weatherData);
                 this.setTemp(WeatherTodayData);
                 const temp = this.getTemp();
                 this.setTempMin(WeatherTodayData);
@@ -132,12 +138,59 @@ export class Store implements INotify {
             }
             /* case ModelEvent.five_days_weather: {
                 const weatherFiveDaysData = <weatherFiveDaysData>params.message;
-                // console.log('weatherData :', weatherData);
-                // this.setTemp(weatherFiveDaysData);
-                // const temp = this.getTemp();
-                // this.setTempMin(weatherFiveDaysData);
-                // const tempMin = this.getTempMin();
-                this.observerToView.notify(ModelEvent.five_days_weather, { message: {} });
+                // console.log('weatherFiveDaysData :', weatherFiveDaysData);
+
+                this.setListOfDays(weatherFiveDaysData);
+                const list = this.getListOfDays();
+                // this.setTempMinFiveDays(weatherFiveDaysData);
+                // const tempMin = this.getTempMinFiveDays();
+                // this.setTempMaxFiveDays(weatherFiveDaysData);
+                // const tempMax = this.getTempMaxFiveDays();
+                // this.setFeelsLikeFiveDays(weatherFiveDaysData);
+                // const feelsLike = this.getFeelsLikeFiveDays();
+                // this.setHumidityFiveDays(weatherFiveDaysData);
+                // const humidity = this.getHumidityFiveDays();
+                // this.setPressureFiveDays(weatherFiveDaysData);
+                // const pressure = this.getPressureFiveDays();
+                // this.setVisibilityFiveDays(weatherFiveDaysData);
+                // const visibility = this.getVisibilityFiveDays();
+                // this.setWindSpeedFiveDays(weatherFiveDaysData);
+                // const windSpeed = this.getWindSpeed();
+                // this.setCloudsFiveDays(weatherFiveDaysData);
+                // const clouds = this.getCloudsFiveDays();
+                // this.setSunriseFiveDays(weatherFiveDaysData);
+                // const sunrise = this.getSunriseFiveDays();
+                // this.setSunsetFiveDays(weatherFiveDaysData);
+                // const sunset = this.getSunsetFiveDays();
+                // this.setIconFiveDays(weatherFiveDaysData);
+                // const icon = this.getIconFiveDays();
+
+                // this.setIdFiveDays(weatherFiveDaysData);
+                // const id = this.getIdFiveDays();
+                // this.setDescriptionFiveDays(weatherFiveDaysData);
+                // const description = this.getDescriptionFiveDays();
+                // this.setMainWeatherFiveDays(weatherFiveDaysData);
+                // const mainWeather = this.getMainWeatherFiveDays();
+
+                this.setTimezoneFiveDays(weatherFiveDaysData);
+                const timezone = this.getTimezoneFiveDays();
+                this.setCityNameFiveDays(weatherFiveDaysData);
+                const cityName = this.getCityNameFiveDays();
+                this.setCountryCodeFiveDays(weatherFiveDaysData);
+                const countryCode = this.getCountryCodeFiveDays();
+
+                // this.setDataCalcTimeFiveDays(weatherFiveDaysData);
+                // const dataCalcTime = this.getDataCalcTimeFiveDays();
+
+                this.observerToView.notify(ModelEvent.five_days_weather_indicators, {
+                    message: {
+                        list,
+                        timezone,
+                        cityName,
+                        countryCode,
+                    },
+                    typeEvents: ModelEvent.five_days_weather_indicators,
+                });
                 break;
             } */
             case ModelEvent.air_quality_forecast: {
@@ -151,7 +204,6 @@ export class Store implements INotify {
                     },
                     typeEvents: ModelEvent.air_quality_forecast_indicators,
                 });
-                
                 break;
             }
         }
@@ -238,7 +290,7 @@ export class Store implements INotify {
     }
 
     setVisibility(data: WeatherTodayData) {
-        this.visibility = data.visibility / this.kilometer;
+        this.visibility = data.visibility / this.metersPerKilometer;
     }
 
     getWindSpeed() {
@@ -263,6 +315,7 @@ export class Store implements INotify {
 
     setSunrise(data: WeatherTodayData) {
         this.sunrise = `${new Date(data.sys.sunrise).getHours()}:${new Date(data.sys.sunrise).getMinutes()}`;
+        // console.log('this.sunrise :', this.sunrise);
     }
 
     getSunset() {
@@ -271,6 +324,7 @@ export class Store implements INotify {
 
     setSunset(data: WeatherTodayData) {
         this.sunset = `${new Date(data.sys.sunset).getHours()}:${new Date(data.sys.sunset).getMinutes()}`;
+        // console.log('this.sunset :', this.sunset);
     }
 
     getIcon() {
@@ -294,7 +348,7 @@ export class Store implements INotify {
     }
 
     setDescription(data: WeatherTodayData) {
-        this.description = data.weather[0].description;
+        this.description = data.weather[0].description[0].toUpperCase() + data.weather[0].description.slice(1);
     }
 
     getMainWeather() {
@@ -310,7 +364,8 @@ export class Store implements INotify {
     }
 
     setTimezone(data: WeatherTodayData) {
-        this.timezone = -new Date(data.timezone).getTimezoneOffset() / this.minute;
+        // const timezone = +`${data.timezone}`.replace('-', '-0');
+        this.timezone = data.timezone / this.secondsPerHour;
     }
 
     getCityName() {
@@ -342,7 +397,21 @@ export class Store implements INotify {
     }
 
     setDataCalcTime(data: WeatherTodayData) {
-        this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
+        // this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
+        const userTimezone = new Date(data.timezone).getTimezoneOffset() / this.minute;
+        // console.log('userTimezone :', userTimezone);
+        // console.log('new Date(data.timezone).getTimezoneOffset() :', new Date(data.timezone).getTimezoneOffset());
+        // console.log('new Date(data.timezone) :', new Date(data.timezone));
+        const currentData = new Date((data.dt + data.timezone) * this.millisecondsPerSecond);
+        // console.log('currentData :', currentData);
+        const minutes = `0${currentData.getMinutes()}`;
+        let hours = currentData.getHours() + userTimezone;
+        // console.log('hours :', hours);
+        if (hours > 24) hours = hours - 24;
+        else if (hours <= 0) hours = 24 + hours;
+        // this.dataCalcTime = currentData.toLocaleTimeString('en');
+        this.dataCalcTime = `${hours}:${minutes.substring(minutes.length - 2)} `;
+        // console.log('this.dataCalcTime :', this.dataCalcTime);
     }
 
     getPollutants() {
@@ -352,6 +421,52 @@ export class Store implements INotify {
     setPollutants(data: airQualityForecastData) {
         this.pollutants = data.list[0].components;
     }
-}
 
-// export const store = new Store();
+    getListOfDays() {
+        return this.list;
+    }
+
+    setListOfDays(data: weatherFiveDaysData) {
+        this.list = data.list;
+    }
+
+    getTimezoneFiveDays() {
+        return this.timezone;
+    }
+
+    setTimezoneFiveDays(data: weatherFiveDaysData) {
+        this.timezone = data.city.timezone / this.secondsPerHour;
+    }
+
+    getCityNameFiveDays() {
+        return this.name;
+    }
+
+    setCityNameFiveDays(data: weatherFiveDaysData) {
+        this.name = data.city.name;
+    }
+
+    getCountryCodeFiveDays() {
+        return this.countryCode;
+    }
+
+    setCountryCodeFiveDays(data: weatherFiveDaysData) {
+        this.countryCode = data.city.country;
+    }
+
+    // // getCountry() {
+    // //     return this.country;
+    // // }
+
+    // // setCountry(data: weatherFiveDaysData) {
+    // //     this.country = `${(data)}`;
+    // // }
+
+    // getDataCalcTime() {
+    //     return this.dataCalcTime;
+    // }
+
+    // setDataCalcTime(data: weatherFiveDaysData) {
+    //     this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
+    // }
+}

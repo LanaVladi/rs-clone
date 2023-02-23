@@ -21,8 +21,8 @@ export const enum ModelEvent {
     input = 'input',
 
     today_weather_indicators = 'today-weather-indicators',
-    five_days_weather_indicators  = 'five-days-weather-indicators',
-    air_quality_forecast_indicators  = 'air-quality-forecast-indicators',
+    five_days_weather_indicators = 'five-days-weather-indicators',
+    air_quality_forecast_indicators = 'air-quality-forecast-indicators',
 }
 
 export const enum ViewEvent {
@@ -109,6 +109,13 @@ export type WeatherTodayData = {
     cod: number;
 };
 
+export type weatherIndicatorsFiveDays = {
+    list: Array<weatherOneDayData>;
+    timezone: number;
+    cityName: string;
+    countryCode: string;
+};
+
 export type weatherFiveDaysData = {
     cod: string;
     message: number;
@@ -129,7 +136,7 @@ export type weatherFiveDaysData = {
     };
 };
 
-export type weatherOneDayData = {
+export type night = {
     main: {
         temp: number;
         feels_like: number;
@@ -141,6 +148,46 @@ export type weatherOneDayData = {
         humidity: number;
         temp_kf: number;
     };
+    weather: [
+        {
+            id: number;
+            main: string;
+            description: string;
+            icon: string;
+        }
+    ];
+    clouds: {
+        all: number;
+    };
+    wind: {
+        speed: number;
+        deg: number;
+        gust: number;
+    };
+    visibility: number;
+    pop: number;
+    rain: {
+        '3h': number;
+    };
+    sys: {
+        pod: string;
+    };
+    dt_txt: '2022-08-30 15:00:00';
+};
+
+export type weatherOneDayData = {
+    main: {
+        temp: number[];
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        sea_level: number;
+        grnd_level: number;
+        humidity: number;
+        temp_kf: number;
+    };
+    night: night;
     weather: [
         {
             id: number;
@@ -192,6 +239,7 @@ export type airQualityForecastData = {
 
 // =========== open Weather ===================== //
 
+
 // =========== language ===================== //
 
 export type pagesLang = {
@@ -225,6 +273,9 @@ export type pagesLang = {
     windAnimation: string;
     pleaseSpeak: string;
     surface: string;
+
+    // Ilya
+
     allPollutants: string;
     primaryPollutant: string;
     pollutantUnits: string;
@@ -250,6 +301,14 @@ export type pagesLang = {
     so2: string;
     pm2_5: string;
     pm10: string;
+
+    //Lana
+    kmH: string;
+    mb: string;
+    km: string;
+    recentLocationTitle: string;
+    clearAll: string;
+    recents: string;
 };
 
 // =========== language ===================== //

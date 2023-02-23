@@ -14,7 +14,6 @@
     color: var(--color-textDefault);
     height: 15rem;
     font-size: 1.3rem;
-
 }
 
 .header-tools {
@@ -30,38 +29,6 @@
     background-image: url(/src/assets/img/logo.png);
     background-repeat: no-repeat;
     background-size: contain;
-    cursor: pointer;
-}
-
-.searcher-container {
-    display: inline-flex;
-    position: relative;
-    background-color: var(--color-bg-outer);
-    border-radius: 30px;
-    width: 30rem;
-}
-
-.searcher-input:focus {
-    outline: 5px auto var(--color-logo-border);
-}
-
-.searcher-input {
-    border-radius: 30px;
-    width: 100%;
-    padding: 0.5rem;
-    background-color: var(--color-bg-outer);
-}
-
-.searcher-icon {
-    background-image: url(https://img.icons8.com/material-outlined/256/search-more.png);
-    background-size: contain;
-    width: 2.7rem;
-    height: 2.7rem;
-    background-repeat: no-repeat;
-    background-position: right;
-    right: 0.8rem;
-    top: 0;
-    position: absolute;
     cursor: pointer;
 }
 
@@ -114,15 +81,6 @@
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-}
-
-li {
-    list-style: none;
-}
-
-li:hover {
-    opacity: 0.5;
-    cursor: pointer;
 }
 
 /*  ============== geolocation button =============== */

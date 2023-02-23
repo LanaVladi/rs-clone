@@ -5,13 +5,11 @@ import { Router } from '../../Router';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { weatherIconUrl, weatherIconImgFormat } from '../../../constants';
 import './header.css';
-import { TranslatorModel } from './../../../model/TranslatorModel';
 
 interface HeaderComponentProps {
     controller: HeaderController;
     observerToView: ObserverToView;
     router: Router;
-    language: TranslatorModel;
 }
 
 export class HeaderComponent extends BaseComponent<HeaderComponentProps> implements INotify {
@@ -27,16 +25,9 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
     private componentAirQuality!: HTMLLIElement;
     private weatherIcon!: HTMLImageElement;
     private observerToView: ObserverToView;
-    private language: TranslatorModel;
 
-    constructor(
-        controller: HeaderController,
-        router: Router,
-        observerToView: ObserverToView,
-        language: TranslatorModel
-    ) {
-        super('header', { controller, router, observerToView, language }, 'header');
-        this.language = language;
+    constructor(controller: HeaderController, router: Router, observerToView: ObserverToView) {
+        super('header', { controller, router, observerToView }, 'header');
         this.observerToView = observerToView;
         this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
@@ -55,10 +46,10 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
                 break;
             }
             case ModelEvent.today_weather_indicators: {
-                const { temp, icon, timezone, cityName, countryCode } = <weatherIndicators>params.message;
+                const { temp, icon, cityName, countryCode } = <weatherIndicators>params.message;
 
                 this.temperature.innerText = `${temp}°`;
-                this.locationName.innerText = `${cityName}, ${countryCode}, ${timezone}`;
+                this.locationName.innerText = `${cityName}, ${countryCode}`;
                 this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
             }
         }
@@ -86,6 +77,7 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
             this.logo,
             this.props.controller.searcherController.component.element,
             this.props.controller.geolocationController.component.element,
+            this.props.controller.voiceControl.component.element,
             this.conversion
         );
 
@@ -93,16 +85,16 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.headerNav.classList.add('header-nav');
 
         this.componentToday = document.createElement('li');
-        this.componentToday.textContent = this.props.language.getTranslateRu().today;
+        this.componentToday.textContent = this.props.controller.language.getTranslateRu().today;
 
         this.componentFiveDays = document.createElement('li');
-        this.componentFiveDays.textContent = this.props.language.getTranslateRu().fiveDay;
+        this.componentFiveDays.textContent = this.props.controller.language.getTranslateRu().fiveDay;
 
         this.componentMap = document.createElement('li');
-        this.componentMap.textContent = this.props.language.getTranslateRu().map;
+        this.componentMap.textContent = this.props.controller.language.getTranslateRu().map;
 
         this.componentAirQuality = document.createElement('li');
-        this.componentAirQuality.textContent = this.props.language.getTranslateRu().airQuality;
+        this.componentAirQuality.textContent = this.props.controller.language.getTranslateRu().airQuality;
 
         this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
 

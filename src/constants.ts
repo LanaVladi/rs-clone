@@ -17,7 +17,7 @@ export const fahrenheit = 'imperial';
 export const lang: 'en' | 'ru' = 'ru';
 
 export const weatherIconUrl = `http://openweathermap.org/img/wn/`;
-export const weatherIconImgFormat = `.png`;
+export const weatherIconImgFormat = `@2x.png`;
 
 // export weatherIconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
