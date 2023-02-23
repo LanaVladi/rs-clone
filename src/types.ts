@@ -114,6 +114,7 @@ export type weatherIndicatorsFiveDays = {
     timezone: number;
     cityName: string;
     countryCode: string;
+    dataCalcTime: string;
 };
 
 export type weatherFiveDaysData = {
@@ -172,12 +173,12 @@ export type night = {
     sys: {
         pod: string;
     };
-    dt_txt: '2022-08-30 15:00:00';
+    dt_txt: string;
 };
 
 export type weatherOneDayData = {
     main: {
-        temp: number[];
+        temp: number;
         feels_like: number;
         temp_min: number;
         temp_max: number;
@@ -212,7 +213,7 @@ export type weatherOneDayData = {
     sys: {
         pod: string;
     };
-    // dt_txt: '2022-08-30 15:00:00';
+    dt_txt: string;
 };
 
 export type airQualityForecastData = {
@@ -239,24 +240,6 @@ export type airQualityForecastData = {
 
 // =========== open Weather ===================== //
 
-// =========== AirQuality ===================== //
-
-export type Pollutants = {
-    co: number;
-    no: number;
-    no2: number;
-    o3: number;
-    so2: number;
-    pm2_5: number;
-    pm10: number;
-    nh3: number;
-};
-
-export type PollutantsIndicator = {
-    pollutants: Pollutants;
-};
-
-// =========== AirQuality ===================== //
 
 // =========== language ===================== //
 
@@ -455,3 +438,42 @@ export interface IMinifestFile {
 export type Layer = 'wind' | 'temp' | 'pressure';
 
 // =========== Windy map ===================== //
+
+// =========== AirQuality ===================== //
+
+export type Pollutants = {
+    co: number;
+    no: number;
+    no2: number;
+    o3: number;
+    so2: number;
+    pm2_5: number;
+    pm10: number;
+    nh3: number;
+};
+
+export type PollutantsIndicator = {
+    pollutants : Pollutants;
+};
+
+export type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';
+
+export type PollutantNameKey = 'co' | 'no2' | 'o3' | 'so2' | 'pm2_5' | 'pm10';
+
+export type LevelInfoKey =
+    | 'goodInfo'
+    | 'moderateInfo'
+    | 'unhealthyForGroupsInfo'
+    | 'unhealthyInfo'
+    | 'veryUnhealthyInfo'
+    | 'hazardousInfo';
+
+export type PollutantSettings = {
+    color: string;
+    factor: number;
+    level: string;
+    levelInfo: string;
+    levelAttribute: string;
+};
+
+// =========== AirQuality ===================== //
