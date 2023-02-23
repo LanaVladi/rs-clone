@@ -2,6 +2,7 @@ import { AirQualityPageController } from '../controller/AirQualityPageController
 import { BaseController } from '../controller/BaseController';
 import { WeatherFiveDaysPageController } from '../controller/WeatherFiveDaysPageController';
 import { WeatherTodayPageController } from '../controller/WeatherTodayPageController';
+import { ObserverToModel } from '../model/ObserverToModel';
 import { ObserverToView } from '../model/ObserverToView';
 import { WeatherMapPageController } from './../controller/WeatherMapPageController';
 import { TranslatorModel } from './../model/TranslatorModel';
@@ -14,11 +15,21 @@ export class Router {
     private currentRoute?: string;
     private pageController?: BaseController;
 
-    constructor(container: HTMLElement, observerToView: ObserverToView, language: TranslatorModel) {
+    constructor(
+        container: HTMLElement,
+        observerToModel: ObserverToModel,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
         this.container = container;
 
         const weatherTodayPageController = new WeatherTodayPageController(this, observerToView, language);
-        const weatherFiveDaysPageController = new WeatherFiveDaysPageController(this, observerToView, language);
+        const weatherFiveDaysPageController = new WeatherFiveDaysPageController(
+            this,
+            observerToModel,
+            observerToView,
+            language
+        );
         const weatherMapPageController = new WeatherMapPageController(this, observerToView, language);
         const airQualityPageController = new AirQualityPageController(this, observerToView, language);
 
