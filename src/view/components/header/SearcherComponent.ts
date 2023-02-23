@@ -24,6 +24,8 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
 
     private readonly storageKeyCity = 'city';
     private cityList = new Array<string>();
+    private cityListForShow = new Array<string>();
+
     private lengthOfLocalStorage = 5;
 
     constructor(controller: SearcherController, observerToModel: ObserverToModel, observerToView: ObserverToView) {
@@ -74,22 +76,8 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         this.alertDropDownList.className = 'searcher-input-drop-down-list__alert';
         this.alertDropDownList.textContent = this.props.controller.language.getTranslateRu().recents;
 
-        // this.createDropDownList();
-
         this.inputDropDownList = document.createElement('ul');
         this.inputDropDownList.className = 'searcher-input-drop-down-list';
-
-        // this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-
-        // this.cityList.forEach((city) => {
-        //     this.dropDownListItem = document.createElement('li');
-        //     this.dropDownListItem.className = 'searcher-input-drop-down-item';
-        //     this.dropDownListItem.textContent = `${city}`;
-        //     this.inputDropDownList.append(this.dropDownListItem);
-        // });
-        // }
-
-        // this.inputDropDownList.append(this.dropDownListItem);
 
         this.dropDownListBox.append(recentLocationTitleBox, this.alertDropDownList, this.inputDropDownList);
 
@@ -99,6 +87,7 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     protected addListeners(): void {
         this.searchInput.addEventListener('change', () => {
             const cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
+
             if (localStorage.getItem(this.storageKeyCity)?.length === 0) {
                 this.cityList = [cityName];
                 localStorage.setItem(this.storageKeyCity, JSON.stringify(this.cityList));
@@ -107,15 +96,17 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
                 this.checkLocalStorage(cityName);
             }
 
-            this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-
-            this.cityList.forEach((city) => {
-                this.dropDownListItem = document.createElement('li');
-                this.dropDownListItem.className = 'searcher-input-drop-down-item';
-                this.dropDownListItem.textContent = `${city}`;
-                this.inputDropDownList.append(this.dropDownListItem);
-            });
             // this.createDropDownList();
+
+            // this.cityList = [];
+            // this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
+
+            // this.cityList.forEach((city) => {
+            //     this.dropDownListItem = document.createElement('li');
+            //     this.dropDownListItem.className = 'searcher-input-drop-down-item';
+            //     this.dropDownListItem.textContent = `${city}`;
+            //     this.inputDropDownList.append(this.dropDownListItem);
+            // });
 
             this.observerToModel.notify(ViewEvent.input, { message: cityName, typeEvents: ModelEvent.input });
 
@@ -123,19 +114,21 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
         });
 
         this.searchInput.addEventListener('click', () => {
-            this.showDropDownList();
             this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-            if (localStorage.getItem(this.storageKeyCity) !== null && this.cityList.length >= 2) {
-                this.alertDropDownList.classList.remove('hidden');
-                this.alertDropDownList.classList.add('visible');
+            if (localStorage.getItem(this.storageKeyCity) && this.cityList.length >= 2) {
+                this.showDropDownList();
+
+                // this.alertDropDownList.classList.remove('hidden');
+                // this.alertDropDownList.classList.add('visible');
                 // this.createDropDownList();
             } else {
-                this.alertDropDownList.classList.remove('visible');
-                this.alertDropDownList.classList.add('hidden');
+                this.hideDropDownList();
+                // this.alertDropDownList.classList.remove('visible');
+                // this.alertDropDownList.classList.add('hidden');
             }
         });
 
-        window.addEventListener('click', (event) => {
+        document.body.addEventListener('click', (event) => {
             const target = event.target as HTMLDivElement;
             if (!target?.closest('.drop-down-list-box') && !target.closest('.searcher-container')) {
                 this.hideDropDownList();
@@ -147,6 +140,10 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
             this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
             localStorage.removeItem(this.storageKeyCity);
             this.alertDropDownList.classList.add('visible');
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            this.createDropDownList();
         });
     }
 
@@ -169,35 +166,57 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
 
     hideDropDownList() {
         this.dropDownListBox.classList.remove('visible');
+        // this.cityListForShow = [];
     }
     showDropDownList() {
         this.dropDownListBox.classList.add('visible');
+        // this.cityListForShow = this.cityList;
     }
 
-    // protected createDropDownList() {
-    //     if (localStorage.getItem(this.storageKeyCity)?.length === 0) {
+    protected createDropDownList() {
+        this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
+        this.cityListForShow = this.cityList;
+        if (
+            // this.cityListForShow.length === this.cityList.length &&
+            this.cityListForShow.every((value, index) => value === this.cityList[index])
+        ) {
+            console.log('this.cityListForShow ОДИНАКОВЫЕ ДАННЫЕ:', this.cityListForShow);
+            return;
+        } else {
+            this.cityListForShow = this.cityList;
+            console.log('this.cityListForShow разные ДАННЫЕ:', this.cityListForShow);
+            this.cityListForShow.forEach((city) => {
+                this.dropDownListItem = document.createElement('li');
+                this.dropDownListItem.className = 'searcher-input-drop-down-item';
+                this.dropDownListItem.textContent = `${city}`;
+                console.log('this.dropDownListItem.textContent :', this.dropDownListItem.textContent);
+                this.inputDropDownList.append(this.dropDownListItem);
+            });
+        }
+    }
 
-    //         const cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
-    //         this.cityList = [cityName];
-    //         this.cityList.forEach((city) => {
-    //             this.dropDownListItem = document.createElement('li');
-    //             this.dropDownListItem.className = 'searcher-input-drop-down-item';
-    //             this.dropDownListItem.textContent = `${city}`;
-    //             this.inputDropDownList.append(this.dropDownListItem);
-    //         });
-    //     } else {
-    //         console.log(
-    //             'СЮДА ЗАШЕЛ  localStorage.getItem(this.storageKeyCity) :',
-    //             localStorage.getItem(this.storageKeyCity)
-    //         );
-    //         this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
-    //         this.cityList.forEach((city) => {
-    //             this.dropDownListItem = document.createElement('li');
-    //             this.dropDownListItem.className = 'searcher-input-drop-down-item';
-    //             this.dropDownListItem.textContent = `${city}`;
-    //             this.inputDropDownList.append(this.dropDownListItem);
-    //         });
-    //     }
+    // if (localStorage.getItem(this.storageKeyCity)?.length === 0) {
+    //     const cityName = (this.searchInput as HTMLInputElement).value.toLocaleLowerCase();
+    //     this.cityList = [cityName];
+    //     this.cityList.forEach((city) => {
+    //         this.dropDownListItem = document.createElement('li');
+    //         this.dropDownListItem.className = 'searcher-input-drop-down-item';
+    //         this.dropDownListItem.textContent = `${city}`;
+    //         this.inputDropDownList.append(this.dropDownListItem);
+    //     });
+    // } else {
+    //     console.log(
+    //         'СЮДА ЗАШЕЛ  localStorage.getItem(this.storageKeyCity) :',
+    //         localStorage.getItem(this.storageKeyCity)
+    //     );
+    //     this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
+    //     this.cityList.forEach((city) => {
+    //         this.dropDownListItem = document.createElement('li');
+    //         this.dropDownListItem.className = 'searcher-input-drop-down-item';
+    //         this.dropDownListItem.textContent = `${city}`;
+    //         this.inputDropDownList.append(this.dropDownListItem);
+    //     });
+    // }
 
     // if (localStorage.getItem(this.storageKeyCity)) {
     //     this.cityList.forEach((city) => {
@@ -216,5 +235,5 @@ export class SearcherComponent extends BaseComponent<SearcherComponentProps> {
     //         this.inputDropDownList.append(this.dropDownListItem);
     //     });
     // }
-    // }
 }
+// }
