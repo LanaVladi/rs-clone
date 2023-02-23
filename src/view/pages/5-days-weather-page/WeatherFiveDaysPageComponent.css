@@ -1,0 +1,28 @@
+.five-days-container {
+    background-color: var(--color-white);
+    width: 70rem;
+    margin: 0 auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+}
+
+h1 {
+    padding: 1rem 1.6rem;
+}
+
+.daily-forecast-timestamp {
+    padding: 1rem 1.6rem;
+}
+.daily-forecast-disclosure-list {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+.location-page-title{
+    display: flex;
+}
+.location-title{
+    display: flex;
+    align-items: center;
+}
