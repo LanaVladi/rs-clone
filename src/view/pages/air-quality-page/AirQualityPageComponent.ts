@@ -2,58 +2,20 @@ import './AirQualityPageComponent.css';
 import { AirQualityPageController } from '../../../controller/AirQualityPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import INotify, {
+    LevelInfoKey,
+    LevelKey,
     ModelEvent,
     NotifyParameters,
     pagesLang,
+    PollutantNameKey,
     Pollutants,
+    PollutantSettings,
     PollutantsIndicator,
-    WeatherTodayData,
 } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import { TranslatorModel } from '../../../model/TranslatorModel';
 import aqiLib from 'aqi-us';
-
-const MOLECULAR_WEIGHT_CO = 28.01;
-const MOLECULAR_WEIGHT_NO2 = 46.01;
-const MOLECULAR_WEIGHT_O3 = 48;
-const MOLECULAR_WEIGHT_SO2 = 64.06;
-const MICRO_G_IN_MILI_G = 1000;
-const VOLUME_BY_NORMAL_CONDITIONS = 24.45;
-const BIG_CYRCLE_LENGTH = 320.4424506661589;
-const CYRCLE_LENGTH = 169.64600329384882;
-const SEGMENT_COUNT = 6;
-
-const levelInfoObj = {
-    goodInfo: 'Качество воздуха удовлетворительное, уровень загрязнений почти не вызывает опасений.',
-    moderateInfo:
-        'Качество воздуха приемлемое, однако для некоторых типов загрязнений есть средний риск воздействия на самочувствие малой части людей, чувствительных к загрязнению воздуха.',
-    unhealthyForGroupsInfo:
-        'Чувствительные люди могут испытывать проблемы со здоровьем. Вероятно, это не повлияет на остальные слои населения.',
-    unhealthyInfo:
-        'У любого человека могут начаться проблемы со здоровьем, воздействие на чувствительных людей может быть более серьезным.',
-    veryUnhealthyInfo:
-        'Предупреждения касательно здоровья, означающие экстренную ситуацию. Вполне возможно, что это повлияет на все население.',
-    hazardousInfo: 'Оповещение в отношении здоровья: все люди могут испытывать более серьезные проблемы со здоровьем.',
-};
-
-type PollutantSettings = {
-    color: string;
-    factor: number;
-    level: string;
-    levelInfo: string;
-    levelAttribute: string;
-};
-
-type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';
-type PollutantNameKey = 'co' | 'no2' | 'o3' | 'so2' | 'pm2_5' | 'pm10';
-type LevelInfoKey =
-    | 'goodInfo'
-    | 'moderateInfo'
-    | 'unhealthyForGroupsInfo'
-    | 'unhealthyInfo'
-    | 'veryUnhealthyInfo'
-    | 'hazardousInfo';
 
 interface AirQualityPageComponentProps {
     controller: AirQualityPageController;
@@ -85,6 +47,29 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     private AirQualityPopOverTitle!: HTMLHeadingElement;
     private AirQualityPopOverBody!: HTMLParagraphElement;
     private airQualityLevelsList!: HTMLDListElement;
+
+    private MOLECULAR_WEIGHT_CO = 28.01;
+    private MOLECULAR_WEIGHT_NO2 = 46.01;
+    private MOLECULAR_WEIGHT_O3 = 48;
+    private MOLECULAR_WEIGHT_SO2 = 64.06;
+    private MICRO_G_IN_MILI_G = 1000;
+    private VOLUME_BY_NORMAL_CONDITIONS = 24.45;
+    private BIG_CYRCLE_LENGTH = 320.4424506661589;
+    private CYRCLE_LENGTH = 169.64600329384882;
+    private SEGMENT_COUNT = 6;
+
+    private levelInfoObj = {
+        goodInfo: 'Качество воздуха удовлетворительное, уровень загрязнений почти не вызывает опасений.',
+        moderateInfo:
+            'Качество воздуха приемлемое, однако для некоторых типов загрязнений есть средний риск воздействия на самочувствие малой части людей, чувствительных к загрязнению воздуха.',
+        unhealthyForGroupsInfo:
+            'Чувствительные люди могут испытывать проблемы со здоровьем. Вероятно, это не повлияет на остальные слои населения.',
+        unhealthyInfo:
+            'У любого человека могут начаться проблемы со здоровьем, воздействие на чувствительных людей может быть более серьезным.',
+        veryUnhealthyInfo:
+            'Предупреждения касательно здоровья, означающие экстренную ситуацию. Вполне возможно, что это повлияет на все население.',
+        hazardousInfo: 'Оповещение в отношении здоровья: все люди могут испытывать более серьезные проблемы со здоровьем.',
+    };
 
     constructor(
         controller: AirQualityPageController,
@@ -125,7 +110,6 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         }
     }
 
-    
     protected render(): void {
         const airQualityContainer = document.createElement('div');
         airQualityContainer.className = 'air-quality-container';
@@ -196,14 +180,14 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         airQualityPopOverContent.className = 'air-quality-popover-content';
 
         const AirQualityPopOverText = document.createElement('div');
-        AirQualityPopOverText.className = 'air-Quality-popover-text';
+        AirQualityPopOverText.className = 'air-quality-popover-text';
 
         this.AirQualityPopOverTitle = document.createElement('h4');
-        this.AirQualityPopOverTitle.className = 'air-Quality-popover-title';
+        this.AirQualityPopOverTitle.className = 'air-quality-popover-title';
         this.AirQualityPopOverTitle.textContent = 'Источник';
 
         this.AirQualityPopOverBody = document.createElement('p');
-        this.AirQualityPopOverBody.className = 'air-Quality-popover-body';
+        this.AirQualityPopOverBody.className = 'air-quality-popover-body';
         this.AirQualityPopOverBody.textContent =
             'Содержит данные службы мониторинга атмосферы Copernicus Atmosphere Monitoring Service за 2023 г. и/или измененные данные службы Copernicus Atmosphere Monitoring Service за 2023 г. Европейская комиссия и ЕЦСПП не несут ответственность за любое использование данной информации.';
 
@@ -387,7 +371,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private getBigChart(aqi: number): string {
         const { color, factor } = this.getPollutantSettings(aqi);
-        const currentSector = (BIG_CYRCLE_LENGTH / SEGMENT_COUNT) * factor;
+        const currentSector = (this.BIG_CYRCLE_LENGTH / this.SEGMENT_COUNT) * factor;
         return `
             <svg width="102" height="102" style="border-radius: 50%;display: block;">
                 <circle r="51" cx="51" cy="51" transform="rotate(90 51 51)" style="stroke-width:10;stroke: #e7ecf1;" fill='#0000'></circle>
@@ -399,7 +383,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
     private getChart(aqi: number): string {
         const { color, factor } = this.getPollutantSettings(aqi);
-        const currentSector = (CYRCLE_LENGTH / SEGMENT_COUNT) * factor;
+        const currentSector = (this.CYRCLE_LENGTH / this.SEGMENT_COUNT) * factor;
         return `
             <svg width="54" height="54" style="border-radius: 50%;display: block;">
                 <circle r="27" cx="27" cy="27" transform="rotate(90 27 27)" style="stroke-width:10;stroke: #e7ecf1;" fill='#0000'></circle>
@@ -421,37 +405,37 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             color = '#00E838';
             factor = 1;
             level = 'Хорошее';
-            levelInfo = levelInfoObj.goodInfo;
+            levelInfo = this.levelInfoObj.goodInfo;
             levelAttribute = 'good';
         } else if (aqi >= 50 && aqi < 100) {
             color = '#FFFF24';
             factor = 2;
             level = 'Среднее';
-            levelInfo = levelInfoObj.moderateInfo;
+            levelInfo = this.levelInfoObj.moderateInfo;
             levelAttribute = 'moderate';
         } else if (aqi >= 100 && aqi < 150) {
             color = '#FF7200';
             factor = 3;
             level = 'Вредное для чувствительных людей';
-            levelInfo = levelInfoObj.unhealthyForGroupsInfo;
+            levelInfo = this.levelInfoObj.unhealthyForGroupsInfo;
             levelAttribute = 'unhealthyForGroups';
         } else if (aqi >= 150 && aqi < 200) {
             color = '#f00';
             factor = 4;
             level = 'Вредные условия';
-            levelInfo = levelInfoObj.unhealthyInfo;
+            levelInfo = this.levelInfoObj.unhealthyInfo;
             levelAttribute = 'unhealthy';
         } else if (aqi >= 200 && aqi < 300) {
             color = '#9d3d8c';
             factor = 5;
             level = 'Очень вредные условия';
-            levelInfo = levelInfoObj.veryUnhealthyInfo;
+            levelInfo = this.levelInfoObj.veryUnhealthyInfo;
             levelAttribute = 'veryUnhealthy';
         } else {
             color = '#8d0021';
             factor = 6;
             level = 'Опасно';
-            levelInfo = levelInfoObj.hazardousInfo;
+            levelInfo = this.levelInfoObj.hazardousInfo;
             levelAttribute = 'hazardous';
         }
         return { color, factor, level, levelInfo, levelAttribute };
@@ -463,13 +447,13 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
 
         switch (name) {
             case 'co':
-                const co_ppm = (VOLUME_BY_NORMAL_CONDITIONS * value) / MICRO_G_IN_MILI_G / MOLECULAR_WEIGHT_CO;
+                const co_ppm = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MICRO_G_IN_MILI_G / this.MOLECULAR_WEIGHT_CO;
                 return aqiLib.co(co_ppm);
             case 'no2':
-                const no2_ppb = (VOLUME_BY_NORMAL_CONDITIONS * value) / MOLECULAR_WEIGHT_NO2;
+                const no2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_NO2;
                 return aqiLib.no2(no2_ppb);
             case 'o3':
-                const o3_ppb = (VOLUME_BY_NORMAL_CONDITIONS * value) / MOLECULAR_WEIGHT_O3;
+                const o3_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_O3;
                 const o3_1hr_aqi = aqiLib.o3_1hr(o3_ppb);
                 const o3_8hr_aqi = aqiLib.o3_8hr(o3_ppb);
                 return o3_1hr_aqi || o3_8hr_aqi;
@@ -478,7 +462,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             case 'pm2_5':
                 return aqiLib.pm25(value);
             case 'so2':
-                const so2_ppb = (VOLUME_BY_NORMAL_CONDITIONS * value) / MOLECULAR_WEIGHT_SO2;
+                const so2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_SO2;
                 return aqiLib.so2(so2_ppb);
             default:
                 return 0;

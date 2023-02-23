@@ -455,4 +455,24 @@ export type PollutantsIndicator = {
     pollutants : Pollutants;
 };
 
+export type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';
+
+export type PollutantNameKey = 'co' | 'no2' | 'o3' | 'so2' | 'pm2_5' | 'pm10';
+
+export type LevelInfoKey =
+    | 'goodInfo'
+    | 'moderateInfo'
+    | 'unhealthyForGroupsInfo'
+    | 'unhealthyInfo'
+    | 'veryUnhealthyInfo'
+    | 'hazardousInfo';
+
+export type PollutantSettings = {
+    color: string;
+    factor: number;
+    level: string;
+    levelInfo: string;
+    levelAttribute: string;
+};
+
 // =========== AirQuality ===================== //
