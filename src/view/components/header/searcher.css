@@ -21,13 +21,12 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     z-index: 1;
-    visibility: hidden;
+    /* visibility: hidden; */
+    display: none;
     padding: 1rem;
 }
 
-.drop-down-list-box.visible {
-    visibility: visible;
-}
+
 
 .recent-location-title-box {
     display: flex;
@@ -48,12 +47,21 @@
     padding-bottom: 2rem;
 }
 
-.searcher-input-drop-down-list__alert {
+.searcher-input-drop-down-list__alert,
+.searcher-input-drop-down-list {
     visibility: hidden;
+    /* display: none; */
 }
 
-.searcher-input-drop-down-list__alert.visible {
+.searcher-input-drop-down-list__alert.visible,
+.searcher-input-drop-down-list.visible {
     visibility: visible;
+    /* display: flex; */
+}
+
+.drop-down-list-box.visible {
+    /* visibility: visible; */
+    display: flex;
 }
 
 .searcher-input:focus {
