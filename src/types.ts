@@ -1,64 +1,135 @@
 import { Map } from 'leaflet';
 
+// =========== Observer ===================== //
+
 export type NotifyParameters<T> = {
     message: T;
-    typeEvents: APIEvent;
+    typeEvents?: ModelEvent | ViewEvent;
 };
 
-export interface Subscriber {
+export default interface INotify {
     notify<T>(params: NotifyParameters<T>): void;
 }
 
-export const enum APIEvent {
-    todayWeather = 'today-weather',
-    fiveDaysWeather = 'five-days-weather',
+export const enum ModelEvent {
+    today_weather = 'today-weather',
+    five_days_weather = 'five-days-weather',
+    air_quality_forecast = 'air-quality-forecast',
+    weather_map = 'map',
+    language = 'language',
+    temp_unit = 'temp-unit',
+    input = 'input',
+
+    today_weather_indicators = 'today-weather-indicators',
+    five_days_weather_indicators = 'five-days-weather-indicators',
+    air_quality_forecast_indicators = 'air-quality-forecast-indicators',
 }
 
+export const enum ViewEvent {
+    input = 'input',
+    geolocation = 'geolocation',
+    language = 'language',
+    temp_unit = 'temp-unit',
+}
+
+// =========== Observer ===================== //
+
+// =========== open Weather ===================== //
+
+export type weatherIndicators = {
+    temp: number;
+    tempMin: number;
+    tempMax: number;
+    feelsLike: number;
+    pressure: number;
+    humidity: number;
+    windSpeed: number;
+    visibility: number;
+    clouds: number;
+    sunrise: string;
+    sunset: string;
+    icon: string;
+    id: number;
+    mainWeather: string;
+    description: string;
+    timezone: number;
+    cityName: string;
+    countryCode: string;
+    country: string;
+    dataCalcTime: string;
+};
+
 export type WeatherTodayData = {
+    coord: {
+        lon: number;
+        lat: number;
+    };
+    weather: [
+        {
+            id: number;
+            main: string;
+            description: string;
+            icon: string;
+        }
+    ];
+    base: string;
     main: {
-        feels_like: number;
-        humidity: number;
-        pressure: number;
         temp: number;
+        feels_like: number;
         temp_min: number;
         temp_max: number;
+        pressure: number;
+        humidity: number;
+        sea_level: number;
+        grnd_level: number;
+    };
+    visibility: number;
+    wind: {
+        speed: number;
+        deg: number;
+        gust: number;
+    };
+    rain: {
+        '1h': number;
     };
     clouds: {
         all: number;
     };
-    visibility: number;
-    timezone: number;
+    dt: number;
     sys: {
+        type: number;
+        id: number;
+        country: string;
         sunrise: number;
         sunset: number;
     };
-    weather: [
-        {
-            description: string;
-            main: string;
-            icon: string;
-        }
-    ];
-    wind: {
-        speed: number;
-        deg: number;
-    };
+    timezone: number;
+    id: number;
     name: string;
+    cod: number;
+};
+
+export type weatherIndicatorsFiveDays = {
+    list: Array<weatherOneDayData>;
+    timezone: number;
+    cityName: string;
+    countryCode: string;
+    dataCalcTime: string;
 };
 
 export type weatherFiveDaysData = {
-    // cod: '200';
-    // message: 0;
-    // cnt: 40;
+    cod: string;
+    message: number;
+    cnt: number;
     list: Array<weatherOneDayData>;
     city: {
-        // id: 3163858;
+        id: number;
         name: string;
         coord: {
             lat: number;
             lon: number;
         };
-        // country: 'IT';
+        country: string;
         population: number;
         timezone: number;
         sunrise: number;
@@ -66,7 +137,7 @@ export type weatherFiveDaysData = {
     };
 };
 
-export type weatherOneDayData = {
+export type night = {
     main: {
         temp: number;
         feels_like: number;
@@ -76,11 +147,11 @@ export type weatherOneDayData = {
         sea_level: number;
         grnd_level: number;
         humidity: number;
-        temp_kf: number; // what is it?
+        temp_kf: number;
     };
     weather: [
         {
-            // id: 500;
+            id: number;
             main: string;
             description: string;
             icon: string;
@@ -95,16 +166,155 @@ export type weatherOneDayData = {
         gust: number;
     };
     visibility: number;
-    // pop: 0.32;
+    pop: number;
     rain: {
-        '3h': number; //0.26;
+        '3h': number;
     };
     sys: {
-        pod: string; //   pod: 'd';
+        pod: string;
     };
-    // dt_txt: '2022-08-30 15:00:00';
+    dt_txt: string;
 };
 
+export type weatherOneDayData = {
+    main: {
+        temp: number;
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        sea_level: number;
+        grnd_level: number;
+        humidity: number;
+        temp_kf: number;
+    };
+    night: night;
+    weather: [
+        {
+            id: number;
+            main: string;
+            description: string;
+            icon: string;
+        }
+    ];
+    clouds: {
+        all: number;
+    };
+    wind: {
+        speed: number;
+        deg: number;
+        gust: number;
+    };
+    visibility: number;
+    pop: number;
+    rain: {
+        '3h': number;
+    };
+    sys: {
+        pod: string;
+    };
+    dt_txt: string;
+};
+
+export type airQualityForecastData = {
+    coord: string[];
+    list: [
+        {
+            dt: number;
+            main: {
+                aqi: number;
+            };
+            components: {
+                co: number;
+                no: number;
+                no2: number;
+                o3: number;
+                so2: number;
+                pm2_5: number;
+                pm10: number;
+                nh3: number;
+            };
+        }
+    ];
+};
+
+// =========== open Weather ===================== //
+
+
+// =========== language ===================== //
+
+export type pagesLang = {
+    night: string;
+    morning: string;
+    afternoon: string;
+    evening: string;
+    today: string;
+    fiveDay: string;
+    forecastFiveDay: string;
+    weatherToday: string;
+    forecastToday: string;
+    map: string;
+    otherForecasts: string;
+    searchByCity: string;
+    airQuality: string;
+    airQualityToday: string;
+    asOf: string;
+    nextHours: string;
+    feelsLike: string;
+    high: string;
+    low: string;
+    wind: string;
+    temp: string;
+    humidity: string;
+    cloudiness: string;
+    pressure: string;
+    visibility: string;
+    search: string;
+    fullScreen: string;
+    windAnimation: string;
+    pleaseSpeak: string;
+    surface: string;
+
+    // Ilya
+
+    allPollutants: string;
+    primaryPollutant: string;
+    pollutantUnits: string;
+    moreDetailsText: string;
+    airQualityLevelsCaption: string;
+    AirQualityPopOverTitle: string;
+    AirQualityPopOverBody: string;
+    good: string;
+    moderate: string;
+    unhealthyForGroups: string;
+    unhealthy: string;
+    veryUnhealthy: string;
+    hazardous: string;
+    goodInfo: string;
+    moderateInfo: string;
+    unhealthyForGroupsInfo: string;
+    unhealthyInfo: string;
+    veryUnhealthyInfo: string;
+    hazardousInfo: string;
+    co: string;
+    no2: string;
+    o3: string;
+    so2: string;
+    pm2_5: string;
+    pm10: string;
+
+    //Lana
+    kmH: string;
+    mb: string;
+    km: string;
+    recentLocationTitle: string;
+    clearAll: string;
+    recents: string;
+};
+
+// =========== language ===================== //
+
+// =========== Windy map ===================== //
 export interface ICoordinates {
     lat: {
         degrees: number;
@@ -226,3 +436,44 @@ export interface IMinifestFile {
 }
 
 export type Layer = 'wind' | 'temp' | 'pressure';
+
+// =========== Windy map ===================== //
+
+// =========== AirQuality ===================== //
+
+export type Pollutants = {
+    co: number;
+    no: number;
+    no2: number;
+    o3: number;
+    so2: number;
+    pm2_5: number;
+    pm10: number;
+    nh3: number;
+};
+
+export type PollutantsIndicator = {
+    pollutants : Pollutants;
+};
+
+export type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';
+
+export type PollutantNameKey = 'co' | 'no2' | 'o3' | 'so2' | 'pm2_5' | 'pm10';
+
+export type LevelInfoKey =
+    | 'goodInfo'
+    | 'moderateInfo'
+    | 'unhealthyForGroupsInfo'
+    | 'unhealthyInfo'
+    | 'veryUnhealthyInfo'
+    | 'hazardousInfo';
+
+export type PollutantSettings = {
+    color: string;
+    factor: number;
+    level: string;
+    levelInfo: string;
+    levelAttribute: string;
+};
+
+// =========== AirQuality ===================== //

@@ -1,7 +1,6 @@
-import { lang, langObj } from '../../../constants';
 import { VoiceControlController } from '../../../controller/VoiceControlController';
 import { BaseComponent } from '../../BaseComponent';
-import '../voiceControl/voiceControl.css'
+import '../voiceControl/voiceControl.css';
 
 interface VoiceControlComponentProps {
     controller: VoiceControlController;
@@ -28,8 +27,8 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
 
         this.modalInner = document.createElement('div');
         this.modalInner.className = 'modal-inner';
-        this.modalInner.innerText = langObj[lang].pleaseSpeak;
-        
+        this.modalInner.innerText = this.props.controller.language.getTranslateRu().pleaseSpeak;
+
         this.voiceRecordAnimation = document.createElement('div');
         this.voiceRecordAnimation.className = 'voice-record-animation';
         this.voiceRecordAnimation.innerHTML = `
@@ -47,7 +46,7 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
         this.overlay = document.createElement('div');
         this.overlay.className = 'voice-control-overlay';
 
-        this.element.append(this.voiceControlIcon, this.voiceControlModal, this.overlay);
+        this.element.append(this.voiceControlIcon, this.voiceControlModal, /* this.overlay */);
     }
 
     protected addListeners(): void {

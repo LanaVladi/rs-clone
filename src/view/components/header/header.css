@@ -14,49 +14,21 @@
     color: var(--color-textDefault);
     height: 15rem;
     font-size: 1.3rem;
-
 }
 
 .header-tools {
     width: 80%;
-    justify-content: space-between;
+    justify-content: space-evenly;
     display: flex;
     align-items: center;
 }
 
 .header-logo {
-    margin-top: 1em;
-}
-
-.searcher-container {
-    display: inline-flex;
-    position: relative;
-    background-color: var(--color-bg-outer);
-    border-radius: 30px;
-    width: 30rem;
-}
-
-.searcher-input:focus {
-    outline: 5px auto black;
-}
-
-.searcher-input {
-    border-radius: 30px;
-    width: 100%;
-    padding: 0.5rem;
-    background-color: var(--color-bg-outer);
-}
-
-.searcher-icon {
-    background-image: url(https://img.icons8.com/material-outlined/256/search-more.png);
-    background-size: contain;
-    width: 2.7rem;
-    height: 2.7rem;
+    width: 5rem;
+    height: 5rem;
+    background-image: url(/src/assets/img/logo.png);
     background-repeat: no-repeat;
-    background-position: right;
-    right: 0.8rem;
-    top: 0;
-    position: absolute;
+    background-size: contain;
     cursor: pointer;
 }
 
@@ -79,11 +51,24 @@
     height: 3rem;
 }
 
-.temperature-unit {
-    background-color: var(--color-bg-footer-header);
+.temperature-unit-container {
+    background-color: transparent;
+    cursor: pointer;
 }
 
-.lang-logo {
+.option {
+    cursor: pointer;
+}
+
+.language-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.lang-icon {
     background-image: url("https://www.svgrepo.com/show/116369/earth-globe-tool.svg");
     background-size: contain;
     background-repeat: no-repeat;
@@ -98,11 +83,19 @@
     justify-content: space-between;
 }
 
-li {
-    list-style: none;
+/*  ============== geolocation button =============== */
+
+.geolocation-button {
+    transform: rotate(315deg);
+    font-size: 1.7rem;
+    border-radius: 2rem;
+    padding: 0.3rem 0 0.5rem 0.3rem;
+    width: 3rem;
+    height: 3rem;
+    color: var(--color-white);
+    background-color: var(--color-btn);
 }
 
-li:hover {
-    opacity: 0.5;
-    cursor: pointer;
+.geolocation-button:hover {
+    background-color: var(--color-btn-hover);
 }

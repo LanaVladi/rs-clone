@@ -1,0 +1,81 @@
+.searcher-container {
+    position: relative;
+    display: inline-flex;
+    position: relative;
+    background-color: var(--color-bg-outer);
+    border-radius: 30px;
+    width: 30rem;
+}
+
+.drop-down-list-box {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    min-width: 35rem;
+    top: calc(100% + 0.5rem);
+    background-color: var(--color-bg-outer);
+    border-radius: 1rem;
+    width: 100%;
+    box-shadow: 0 0 12px 0 #0003;
+    overflow: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    z-index: 1;
+    visibility: hidden;
+    padding: 1rem;
+}
+
+.drop-down-list-box.visible {
+    visibility: visible;
+}
+
+.recent-location-title-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+}
+
+.recent-location-box__btn-clear-all {
+    background-color: transparent;
+    color: var(--color-button-text);
+    font-weight: 900;
+}
+
+.searcher-input-drop-down-item {
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 2rem;
+}
+
+.searcher-input-drop-down-list__alert {
+    visibility: hidden;
+}
+
+.searcher-input-drop-down-list__alert.visible {
+    visibility: visible;
+}
+
+.searcher-input:focus {
+    outline: 5px auto var(--color-logo-border);
+}
+
+.searcher-input {
+    border-radius: 30px;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--color-bg-outer);
+}
+
+.searcher-icon {
+    background-image: url(https://img.icons8.com/material-outlined/256/search-more.png);
+    background-size: contain;
+    width: 2.7rem;
+    height: 2.7rem;
+    background-repeat: no-repeat;
+    background-position: right;
+    right: 0.8rem;
+    top: 0;
+    position: absolute;
+    cursor: pointer;
+}

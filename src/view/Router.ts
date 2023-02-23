@@ -2,10 +2,12 @@ import { AirQualityPageController } from '../controller/AirQualityPageController
 import { BaseController } from '../controller/BaseController';
 import { WeatherFiveDaysPageController } from '../controller/WeatherFiveDaysPageController';
 import { WeatherTodayPageController } from '../controller/WeatherTodayPageController';
+import { ObserverToModel } from '../model/ObserverToModel';
 import { ObserverToView } from '../model/ObserverToView';
 import { WeatherMapPageController } from './../controller/WeatherMapPageController';
+import { TranslatorModel } from './../model/TranslatorModel';
 
-type routes = Map<string, () => BaseController>;
+type routes = Map<string, BaseController>;
 
 export class Router {
     private container: HTMLElement;
@@ -13,13 +15,29 @@ export class Router {
     private currentRoute?: string;
     private pageController?: BaseController;
 
-    constructor(container: HTMLElement, observerToView: ObserverToView) {
+    constructor(
+        container: HTMLElement,
+        observerToModel: ObserverToModel,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
         this.container = container;
-        this.routes = new Map<string, () => BaseController>([
-            ['today', () => new WeatherTodayPageController(this, observerToView)],
-            ['five-days', () => new WeatherFiveDaysPageController(this, observerToView)],
-            ['map', () => new WeatherMapPageController(this, observerToView)],
-            ['air-quality', () => new AirQualityPageController(this, observerToView)],
+
+        const weatherTodayPageController = new WeatherTodayPageController(this, observerToView, language);
+        const weatherFiveDaysPageController = new WeatherFiveDaysPageController(
+            this,
+            observerToModel,
+            observerToView,
+            language
+        );
+        const weatherMapPageController = new WeatherMapPageController(this, observerToView, language);
+        const airQualityPageController = new AirQualityPageController(this, observerToView, language);
+
+        this.routes = new Map<string, BaseController>([
+            ['today', weatherTodayPageController],
+            ['five-days', weatherFiveDaysPageController],
+            ['map', weatherMapPageController],
+            ['air-quality', airQualityPageController],
         ]);
 
         const currentRoute = this.getCurrentRoute();
@@ -42,7 +60,7 @@ export class Router {
         }
     }
 
-    private getController(pageRoute: string): () => BaseController {
+    private getController(pageRoute: string): BaseController {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (pageRoute === '') return this.routes.get('today')!;
 
@@ -58,9 +76,9 @@ export class Router {
     public goTo(pageRoute: string): void {
         if (this.currentRoute === pageRoute) return;
         this.updateUrl(pageRoute);
-        const controller = this.getController(pageRoute);
-        this.pageController = controller();
+        this.pageController = this.getController(pageRoute);
         this.container.innerHTML = '';
+        this.pageController.show();
         this.container.append(this.pageController.component.element);
         this.currentRoute = pageRoute;
     }
