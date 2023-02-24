@@ -54,8 +54,9 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                 const { list, timezone, cityName, countryCode, dataCalcTime } = <weatherIndicatorsFiveDays>(
                     params.message
                 );
+                this.dailyForecastDisclosureList.innerHTML=''
                 this.locationTitle.textContent = `${cityName}`;
-                this.dailyForecastTime.textContent = `${dataCalcTime}`;
+                this.dailyForecastTime.textContent = `${dataCalcTime}, GMT ${timezone}:00`;
 
                 let filteredArrayDay = list.filter(function (el, index) {
                     let day = new Date(el.dt_txt);
@@ -74,7 +75,6 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                     el.night = filtredArrayNight[index];
                     return el;
                 });
-                console.log(newRes)
                 newRes.forEach((el: weatherOneDayData) => {
                     const day = new WeatherOneDayComponent(this.observerToView, this.language, el);
                     this.dailyForecastDisclosureList.append(day.element);
