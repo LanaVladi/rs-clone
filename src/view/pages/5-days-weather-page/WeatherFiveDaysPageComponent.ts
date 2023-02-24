@@ -5,7 +5,6 @@ import INotify, {
     ModelEvent,
     NotifyParameters,
     pagesLang,
-    weatherFiveDaysData,
     weatherIndicatorsFiveDays,
     weatherOneDayData,
 } from '../../../types';
@@ -51,27 +50,25 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                 break;
             }
             case ModelEvent.five_days_weather_indicators: {
-                const { list, timezone, cityName, countryCode, dataCalcTime } = <weatherIndicatorsFiveDays>(
-                    params.message
-                );
-                this.dailyForecastDisclosureList.innerHTML=''
+                const { list, timezone, cityName, dataCalcTime } = <weatherIndicatorsFiveDays>params.message;
+                this.dailyForecastDisclosureList.innerHTML = '';
                 this.locationTitle.textContent = `${cityName}`;
                 this.dailyForecastTime.textContent = `${dataCalcTime}, GMT ${timezone}:00`;
 
-                let filteredArrayDay = list.filter(function (el, index) {
-                    let day = new Date(el.dt_txt);
+                const filteredArrayDay = list.filter(function (el) {
+                    const day = new Date(el.dt_txt);
                     if (day.getHours() === 12) {
                         return el;
                     }
                 });
-                let filtredArrayNight = list.filter(function (el, index) {
-                    let day = new Date(el.dt_txt);
+                const filtredArrayNight = list.filter(function (el) {
+                    const day = new Date(el.dt_txt);
                     if (day.getHours() === 0) {
                         return el;
                     }
                 });
 
-                let newRes = filteredArrayDay.map((el, index) => {
+                const newRes = filteredArrayDay.map((el, index) => {
                     el.night = filtredArrayNight[index];
                     return el;
                 });

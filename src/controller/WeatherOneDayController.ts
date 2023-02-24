@@ -1,5 +1,3 @@
-import { BaseController } from './BaseController';
-import { ObserverToModel } from '../model/ObserverToModel';
 import { TranslatorModel } from '../model/TranslatorModel';
 import { ObserverToView } from '../model/ObserverToView';
 import { WeatherOneDayComponent } from '../view/pages/5-days-weather-page/WeatherOneDayComponent';

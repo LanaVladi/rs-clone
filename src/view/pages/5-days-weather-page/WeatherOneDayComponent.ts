@@ -1,18 +1,7 @@
-import { langObj, dayName } from './../../../constants';
-// import { langObj, lang } from '../../../constants';
 import './WeatherDayComponent.css';
-import { WeatherOneDayController } from '../../../controller/WeatherOneDayController';
-import { ObserverToModel } from '../../../model/ObserverToModel';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { TranslatorModel } from '../../../model/TranslatorModel';
-import {
-    ModelEvent,
-    NotifyParameters,
-    pagesLang,
-    ViewEvent,
-    weatherIndicatorsFiveDays,
-    weatherOneDayData,
-} from '../../../types';
+import { ModelEvent, NotifyParameters, pagesLang, weatherOneDayData } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 
 interface WeatherOneDayComponentProps {
@@ -69,27 +58,45 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.weatherIcon.src = `http://openweathermap.org/img/wn/${this.day.weather[0].icon}@2x.png`;
         this.weatherIconNight.src = `http://openweathermap.org/img/wn/${this.day.night.weather[0].icon}@2x.png`;
         this.dayName.textContent = `${this.getDayofWeek(this.day.dt_txt)}`;
-        this.nightOftheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${this.props.language.getTranslateRu().night}`;
+        this.nightOftheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${
+            this.props.language.getTranslateRu().night
+        }`;
         this.detailsSummaryHighTempValue.textContent = `${Math.floor(this.day.main.temp_max)}°`;
         this.detailsSummaryLowTempValue.textContent = `${Math.floor(this.day.night.main.temp)}°`;
         this.detailsSummaryPrecipText.textContent = `${Math.round(this.day.pop * 100)}%`;
-        this.detailsSummaryExtended.textContent = `${(this.day.weather[0].description)}`;
-        this.detailsSummaryWindText.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${this.props.language.getTranslateRu().kmH}`;
+        this.detailsSummaryExtended.textContent = `${this.day.weather[0].description}`;
+        this.detailsSummaryWindText.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${
+            this.props.language.getTranslateRu().kmH
+        }`;
         this.detailsTableValueHumidity.textContent = `${this.day.main.humidity} %`;
         this.detailsTableValueHumidityNight.textContent = `${this.day.night.main.humidity} %`;
         this.detailsTableValueFeelLike.textContent = `${Math.floor(this.day.main.feels_like)}°`;
         this.detailsTableValueFeelLikeNight.textContent = `${Math.floor(this.day.night.main.feels_like)}°`;
-        this.detailsTableValuePressure.textContent = `${this.day.main.pressure} ${this.props.language.getTranslateRu().mb}`;
-        this.detailsTableValuePressureNight.textContent = `${this.day.night.main.pressure} ${this.props.language.getTranslateRu().mb}`;
-        this.detailsTableValueVisibility.textContent = `${Math.round(this.day.visibility / 1000)} ${this.props.language.getTranslateRu().km}`;
-        this.detailsTableValueVisibilityNight.textContent = `${Math.round(this.day.night.visibility / 1000)} ${this.props.language.getTranslateRu().km}`;
+        this.detailsTableValuePressure.textContent = `${this.day.main.pressure} ${
+            this.props.language.getTranslateRu().mb
+        }`;
+        this.detailsTableValuePressureNight.textContent = `${this.day.night.main.pressure} ${
+            this.props.language.getTranslateRu().mb
+        }`;
+        this.detailsTableValueVisibility.textContent = `${Math.round(this.day.visibility / 1000)} ${
+            this.props.language.getTranslateRu().km
+        }`;
+        this.detailsTableValueVisibilityNight.textContent = `${Math.round(this.day.night.visibility / 1000)} ${
+            this.props.language.getTranslateRu().km
+        }`;
         this.temperatureValue.textContent = `${Math.floor(this.day.main.temp)}°`;
         this.temperatureValueNight.textContent = `${Math.floor(this.day.night.main.temp)}°`;
-        this.dayOfTheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${this.props.language.getTranslateRu().afternoon}`;
+        this.dayOfTheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${
+            this.props.language.getTranslateRu().afternoon
+        }`;
         this.percentageValueDraft.textContent = `${Math.round(this.day.pop * 100)}%`;
         this.percentageValueDraftNight.textContent = `${Math.round(this.day.night.pop * 100)}%`;
-        this.percentageValueSpeed.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${this.props.language.getTranslateRu().kmH}`;
-        this.percentageValueSpeedNight.textContent = `${Math.floor(this.day.night.wind.speed * 3.6)} ${this.props.language.getTranslateRu().kmH}`;
+        this.percentageValueSpeed.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${
+            this.props.language.getTranslateRu().kmH
+        }`;
+        this.percentageValueSpeedNight.textContent = `${Math.floor(this.day.night.wind.speed * 3.6)} ${
+            this.props.language.getTranslateRu().kmH
+        }`;
         this.observerToView.subscribe(ModelEvent.language, this);
     }
 
@@ -106,12 +113,18 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
                 this.detailsTableLabelFeelLikeNight.textContent = langObject.feelsLike;
                 this.detailsTableLabelPressureNight.textContent = langObject.pressure;
                 this.nightOftheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${langObject.night}`;
-                this.detailsSummaryWindText.textContent=`${Math.floor(this.day.wind.speed * 3.6)} ${langObject.kmH}`
+                this.detailsSummaryWindText.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${langObject.kmH}`;
                 this.dayOfTheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${langObject.afternoon}`;
-                this.detailsTableValueVisibility.textContent = `${Math.round(this.day.visibility / 1000)} ${langObject.km}`
+                this.detailsTableValueVisibility.textContent = `${Math.round(this.day.visibility / 1000)} ${
+                    langObject.km
+                }`;
                 this.percentageValueSpeed.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${langObject.kmH}`;
-                this.percentageValueSpeedNight.textContent = `${Math.floor(this.day.night.wind.speed * 3.6)} ${langObject.kmH}`;
-                this.detailsTableValueVisibilityNight.textContent = `${Math.round(this.day.night.visibility / 1000)} ${langObject.km}`;
+                this.percentageValueSpeedNight.textContent = `${Math.floor(this.day.night.wind.speed * 3.6)} ${
+                    langObject.kmH
+                }`;
+                this.detailsTableValueVisibilityNight.textContent = `${Math.round(this.day.night.visibility / 1000)} ${
+                    langObject.km
+                }`;
                 this.detailsTableValuePressure.textContent = `${this.day.main.pressure} ${langObject.mb}`;
                 this.detailsTableValuePressureNight.textContent = `${this.day.night.main.pressure} ${langObject.mb}`;
                 // this.detailsSummaryExtended.textContent = `${this.day.weather[0].main}${langObject.clear}`;
@@ -502,10 +515,9 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
     }
 
     getDayofWeek(day: string) {
-        let date = new Date(day);
-        let days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
-        let daysEn=['SUN','MON','TUE','WED','THU','FRI','SAT']
+        const date = new Date(day);
+        const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+        // const daysEn=['SUN','MON','TUE','WED','THU','FRI','SAT']
         return days[date.getDay()] + ' ' + date.getDate();
     }
-
 }
