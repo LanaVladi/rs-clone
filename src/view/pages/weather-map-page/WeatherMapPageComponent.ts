@@ -48,6 +48,8 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     private store!: IStore;
 
     private windyDiv!: HTMLDivElement;
+    private mapControlsContainer!: HTMLDivElement;
+    private burgerButton!: HTMLDivElement;
     private layersButtons!: HTMLDivElement;
     private layerMetricSelect!: HTMLSelectElement;
     private windLayerBtn!: HTMLButtonElement;
@@ -117,7 +119,10 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.windyDiv = document.createElement('div');
         this.windyDiv.id = 'windy';
 
-        this.element.append(this.windyDiv);
+        this.mapControlsContainer = document.createElement('div');
+        this.mapControlsContainer.className = 'map-controls-container';
+
+        this.element.append(this.windyDiv, this.mapControlsContainer);
 
         this.drawWeatherMap(this.windyDiv);
     }
@@ -138,6 +143,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             this.store = store;
             store.set('lang', this.language);
 
+            this.renderBurgerButton();
             this.renderLayersButtons(store, overlays);
             this.renderAltitudeInput(store);
             this.renderWindAnimToggler(store);
@@ -176,9 +182,11 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
                 document.getElementById('weather-data-value-display')?.remove();
             }
 
-            const { lat, lng: lon } = map.mouseEventToLatLng(event);
-            const coord = latLonToDMS(lat, lon);
-            this.displayPosition(coord, event);
+            if (window.innerWidth > 767) {
+                const { lat, lng: lon } = map.mouseEventToLatLng(event);
+                const coord = latLonToDMS(lat, lon);
+                this.displayPosition(coord, event);
+            }
         });
 
         windyDiv.addEventListener('mouseout', () => {
@@ -233,7 +241,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.pressLayerBtn.innerText = langObj[this.language].pressure;
 
         this.layersButtons.append(this.windLayerBtn, this.tempLayerBtn, this.pressLayerBtn, this.layerMetricSelect);
-        this.element.append(this.layersButtons);
+        this.mapControlsContainer.append(this.layersButtons);
 
         const layer = this.getLayer();
         this.addMetricSelect(layer, overlays);
@@ -308,6 +316,22 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         });
     }
 
+    private renderBurgerButton() {
+        this.burgerButton = document.createElement('div');
+        this.burgerButton.id = 'burger-button';
+        this.burgerButton.innerHTML = `
+            <span></span>
+            <span></span>
+            <span></span>
+        `;
+        this.element.append(this.burgerButton);
+
+        this.burgerButton.addEventListener('click', () => {
+            this.burgerButton.classList.toggle('open');
+            this.mapControlsContainer.classList.toggle('burger-active');
+        });
+    }
+
     private renderAltitudeInput(store: IStore) {
         const altitudeInputContainer = document.createElement('div');
         altitudeInputContainer.className = 'altitude-input-container';
@@ -327,7 +351,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.altitudeValue.style.top = `11.1rem`;
 
         altitudeInputContainer.append(this.altitudeRange, this.altitudeValue);
-        this.element.append(altitudeInputContainer);
+        this.mapControlsContainer.append(altitudeInputContainer);
 
         this.addListnerToAltitudeInput(store);
     }
@@ -417,7 +441,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
 
         this.mapSearchForm.append(this.mapSearchInput, this.mapSearchButton);
         this.mapSearchContainer.append(this.mapSearchForm);
-        this.element.append(this.mapSearchContainer);
+        this.mapControlsContainer.append(this.mapSearchContainer);
 
         this.addListnerToSearchForm(map, picker);
     }
@@ -490,7 +514,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.windAnimLabel.innerText = langObj[this.language].windAnimation;
 
         this.windAnimToggler.append(this.toggler, this.windAnimLabel);
-        this.element.append(this.windAnimToggler);
+        this.mapControlsContainer.append(this.windAnimToggler);
 
         this.addListnerToWindAnimToggler(store);
     }
