@@ -446,26 +446,33 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const value = pollutant[1];
 
         switch (name) {
-            case 'co':
+            case 'co': {
                 const co_ppm = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MICRO_G_IN_MILI_G / this.MOLECULAR_WEIGHT_CO;
                 return aqiLib.co(co_ppm);
-            case 'no2':
+            }
+            case 'no2': {
                 const no2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_NO2;
                 return aqiLib.no2(no2_ppb);
-            case 'o3':
+            }
+            case 'o3': {
                 const o3_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_O3;
                 const o3_1hr_aqi = aqiLib.o3_1hr(o3_ppb);
                 const o3_8hr_aqi = aqiLib.o3_8hr(o3_ppb);
                 return o3_1hr_aqi || o3_8hr_aqi;
-            case 'pm10':
+            }
+            case 'pm10': {
                 return aqiLib.pm10(value);
-            case 'pm2_5':
+            }
+            case 'pm2_5': {
                 return aqiLib.pm25(value);
-            case 'so2':
+            }
+            case 'so2': {
                 const so2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_SO2;
                 return aqiLib.so2(so2_ppb);
-            default:
+            }
+            default: {
                 return 0;
+            }
         }
     }
 
@@ -510,7 +517,6 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const levelKey = this.primaryPollutantContainer.getAttribute('data-level') as LevelKey;
         const levelInfoKey: LevelInfoKey = `${levelKey}Info`;
         const pollutantKey = this.primaryPollutantContainer.getAttribute('data-pollutant') as PollutantNameKey;
-        console.log(levelInfoKey);
 
         level.textContent = langObject[levelKey];
         levelInfo.textContent = langObject[levelInfoKey];
