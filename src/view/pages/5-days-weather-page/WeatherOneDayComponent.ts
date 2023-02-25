@@ -164,6 +164,7 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.detailsSummaryConditionIcon.className = 'details-summary--condition-icon';
 
         this.detailsSummaryExtended = document.createElement('div');
+        this.detailsSummaryExtended.className = 'details-summary--extended';
         this.detailsSummaryExtended.textContent = ``;
 
         const detailsSummaryPrecip = document.createElement('div');
@@ -211,14 +212,14 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.daypartDetails.className = 'daypart-details';
 
         const dailyContent = document.createElement('div');
-        dailyContent.className = 'daily-content';
+        dailyContent.className = 'daily-content daily-content-day';
 
         this.dayOfTheWeek = document.createElement('h3');
 
         this.nightOftheWeek = document.createElement('h3');
 
         const dailyContentNight = document.createElement('div');
-        dailyContentNight.className = 'daily-content';
+        dailyContentNight.className = 'daily-content daily-content-night';
 
         const conditionsSummary = document.createElement('div');
         conditionsSummary.className = 'conditions-summary';
@@ -291,10 +292,10 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         dataPointsNight.append(dailyContentLabelDraftNight, dailyContentLabelSpeedNigth);
 
         const detailsTableContainer = document.createElement('div');
-        detailsTableContainer.className = 'details-table-container';
+        detailsTableContainer.className = 'details-table-container details-table-container-day';
 
         const detailsTableContainerNight = document.createElement('div');
-        detailsTableContainerNight.className = 'details-table-container';
+        detailsTableContainerNight.className = 'details-table-container details-table-container-night';
 
         const detailsTable = document.createElement('ul');
         detailsTable.className = 'details-table';
