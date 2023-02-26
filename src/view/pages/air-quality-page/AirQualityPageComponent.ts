@@ -494,8 +494,9 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
                 const so2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_SO2;
                 return aqiLib.so2(so2_ppb);
             }
-            default:
+            default: {
                 return 0;
+            }
         }
     }
 
