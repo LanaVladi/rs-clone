@@ -31,6 +31,9 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     private popoverClose!: HTMLDivElement;
     private language: TranslatorModel;
 
+    // private storageKeyLang = 'lang';
+    // private startLang!: pagesLang;
+
     private title!: HTMLElement;
     private locationPageTitle!: HTMLSpanElement;
     private allPollutantsTitle!: HTMLDivElement;
@@ -81,10 +84,29 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         super('other-forecast-air-quality', { controller, router, observerToView, language }, 'div');
         this.observerToView = observerToView;
         this.language = language;
+
+        // this.startLang = this.checkLocalStorageLanguage();
+        // this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
+
         this.observerToView.subscribe(ModelEvent.air_quality_forecast_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
         this.observerToView.subscribe(ModelEvent.temp_unit, this);
     }
+
+    // protected checkLocalStorageLanguage() {
+    //     if (!JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`)) {
+    //         const startLangInit = 'ru';
+    //         localStorage.setItem(this.storageKeyLang, JSON.stringify(startLangInit));
+    //         return this.language.getTranslateRu();
+    //     } else {
+    //         const startLangInit = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
+    //         if (startLangInit === 'en') {
+    //             return this.language.getTranslateEn();
+    //         } else {
+    //             return this.language.getTranslateRu();
+    //         }
+    //     }
+    // }
 
     notify<T>(params: NotifyParameters<T>): void {
         switch (params.typeEvents) {
@@ -518,7 +540,6 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const levelKey = this.primaryPollutantContainer.getAttribute('data-level') as LevelKey;
         const levelInfoKey: LevelInfoKey = `${levelKey}Info`;
         const pollutantKey = this.primaryPollutantContainer.getAttribute('data-pollutant') as PollutantNameKey;
-        console.log(levelInfoKey);
 
         level.textContent = langObject[levelKey];
         levelInfo.textContent = langObject[levelInfoKey];

@@ -5,11 +5,13 @@ import { Router } from '../../Router';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { weatherIconUrl, weatherIconImgFormat } from '../../../constants';
 import './header.css';
+import { TranslatorModel } from '../../../model/TranslatorModel';
 
 interface HeaderComponentProps {
     controller: HeaderController;
     observerToView: ObserverToView;
     router: Router;
+    language: TranslatorModel;
 }
 
 export class HeaderComponent extends BaseComponent<HeaderComponentProps> implements INotify {
@@ -25,13 +27,40 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
     public componentMap!: HTMLLIElement;
     private componentAirQuality!: HTMLLIElement;
     private observerToView: ObserverToView;
+    public language: TranslatorModel;
 
-    constructor(controller: HeaderController, router: Router, observerToView: ObserverToView) {
-        super('header', { controller, router, observerToView }, 'header');
+    private storageKeyLang = 'lang';
+    private startLang!: pagesLang;
+
+    constructor(
+        controller: HeaderController,
+        router: Router,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
+        super('header', { controller, router, observerToView, language }, 'header');
         this.observerToView = observerToView;
+        this.language = language;
+        this.startLang = this.checkLocalStorageLanguage();
+        this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
         this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
         this.observerToView.subscribe(ModelEvent.temp_unit, this);
+    }
+
+    protected checkLocalStorageLanguage() {
+        if (!JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`)) {
+            const startLangInit = 'ru';
+            localStorage.setItem(this.storageKeyLang, JSON.stringify(startLangInit));
+            return this.language.getTranslateRu();
+        } else {
+            const startLangInit = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
+            if (startLangInit === 'en') {
+                return this.language.getTranslateEn();
+            } else {
+                return this.language.getTranslateRu();
+            }
+        }
     }
 
     notify<T>(params: NotifyParameters<T>): void {
@@ -40,16 +69,16 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
                 const langObject = <pagesLang>params.message;
 
                 this.componentToday.textContent = langObject.today;
-                this.componentFiveDays.innerText = langObject.fiveDay;
-                this.componentMap.innerText = langObject.map;
+                this.componentFiveDays.textContent = langObject.fiveDay;
+                this.componentMap.textContent = langObject.map;
                 this.componentAirQuality.textContent = langObject.airQuality;
                 break;
             }
             case ModelEvent.today_weather_indicators: {
                 const { temp, icon, cityName, countryCode } = <weatherIndicators>params.message;
 
-                this.temperature.innerText = `${temp}°`;
-                this.locationName.innerText = `${cityName}, ${countryCode}`;
+                this.temperature.textContent = `${temp}°`;
+                this.locationName.textContent = `${cityName}, ${countryCode}`;
                 this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
             }
         }
@@ -86,15 +115,15 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
 
         this.componentToday = document.createElement('li');
         this.componentToday.classList.add('header-nav-li');
-        this.componentToday.textContent = this.props.controller.language.getTranslateRu().today;
+        this.componentToday.textContent = this.props.language.getTranslateRu().today;
 
         this.componentFiveDays = document.createElement('li');
         this.componentFiveDays.classList.add('header-nav-li');
-        this.componentFiveDays.textContent = this.props.controller.language.getTranslateRu().fiveDay;
+        this.componentFiveDays.textContent = this.props.language.getTranslateRu().fiveDay;
 
         this.componentMap = document.createElement('li');
         this.componentMap.classList.add('header-nav-li');
-        this.componentMap.textContent = this.props.controller.language.getTranslateRu().map;
+        this.componentMap.textContent = this.props.language.getTranslateRu().map;
 
         this.componentAirQuality = document.createElement('li');
         this.componentAirQuality.classList.add('header-nav-li');

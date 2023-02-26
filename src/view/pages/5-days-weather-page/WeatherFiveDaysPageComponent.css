@@ -1,3 +1,4 @@
+
 .five-days-container {
     background-color: var(--color-white);
     width: 70rem;
@@ -19,10 +20,36 @@ h1 {
     display: flex;
     flex-direction: column;
 }
-.location-page-title{
+.location-page-title {
     display: flex;
 }
-.location-title{
+.location-title {
     display: flex;
     align-items: center;
+}
+@media  screen and (max-width: 725px){
+    .five-days-container{
+        width: 60rem;
+    }
+
+}
+@media  screen and (max-width: 625px){
+    .five-days-container{
+        width: 50rem;
+    }
+}
+@media  screen and (max-width: 530px){
+    .five-days-container{
+        width: 40rem;
+    }
+}
+@media  screen and (max-width: 445px){
+    .five-days-container{
+        width: 35rem;
+    }
+}
+@media  screen and (max-width: 400px){
+    .five-days-container{
+        width: 30rem;
+    }
 }

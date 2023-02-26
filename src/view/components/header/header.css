@@ -93,7 +93,7 @@
 }
 
 .header-nav-li:hover {
-    border-bottom: 0.2rem solid var(--color-logo-border)!important;
+    text-decoration: underline;
 }
 
 /*  ============== geolocation button =============== */

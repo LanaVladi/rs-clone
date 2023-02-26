@@ -1,7 +1,7 @@
 import { Map } from 'leaflet';
-import { apiKeyMapForecast, lang, langObj } from '../../../constants';
+import { apiKeyMapForecast, lang } from '../../../constants';
 import { WeatherMapPageController } from '../../../controller/WeatherMapPageController';
-import { GeolocationModel } from '../../../model/GeolocationModel';
+// import { GeolocationModel } from '../../../model/GeolocationModel';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { TranslatorModel } from '../../../model/TranslatorModel';
 import INotify, { IBroadcast, ICoordinates, IPicker, IWindyAPI, ModelEvent, NotifyParameters } from '../../../types';
@@ -27,6 +27,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     private language: TranslatorModel;
     // private geolocation: GeolocationModel;
     private isOpen = false;
+    private _map!: Map;
 
     constructor(
         controller: WeatherMapPageController,
@@ -39,13 +40,22 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.observerToView = observerToView;
         this.language = language;
         this.observerToView.subscribe(ModelEvent.weather_map, this);
+
+        const mutationObserver = new MutationObserver(this.refresh.bind(this));
+        mutationObserver.observe(this.element, { attributes: true });
     }
 
     notify<T>(params: NotifyParameters<T>): void {
         const weatherData = <IWindyAPI>params.message;
-        console.log('weatherData IWindyAPI:', weatherData);
+        // console.log('weatherData IWindyAPI:', weatherData);
+    }
 
-        // this.title.innerText = `Карта:`;
+    private refresh(): void {
+        if (this._map) {
+            this.windyDiv.style.width = '99.9%';
+            this.windyDiv.style.width = '100%';
+            this._map.invalidateSize();
+        }
     }
 
     protected render(): void {
@@ -61,7 +71,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         const [startLat, startLon] = await getGeolocation();
         const options = {
             key: apiKeyMapForecast,
-            //verbose: true,
+            // verbose: true,
             lat: startLat,
             lon: startLon,
             zoom: 5,
@@ -78,6 +88,8 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             mapColorLegend.createLegend(store);
 
             this.addListenersToMap(windyDiv, broadcast, picker, map);
+
+            this._map = map;
         });
     }
 

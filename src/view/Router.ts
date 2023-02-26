@@ -34,11 +34,20 @@ export class Router {
         const airQualityPageController = new AirQualityPageController(this, observerToView, language);
 
         this.routes = new Map<string, BaseController>([
+            ['map', weatherMapPageController],
             ['today', weatherTodayPageController],
             ['five-days', weatherFiveDaysPageController],
-            ['map', weatherMapPageController],
             ['air-quality', airQualityPageController],
         ]);
+
+        weatherTodayPageController.component.element.style.display = 'none';
+        weatherFiveDaysPageController.component.element.style.display = 'none';
+        weatherMapPageController.component.element.style.display = 'none';
+        airQualityPageController.component.element.style.display = 'none';
+        this.container.append(weatherTodayPageController.component.element);
+        this.container.append(weatherFiveDaysPageController.component.element);
+        this.container.append(weatherMapPageController.component.element);
+        this.container.append(airQualityPageController.component.element);
 
         const currentRoute = this.getCurrentRoute();
         this.goTo(currentRoute);
@@ -76,10 +85,12 @@ export class Router {
     public goTo(pageRoute: string): void {
         if (this.currentRoute === pageRoute) return;
         this.updateUrl(pageRoute);
+        if (this.currentRoute) {
+            const oldPageController = this.getController(this.currentRoute);
+            oldPageController.component.element.style.display = 'none';
+        }
         this.pageController = this.getController(pageRoute);
-        this.container.innerHTML = '';
-        this.pageController.show();
-        this.container.append(this.pageController.component.element);
+        this.pageController.component.element.style.display = 'grid';
         this.currentRoute = pageRoute;
     }
 

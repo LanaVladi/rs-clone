@@ -1,7 +1,7 @@
 .weather-today {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
+    /* grid-template-rows: repeat(3, 1fr); */
     grid-column-gap: 0rem;
     grid-row-gap: 1rem;
     /* width: 70rem; */
@@ -310,5 +310,17 @@
 
     .todays-details-item {
         width: 96%;
+    }
+
+    @media screen and (max-width: 379px) {
+        .weather-today {
+            width: 90%;
+        }
+    }
+
+    @media screen and (max-width: 329px) {
+        .weather-today {
+            width: 100%;
+        }
     }
 }

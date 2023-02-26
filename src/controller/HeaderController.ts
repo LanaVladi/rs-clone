@@ -37,6 +37,6 @@ export class HeaderController extends BaseController<HeaderComponent> {
         this.searcherController = new SearcherController(observerToModel, observerToView, language);
         this.tempUnitController = new TempUnitController(observerToModel);
         this.geolocationController = new GeolocationController(observerToModel, geolocation);
-        this.component = new HeaderComponent(this, router, observerToView);
+        this.component = new HeaderComponent(this, router, observerToView, language);
     }
 }

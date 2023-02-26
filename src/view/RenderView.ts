@@ -18,10 +18,10 @@ class RenderView {
         const observerToModel = new ObserverToModel();
         const observerToView = new ObserverToView();
         const geolocation = new GeolocationModel();
-        const language = new TranslatorModel(observerToModel, observerToView, 'ru');
         const store = new Store(observerToModel, observerToView);
-        new ApiOpenWeather(observerToModel, observerToView, geolocation, store);
 
+        new ApiOpenWeather(observerToModel, observerToView, geolocation, store);
+        const language = new TranslatorModel(observerToModel, observerToView);
         const router = new Router(main, observerToModel, observerToView, language);
 
         const headerController = new HeaderController(router, observerToModel, observerToView, geolocation, language);

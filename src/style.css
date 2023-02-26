@@ -89,7 +89,7 @@ img {
 }
 
 h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 900;
 }
 
@@ -106,7 +106,9 @@ h2 {
 
     --color-btn: rgba(9, 84, 113, 0.3);
     --color-btn-hover: rgba(183, 183, 183, 0.6);
-    --color-button-text: #0b1c4f;
+    --color-button-text: #214fd8;;
+
+    --shadow-container: 0 0 1.2rem 0 #0003;
 }
 
 
@@ -116,7 +118,6 @@ h2 {
     background-color: var(--color-bg-outer);
 }
 
-li:hover {
-    opacity: 0.5;
-    cursor: pointer;
+.container {
+    box-shadow: var(--shadow-container);
 }
