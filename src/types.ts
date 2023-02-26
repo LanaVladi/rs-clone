@@ -23,6 +23,7 @@ export const enum ModelEvent {
     today_weather_indicators = 'today-weather-indicators',
     five_days_weather_indicators = 'five-days-weather-indicators',
     air_quality_forecast_indicators = 'air-quality-forecast-indicators',
+    one_days_weather_indicators = 'one_days-weather-indicators',
 }
 
 export const enum ViewEvent {
