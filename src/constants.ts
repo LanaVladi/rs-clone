@@ -154,3 +154,7 @@ export const unitName = new Map([
     ['mmHg', 'мм.рт.ст.'],
     ['inHg', 'дюйм рт.ст.'],
 ]);
+
+export const MINUTES_IN_HOUR = 60;
+export const MS_IN_SEC = 1000;
+export const HALF_CIRCLE_DEG = 180;

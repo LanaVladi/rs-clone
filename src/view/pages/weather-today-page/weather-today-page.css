@@ -187,20 +187,6 @@
     stroke-linecap: round;
 }
 
-.sunrise-sunset-svg-daylight {
-    background: url('../../../assets/svg/daylight.svg') no-repeat center;
-    width: 3rem;
-    height: 3rem;
-
-    transform-origin: 1.1rem 0rem;
-    transform: rotate(180deg);
-    /* stroke: #e87538;
-    fill: none;
-    stroke-width: 0.2rem;
-    stroke-linecap: round; */
-}
-
-
 .sunrise-sunset-svg {
     width: 10rem;
     height: 6rem;
@@ -216,7 +202,38 @@
 
 .sunrise-sunset {
     width: 10rem;
-    height: 6rem;
+    height: 5rem;
+    margin-bottom: .6rem;
+}
+
+.sunrise-sunset-box {
+    position: relative;
+}
+
+.sunrise-sunset-animation {
+    position: absolute;
+    bottom: 2rem;
+    left: .4rem;
+    width: 10rem;
+    height: 5.3rem;
+    box-sizing: content-box;
+    overflow: hidden;
+}
+
+.sunrise-sunset-animation-box {
+    width: 9.8rem;
+    height: 2.5rem;
+    transform: rotate(0deg);
+    bottom: -1.2rem;
+    position: relative;
+}
+
+.sunrise-sunset-animation-sun-icon {
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
+    background: url('../../../assets/svg/daylight.svg') no-repeat center;
+    margin-top: 3rem;
 }
 
 .sunrise-sunset-path {
