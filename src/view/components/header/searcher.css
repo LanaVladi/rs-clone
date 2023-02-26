@@ -21,39 +21,66 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     z-index: 1;
-    visibility: hidden;
-    padding: 1rem;
+    /* visibility: hidden; */
+    display: none;
+    /* padding: 1rem; */
 }
 
-.drop-down-list-box.visible {
-    visibility: visible;
+.drop-down-list__weather-icon {
+    width: 3rem;
+    height: 3rem;
 }
 
 .recent-location-title-box {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.6rem;
 }
 
 .recent-location-box__btn-clear-all {
     background-color: transparent;
     color: var(--color-button-text);
     font-weight: 900;
+    font-size: 1.6rem;
 }
 
 .searcher-input-drop-down-item {
     display: flex;
-    justify-content: space-evenly;
-    padding-bottom: 2rem;
+    justify-content: space-between;
+    padding: 1rem 2rem 0.5rem;
+    align-items: center;
+    font-size: 1.6rem;
 }
 
-.searcher-input-drop-down-list__alert {
+.searcher-input-drop-down-item:hover {
+    background-color: var(--color-logo-border);
+    opacity: 0.5;
+    font-weight: 900;
+}
+
+.searcher-input-drop-down-list__alert,
+.searcher-input-drop-down-list {
     visibility: hidden;
+    /* display: none; */
+}
+
+.searcher-input-drop-down-list.visible,
+.searcher-input-drop-down-item.visible {
+    visibility: visible;
+    /* display: flex; */
 }
 
 .searcher-input-drop-down-list__alert.visible {
     visibility: visible;
+    padding: 1.5rem;
+    font-size: 1.6rem;
+}
+
+.drop-down-list-box.visible {
+    /* visibility: visible; */
+    display: flex;
 }
 
 .searcher-input:focus {
@@ -78,4 +105,22 @@
     top: 0;
     position: absolute;
     cursor: pointer;
+}
+
+.drop-down-list-item-info {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 2rem;
+    cursor: pointer;
+    padding: 0 6rem 0 0rem;
+}
+
+.delete-button-icon-dotted {
+    background: url('../../../assets/svg/delete-button-dotted.svg') no-repeat center;
+    width: 2.4rem;
+    height: auto;
+    color: var(--color-button-text);
+    cursor: pointer;
+    padding: 1rem;
 }

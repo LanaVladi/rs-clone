@@ -2,6 +2,7 @@ import { TempUnitController } from '../../../controller/TempUnitController';
 import { ObserverToModel } from '../../../model/ObserverToModel';
 import { ViewEvent } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
+import { celsius, fahrenheit } from './../../../constants';
 
 interface TempUnitComponentProps {
     controller: TempUnitController;
@@ -11,6 +12,7 @@ export class TempUnitComponent extends BaseComponent<TempUnitComponentProps> {
     private celsius!: HTMLOptionElement;
     private fahrenheit!: HTMLOptionElement;
     private observerToModel: ObserverToModel;
+    public temperatureUnit!: string;
 
     constructor(controller: TempUnitController, observerToModel: ObserverToModel) {
         super('temperature-unit-container', { controller, observerToModel }, 'select');
@@ -36,10 +38,13 @@ export class TempUnitComponent extends BaseComponent<TempUnitComponentProps> {
             let tempUnit = (event.target as HTMLOptionElement).value;
             if (tempUnit === '°C') {
                 tempUnit = '°F';
+                this.temperatureUnit = celsius;
             } else {
                 tempUnit = '°C';
+                this.temperatureUnit = fahrenheit;
             }
-            this.observerToModel.notify(ViewEvent.temp_unit, { message: tempUnit });
+
+            this.observerToModel.notify(ViewEvent.temp_unit, { message: this.temperatureUnit });
         });
     }
 }

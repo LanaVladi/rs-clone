@@ -31,6 +31,9 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
     private popoverClose!: HTMLDivElement;
     private language: TranslatorModel;
 
+    // private storageKeyLang = 'lang';
+    // private startLang!: pagesLang;
+
     private title!: HTMLElement;
     private locationPageTitle!: HTMLSpanElement;
     private allPollutantsTitle!: HTMLDivElement;
@@ -68,7 +71,8 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
             'У любого человека могут начаться проблемы со здоровьем, воздействие на чувствительных людей может быть более серьезным.',
         veryUnhealthyInfo:
             'Предупреждения касательно здоровья, означающие экстренную ситуацию. Вполне возможно, что это повлияет на все население.',
-        hazardousInfo: 'Оповещение в отношении здоровья: все люди могут испытывать более серьезные проблемы со здоровьем.',
+        hazardousInfo:
+            'Оповещение в отношении здоровья: все люди могут испытывать более серьезные проблемы со здоровьем.',
     };
 
     constructor(
@@ -80,10 +84,29 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         super('other-forecast-air-quality', { controller, router, observerToView, language }, 'div');
         this.observerToView = observerToView;
         this.language = language;
+
+        // this.startLang = this.checkLocalStorageLanguage();
+        // this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
+
         this.observerToView.subscribe(ModelEvent.air_quality_forecast_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
         this.observerToView.subscribe(ModelEvent.temp_unit, this);
     }
+
+    // protected checkLocalStorageLanguage() {
+    //     if (!JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`)) {
+    //         const startLangInit = 'ru';
+    //         localStorage.setItem(this.storageKeyLang, JSON.stringify(startLangInit));
+    //         return this.language.getTranslateRu();
+    //     } else {
+    //         const startLangInit = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
+    //         if (startLangInit === 'en') {
+    //             return this.language.getTranslateEn();
+    //         } else {
+    //             return this.language.getTranslateRu();
+    //         }
+    //     }
+    // }
 
     notify<T>(params: NotifyParameters<T>): void {
         switch (params.typeEvents) {
@@ -446,24 +469,31 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const value = pollutant[1];
 
         switch (name) {
-            case 'co':
-                const co_ppm = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MICRO_G_IN_MILI_G / this.MOLECULAR_WEIGHT_CO;
+            case 'co': {
+                const co_ppm =
+                    (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MICRO_G_IN_MILI_G / this.MOLECULAR_WEIGHT_CO;
                 return aqiLib.co(co_ppm);
-            case 'no2':
+            }
+            case 'no2': {
                 const no2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_NO2;
                 return aqiLib.no2(no2_ppb);
-            case 'o3':
+            }
+            case 'o3': {
                 const o3_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_O3;
                 const o3_1hr_aqi = aqiLib.o3_1hr(o3_ppb);
                 const o3_8hr_aqi = aqiLib.o3_8hr(o3_ppb);
                 return o3_1hr_aqi || o3_8hr_aqi;
-            case 'pm10':
+            }
+            case 'pm10': {
                 return aqiLib.pm10(value);
-            case 'pm2_5':
+            }
+            case 'pm2_5': {
                 return aqiLib.pm25(value);
-            case 'so2':
+            }
+            case 'so2': {
                 const so2_ppb = (this.VOLUME_BY_NORMAL_CONDITIONS * value) / this.MOLECULAR_WEIGHT_SO2;
                 return aqiLib.so2(so2_ppb);
+            }
             default:
                 return 0;
         }
@@ -510,11 +540,9 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         const levelKey = this.primaryPollutantContainer.getAttribute('data-level') as LevelKey;
         const levelInfoKey: LevelInfoKey = `${levelKey}Info`;
         const pollutantKey = this.primaryPollutantContainer.getAttribute('data-pollutant') as PollutantNameKey;
-        console.log(levelInfoKey);
 
         level.textContent = langObject[levelKey];
         levelInfo.textContent = langObject[levelInfoKey];
         pollutantName.textContent = langObject[pollutantKey];
     }
-
 }

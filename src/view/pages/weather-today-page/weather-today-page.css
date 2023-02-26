@@ -1,11 +1,17 @@
 .weather-today {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
+    /* grid-template-rows: repeat(3, 1fr); */
     grid-column-gap: 0rem;
     grid-row-gap: 1rem;
-    width: 70rem;
-    margin: 0 auto;
+    /* width: 70rem; */
+    /* margin: 0 auto; */
+
+
+    margin: 1.2rem auto;
+    height: 100%;
+    width: 80%;
+    max-width: 100rem;
 }
 
 .current-conditions-card {
@@ -20,14 +26,16 @@
     display: flex;
     border-radius: 1rem 1rem 0 0;
     background-color: var(--color-light-grey);
-    padding: 1rem 1.6rem;
+    padding: 1.5rem 1.6rem;
     gap: 3rem;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: start;
 }
 
 .current-conditions-card-title__timestamp {
     margin: 0.3rem 0 0 4rem;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
 }
 
 .box-temp-value {
@@ -47,12 +55,13 @@
 .current-conditions-box {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 1rem 1.6rem;
 }
 
 .current-conditions-icon {
-    width: 13rem;
-    height: 13rem;
+    width: 16rem;
+    height: 16rem;
 }
 
 .button-primery {
@@ -73,8 +82,9 @@
 .today-weather-card-title,
 .today-details-title {
     display: flex;
-    padding: 1rem 0 1rem 1rem;
+    padding: 2rem 0 1rem 1.5rem;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .weather-table--columns {
@@ -137,7 +147,7 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     position: relative;
-    padding: 1rem 1.6rem;
+    padding: 2.5rem 3.6rem;
 }
 
 .today-details-header__feels-like-temp {
@@ -148,8 +158,12 @@
 }
 
 .today-details-header__feels-like-temp_value {
-    font-size: 3.5rem;
+    font-size: 5.5rem;
     font-weight: 600;
+}
+
+.today-details-header__feels-like-temp_label {
+    font-size: 1.6rem;
 }
 
 .weather-details-item-icon {
@@ -163,7 +177,7 @@
 .sunrise-sunset-svg-box {
     width: 10rem;
     height: 6rem;
-    /* background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center; */
+    background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center;
 
     transform-origin: 4rem 4rem;
     transform: rotate(180deg);
@@ -171,6 +185,19 @@
     fill: none;
     stroke-width: 0.2rem;
     stroke-linecap: round;
+}
+
+.sunrise-sunset-svg-daylight {
+    background: url('../../../assets/svg/daylight.svg') no-repeat center;
+    width: 3rem;
+    height: 3rem;
+
+    transform-origin: 1.1rem 0rem;
+    transform: rotate(180deg);
+    /* stroke: #e87538;
+    fill: none;
+    stroke-width: 0.2rem;
+    stroke-linecap: round; */
 }
 
 
@@ -204,11 +231,13 @@
 .sunrise-sunset-time {
     display: flex;
     justify-content: space-between;
+    font-size: 1.3rem;
 }
 
 .today-details-indicators {
     display: flex;
     flex-wrap: wrap;
+    font-size: 1.6rem;
 }
 
 .todays-details-item {
@@ -228,6 +257,11 @@
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
+}
+
+.today-details-item-info-box {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .icon-container-wind-item {
@@ -260,7 +294,33 @@
 .icon-container-cloudiness-item,
 .icon-container-pressure-item,
 .icon-container-visibility-item {
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 2.4rem;
+    height: 2.4rem;
     margin-right: 1rem;
+}
+
+
+@media screen and (max-width: 767px) {
+    .today-details-indicators {
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+        width: 96%;
+    }
+
+    .todays-details-item {
+        width: 96%;
+    }
+
+    @media screen and (max-width: 379px) {
+        .weather-today {
+            width: 90%;
+        }
+    }
+
+    @media screen and (max-width: 329px) {
+        .weather-today {
+            width: 100%;
+        }
+    }
 }
