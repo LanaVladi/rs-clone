@@ -35,7 +35,6 @@ interface WeatherMapPageComponentProps {
     router: Router;
     observerToView: ObserverToView;
     language: TranslatorModel;
-    // private geolocation: GeolocationModel;
 }
 
 export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageComponentProps> implements INotify {
@@ -68,6 +67,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     private windAnimToggler!: HTMLDivElement;
     private toggler!: HTMLDivElement;
     private windAnimLabel!: HTMLDivElement;
+    private _map!: Map;
 
     constructor(
         controller: WeatherMapPageController,
@@ -80,6 +80,9 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.observerToView = observerToView;
         this.observerToView.subscribe(ModelEvent.weather_map, this);
         this.observerToView.subscribe(ModelEvent.language, this);
+
+        const mutationObserver = new MutationObserver(this.refresh.bind(this));
+        mutationObserver.observe(this.element, { attributes: true });
     }
 
     notify<T>(params: NotifyParameters<T>): void {
@@ -115,6 +118,14 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         return langName?.textContent?.toLowerCase() as Lang;
     }
 
+    private refresh(): void {
+        if (this._map) {
+            this.windyDiv.style.width = '99.9%';
+            this.windyDiv.style.width = '100%';
+            this._map.invalidateSize();
+        }
+    }
+
     protected render(): void {
         this.windyDiv = document.createElement('div');
         this.windyDiv.id = 'windy';
@@ -131,7 +142,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         const [startLat, startLon] = await getGeolocation();
         const options = {
             key: apiKeyMapForecast,
-            //verbose: true,
+            // verbose: true,
             lat: startLat,
             lon: startLon,
             zoom: 5,
@@ -153,6 +164,8 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             this.renderScreenSizeButtons(map);
 
             this.addListenersToMap(windyDiv, broadcast, picker, map);
+
+            this._map = map;
         });
     }
 
