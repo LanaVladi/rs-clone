@@ -123,6 +123,8 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             this.windyDiv.style.width = '99.9%';
             this.windyDiv.style.width = '100%';
             this._map.invalidateSize();
+            console.log('____REFRESH____');
+            
         }
     }
 

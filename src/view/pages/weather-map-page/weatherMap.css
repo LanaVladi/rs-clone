@@ -21,7 +21,7 @@
 
 .weather-map #windy {
     width: 100%;
-    height: 100%;
+    height: 200%;
 }
 
 .weather-map #windy #mobile-ovr-select {
