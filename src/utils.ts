@@ -1,3 +1,4 @@
+import { MINUTES_IN_HOUR, MS_IN_SEC } from './constants';
 import { ICoordinates } from './types';
 
 export async function getGeolocation(IsHighAccuracy?: boolean): Promise<[number, number]> {
@@ -64,4 +65,15 @@ export async function getCoordinates(location: string): Promise<[number, number]
         console.error(error);
         return [0, 0];
     }
+}
+
+export function convertUnixToDate(timezone: number, unix: number) {
+    const userTimezone = new Date(timezone).getTimezoneOffset() / MINUTES_IN_HOUR;
+    const currentData = new Date((unix + timezone) * MS_IN_SEC);
+    const minutes = `0${currentData.getMinutes()}`;
+    let hours = currentData.getHours() + timezone + userTimezone;
+
+    if (hours > 24) hours = hours - 24;
+    else if (hours <= 0) hours = 24 + hours;
+    return `${Math.floor(hours)}:${minutes.substring(minutes.length - 2)} `;
 }

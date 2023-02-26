@@ -46,8 +46,8 @@ export type weatherIndicators = {
     windSpeed: number;
     visibility: number;
     clouds: number;
-    sunrise: string;
-    sunset: string;
+    sunrise: number;
+    sunset: number;
     icon: string;
     id: number;
     mainWeather: string;
@@ -56,7 +56,7 @@ export type weatherIndicators = {
     cityName: string;
     countryCode: string;
     country: string;
-    dataCalcTime: string;
+    dataCalcTime: number;
 };
 
 export type WeatherTodayData = {
@@ -114,7 +114,7 @@ export type weatherIndicatorsFiveDays = {
     timezone: number;
     cityName: string;
     countryCode: string;
-    dataCalcTime: string;
+    dataCalcTime: number;
 };
 
 export type weatherFiveDaysData = {

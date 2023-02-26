@@ -127,6 +127,7 @@ import INotify, {
     weatherIndicatorsFiveDays,
     weatherOneDayData,
 } from '../../../types';
+import { convertUnixToDate } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './WeatherFiveDaysPageComponent.css';
@@ -194,7 +195,7 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                 const { list, timezone, cityName, dataCalcTime } = <weatherIndicatorsFiveDays>params.message;
                 this.dailyForecastDisclosureList.innerHTML = '';
                 this.locationTitle.textContent = `${cityName}`;
-                this.dailyForecastTime.textContent = `${dataCalcTime}, GMT ${timezone}:00`;
+                this.dailyForecastTime.textContent = `${convertUnixToDate(timezone, dataCalcTime)}, GMT ${timezone}:00`;
 
                 const filteredArrayDay = list.filter(function (el) {
                     const day = new Date(el.dt_txt);

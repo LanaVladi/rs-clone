@@ -1,8 +1,9 @@
-import { weatherIconImgFormat, weatherIconUrl } from '../../../constants';
+import { HALF_CIRCLE_DEG, weatherIconImgFormat, weatherIconUrl } from '../../../constants';
 import { WeatherTodayPageController } from '../../../controller/WeatherTodayPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { TranslatorModel } from '../../../model/TranslatorModel';
 import INotify, { ModelEvent, NotifyParameters, pagesLang, weatherIndicators } from '../../../types';
+import { convertUnixToDate } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './weather-today-page.css';
@@ -30,6 +31,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
     //  third block
     private todayDetailsTitleName!: HTMLHeadingElement;
     private todayDetailsTitleValue!: HTMLHeadingElement;
+    private sunriseSunsetAnimationBox!: HTMLDivElement;
     private sunriseSunsetTimeSunriseTime!: HTMLParagraphElement;
     private sunriseSunsetTimeSunsetTime!: HTMLParagraphElement;
     private feelsLikeTempValue!: HTMLSpanElement;
@@ -136,7 +138,10 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                 } = <weatherIndicators>params.message;
                 //  first block
                 this.currentConditionsTitleLocation.textContent = `${cityName}, ${countryCode}`;
-                this.currentConditionsTitleTimestampValue.textContent = `${dataCalcTime}, GMT ${timezone}:00`;
+                this.currentConditionsTitleTimestampValue.textContent = `${convertUnixToDate(
+                    timezone,
+                    dataCalcTime
+                )}, GMT ${timezone}:00`;
                 this.boxTempValue.textContent = `${temp}°`;
                 this.boxTempPhrase.textContent = `${description}`;
                 // this.boxTempPhrase.textContent = `${mainWeather}`;
@@ -146,8 +151,8 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                 //  third block
                 this.feelsLikeTempValue.textContent = `${feelsLike}°`;
                 this.todayDetailsTitleValue.textContent = `${cityName}, ${countryCode}`;
-                this.sunriseSunsetTimeSunriseTime.textContent = `${sunrise}`;
-                this.sunriseSunsetTimeSunsetTime.textContent = `${sunset}`;
+                this.sunriseSunsetTimeSunriseTime.textContent = `${convertUnixToDate(timezone, sunrise)}`;
+                this.sunriseSunsetTimeSunsetTime.textContent = `${convertUnixToDate(timezone, sunset)}`;
                 this.todayDetailsItemInfoMaxTemp.textContent = `${tempMax}°/`;
                 this.todayDetailsItemInfoMinTemp.textContent = `${tempMin}°`;
                 this.todayDetailsItemInfoHumidity.textContent = `${humidity}%`;
@@ -155,6 +160,8 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                 this.todayDetailsItemInfoCloudiness.textContent = `${clouds}%`;
                 this.todayDetailsItemInfoPressure.textContent = `${pressure}`;
                 this.todayDetailsItemInfoVisibility.textContent = `${visibility}`;
+
+                this.updateSunAnimation(sunrise, sunset, dataCalcTime);
             }
         }
     }
@@ -332,8 +339,14 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
        `
         );
 
-        const sunriseSunsetSvgDaylight = document.createElement('div');
-        sunriseSunsetSvgDaylight.className = 'sunrise-sunset-svg-daylight';
+        const sunriseSunsetAnimation = document.createElement('div');
+        sunriseSunsetAnimation.className = 'sunrise-sunset-animation';
+        this.sunriseSunsetAnimationBox = document.createElement('div');
+        this.sunriseSunsetAnimationBox.className = 'sunrise-sunset-animation-box';
+        const sunIcon = document.createElement('div');
+        sunIcon.className = 'sunrise-sunset-animation-sun-icon';
+        this.sunriseSunsetAnimationBox.append(sunIcon);
+        sunriseSunsetAnimation.append(this.sunriseSunsetAnimationBox);
 
         const sunriseSunsetTime = document.createElement('div');
         sunriseSunsetTime.className = 'sunrise-sunset-time';
@@ -344,7 +357,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         this.sunriseSunsetTimeSunsetTime.className = 'sunset-time';
 
         sunriseSunsetTime.append(this.sunriseSunsetTimeSunriseTime, this.sunriseSunsetTimeSunsetTime);
-        sunriseSunsetBox.append(sunriseSunsetSvgDaylight, sunriseSunsetTime);
+        sunriseSunsetBox.append(sunriseSunsetTime, sunriseSunsetAnimation);
 
         // sunriseSunsetBox.append(sunriseSunsetSvgBox);
         todayDetailsHeader.append(feelsLikeTempBox, sunriseSunsetBox);
@@ -533,5 +546,12 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
     public show() {
         return this.element;
+    }
+
+    private updateSunAnimation(sunrise: number, sunset: number, currentTime: number) {
+        const day = sunset - sunrise;
+        const sunPos = currentTime - sunrise;
+        const deg =(sunPos * HALF_CIRCLE_DEG) / day;
+        this.sunriseSunsetAnimationBox.style.transform = `rotate(${deg}deg)`;
     }
 }

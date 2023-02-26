@@ -33,8 +33,8 @@ export class Store implements INotify {
     private visibility!: number;
     private wind_speed!: number;
     private clouds!: number;
-    private sunrise!: string;
-    private sunset!: string;
+    private sunrise!: number;
+    private sunset!: number;
     private icon!: string;
     private id!: number;
     private description!: string;
@@ -43,7 +43,7 @@ export class Store implements INotify {
     private name!: string;
     private countryCode!: string;
     private country!: string;
-    private dataCalcTime!: string;
+    private dataCalcTime!: number;
 
     // ==============5 DAYS WEATHER INDICATORS
     private list!: Array<weatherOneDayData>;
@@ -314,8 +314,7 @@ export class Store implements INotify {
     }
 
     setSunrise(data: WeatherTodayData) {
-        this.sunrise = `${new Date(data.sys.sunrise).getHours()}:${new Date(data.sys.sunrise).getMinutes()}`;
-        // console.log('this.sunrise :', this.sunrise);
+        this.sunrise = data.sys.sunrise;
     }
 
     getSunset() {
@@ -323,8 +322,7 @@ export class Store implements INotify {
     }
 
     setSunset(data: WeatherTodayData) {
-        this.sunset = `${new Date(data.sys.sunset).getHours()}:${new Date(data.sys.sunset).getMinutes()}`;
-        // console.log('this.sunset :', this.sunset);
+        this.sunset = data.sys.sunset;
     }
 
     getIcon() {
@@ -397,21 +395,7 @@ export class Store implements INotify {
     }
 
     setDataCalcTime(data: WeatherTodayData) {
-        // this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
-        const userTimezone = new Date(data.timezone).getTimezoneOffset() / this.minute;
-        // console.log('userTimezone :', userTimezone);
-        // console.log('new Date(data.timezone).getTimezoneOffset() :', new Date(data.timezone).getTimezoneOffset());
-        // console.log('new Date(data.timezone) :', new Date(data.timezone));
-        const currentData = new Date((data.dt + data.timezone) * this.millisecondsPerSecond);
-        // console.log('currentData :', currentData);
-        const minutes = `0${currentData.getMinutes()}`;
-        let hours = currentData.getHours() + userTimezone;
-        // console.log('hours :', hours);
-        if (hours > 24) hours = hours - 24;
-        else if (hours <= 0) hours = 24 + hours;
-        // this.dataCalcTime = currentData.toLocaleTimeString('en');
-        this.dataCalcTime = `${hours}:${minutes.substring(minutes.length - 2)} `;
-        // console.log('this.dataCalcTime :', this.dataCalcTime);
+        this.dataCalcTime = data.dt;
     }
 
     getPollutants() {
