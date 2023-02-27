@@ -1,13 +1,25 @@
 :root {
     --main-weather-map-color: rgb(212, 149, 0);
-    /*header-color rgb(156 194 209) */
 }
 
 .weather-map {
     margin: 0 auto;
-    width: 80%;
+    margin-bottom: 3rem;
+    width: 90%;
     height: 60rem;
+    padding: 1rem;
+    max-width: 100rem;
+    background-color: var(--color-white);
+    box-shadow: 0 0 1.2rem 0 #0003;
+    border-radius: 0.6rem;
+}
+
+.weather-map-container {
     position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    max-width: 100rem;
     overflow: hidden;
 }
 
@@ -21,7 +33,7 @@
 
 .weather-map #windy {
     width: 100%;
-    height: 200%;
+    height: 100%;
 }
 
 .weather-map #windy #mobile-ovr-select {
@@ -585,7 +597,7 @@
         height: 100%;
         position: absolute;
         top: 0;
-        right: -27rem;
+        right: -50rem;
         z-index: 100;
         background-color: rgba(0, 0 , 0 , 0.7);
         transition: right .3s ease-in-out;

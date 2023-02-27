@@ -46,6 +46,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     private overlays!: IOverlays;
     private store!: IStore;
 
+    private weatherMapContainer!: HTMLDivElement;
     private windyDiv!: HTMLDivElement;
     private mapControlsContainer!: HTMLDivElement;
     private burgerButton!: HTMLDivElement;
@@ -129,15 +130,19 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     }
 
     protected render(): void {
+        this.weatherMapContainer = document.createElement('div');
+        this.weatherMapContainer.className = 'weather-map-container';
+
         this.windyDiv = document.createElement('div');
         this.windyDiv.id = 'windy';
 
         this.mapControlsContainer = document.createElement('div');
         this.mapControlsContainer.className = 'map-controls-container';
 
-        this.element.append(this.windyDiv, this.mapControlsContainer);
+        this.weatherMapContainer.append(this.windyDiv, this.mapControlsContainer);
 
         this.drawWeatherMap(this.windyDiv);
+        this.element.append(this.weatherMapContainer);
     }
 
     private async drawWeatherMap(windyDiv: HTMLDivElement) {
@@ -339,7 +344,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             <span></span>
             <span></span>
         `;
-        this.element.append(this.burgerButton);
+        this.weatherMapContainer.append(this.burgerButton);
 
         this.burgerButton.addEventListener('click', () => {
             this.burgerButton.classList.toggle('open');
@@ -400,7 +405,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.findMeButton = document.createElement('div');
         this.findMeButton.className = 'find-me-button';
         this.findMeButton.innerText = '➤';
-        this.element.append(this.findMeButton);
+        this.weatherMapContainer.append(this.findMeButton);
         this.addListnerToFindMeButton(map);
     }
 
@@ -495,7 +500,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.closeFullScreen = document.createElement('button');
         this.closeFullScreen.className = 'close-fullscreen-button';
         this.closeFullScreen.innerText = '╳';
-        this.element.append(this.openFullScreen, this.closeFullScreen);
+        this.weatherMapContainer.append(this.openFullScreen, this.closeFullScreen);
 
         this.addListnerToScreenSizeButtons(map);
     }
