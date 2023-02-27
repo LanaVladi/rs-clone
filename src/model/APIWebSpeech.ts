@@ -44,6 +44,10 @@ class VoiceControl {
 
         try {
             const record: string = await new Promise((resolve) => {
+                setTimeout(() => {
+                    this.hideVoiceAnimation();
+                    this.recognition.stop();
+                } , 5000);
                 this.recognition.onresult = (event) => {
                     const last = event.results.length - 1;
                     const result = event.results[last];
@@ -52,13 +56,16 @@ class VoiceControl {
 
                 this.recognition.onspeechend = () => {
                     this.recognition.stop();
+                    this.hideVoiceAnimation();
                 };
 
                 this.recognition.onnomatch = () => {
+                    this.hideVoiceAnimation();
                     console.log('NO MATCH');
                 };
 
                 this.recognition.onerror = (event) => {
+                    this.hideVoiceAnimation();
                     console.log(`Error occurred in recognition: ${event.error}`);
                 };
             });
@@ -108,6 +115,15 @@ class VoiceControl {
             };
 
             this.synthesis.speak(utterThis);
+        }
+    }
+
+    private hideVoiceAnimation() {
+        const voiceControlModal = document.querySelector<HTMLDivElement>('.voice-control-modal');
+        const overlay = document.querySelector<HTMLDivElement>('.voice-control-overlay');
+        if (voiceControlModal && overlay) {
+            voiceControlModal.style.visibility = 'hidden';
+            overlay.style.visibility = 'hidden';
         }
     }
 }

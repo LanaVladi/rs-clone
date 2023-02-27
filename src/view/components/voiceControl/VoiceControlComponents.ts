@@ -61,14 +61,10 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
 
     protected addListeners(): void {
         this.voiceControlIcon.addEventListener('click', async () => {
-            console.log('this.voiceControlIcon :', this.voiceControlIcon);
-
-            const record = await this.props.controller.voiceControlModel.getRecord();
-            console.log('record :', record);
-            this.observerToModel.notify(ViewEvent.voice, { message: record, typeEvents: ModelEvent.voice });
-
             this.voiceControlModal.style.visibility = 'visible';
             this.overlay.style.visibility = 'visible';
+            const record = await this.props.controller.voiceControlModel.getRecord();
+            this.observerToModel.notify(ViewEvent.voice, { message: record, typeEvents: ModelEvent.voice });
         });
     }
 }

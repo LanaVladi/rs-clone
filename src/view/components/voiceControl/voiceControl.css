@@ -31,15 +31,23 @@
     position: fixed;
     top: calc(50% - 13rem);
     left: calc(50% - 11rem);
+    z-index: 51;
 }
 
 .voice-control-modal .modal-inner {
-    margin-top: 16rem;
+    margin-top: 20rem;
     position: absolute;
     width: 20rem;
+    padding: 1rem;
     text-align: center;
     font-size: 3rem;
     color: var(--voice-title);
+    background-color: var(--color-headerBlock);
+    border-radius: 10rem;
+    -webkit-border-radius: 10rem;
+    -moz-border-radius: 10rem;
+    -ms-border-radius: 10rem;
+    -o-border-radius: 10rem;
 }
 
 .voice-control-overlay {
