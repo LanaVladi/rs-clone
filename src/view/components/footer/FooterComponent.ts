@@ -28,7 +28,7 @@ export class FooterComponent extends BaseComponent<FooterComponentProps> {
     </div>
     <p class="footer__year">2023</p>
     <div class="footer__RSS-logo">
-      <a class="footer__RSS-logo-link" href="https://rs.school/js/">RS School</a>
+      <a class="footer__RSS-logo-link" href="https://rs.school/js/"><div class='footer-logo-icon'></div></a>
     </div>
     `
         );
