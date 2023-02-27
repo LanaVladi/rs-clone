@@ -112,6 +112,9 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
             this.conversion
         );
 
+        const headerNavContainer = document.createElement('nav');
+        headerNavContainer.className = 'header-nav-container';
+
         this.headerNav = document.createElement('ul');
         this.headerNav.classList.add('header-nav');
 
@@ -132,6 +135,13 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.componentAirQuality.textContent = this.props.controller.language.getTranslateRu().airQuality;
 
         this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
+        headerNavContainer.append(this.headerNav)
+
+        const headerLocationContainer = document.createElement('div');
+        headerLocationContainer.className = 'header-location-container';
+
+        const headerLocationItem = document.createElement('div');
+        headerLocationItem.className = 'header-location-item';
 
         this.headerLocation = document.createElement('div');
         this.headerLocation.className = 'header-location';
@@ -142,9 +152,11 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.temperature = document.createElement('span');
         this.locationName = document.createElement('span');
 
-        this.headerLocation.append(this.weatherIcon, this.temperature, this.locationName);
+        headerLocationItem.append(this.weatherIcon, this.temperature, this.locationName);
+        this.headerLocation.append(headerLocationItem);
+        headerLocationContainer.append(this.headerLocation);
 
-        headerContainer.append(headerTools, this.headerLocation, this.headerNav);
+        headerContainer.append(headerTools, headerLocationContainer, headerNavContainer);
         this.element.append(headerContainer);
     }
 
