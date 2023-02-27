@@ -73,7 +73,7 @@ export function convertUnixToDate(timezone: number, unix: number) {
     const minutes = `0${currentData.getMinutes()}`;
     let hours = currentData.getHours() + timezone + userTimezone;
 
-    if (hours > 24) hours = hours - 24;
+    if (hours > 23) hours = hours - 24;
     else if (hours <= 0) hours = 24 + hours;
     return `${Math.floor(hours)}:${minutes.substring(minutes.length - 2)} `;
 }
