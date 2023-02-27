@@ -58,6 +58,10 @@ export type weatherIndicators = {
     countryCode: string;
     country: string;
     dataCalcTime: number;
+    coord: {
+        lon: number;
+        lat: number;
+    }
 };
 
 export type WeatherTodayData = {

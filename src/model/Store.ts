@@ -24,6 +24,7 @@ export class Store implements INotify {
     private secondsPerHour = 3600;
 
     // ==============TODAY WEATHER INDICATORS
+    private coord!: { lon: number; lat: number; };
     private temp!: number;
     private temp_min!: number;
     private temp_max!: number;
@@ -106,6 +107,10 @@ export class Store implements INotify {
                 this.setDataCalcTime(WeatherTodayData);
                 const dataCalcTime = this.getDataCalcTime();
 
+               this.setCoord(WeatherTodayData);
+               const coord = this.coord;
+                
+
                 // this.setCountry(WeatherTodayData);
                 // const country = this.getCountry();
 
@@ -130,6 +135,7 @@ export class Store implements INotify {
                         cityName,
                         countryCode,
                         dataCalcTime,
+                        coord,
                         // country,
                     },
                     typeEvents: ModelEvent.today_weather_indicators,
@@ -235,6 +241,14 @@ export class Store implements INotify {
 
     setAirQualityForecastData(data: airQualityForecastData) {
         this.airQualityForecastData = data;
+    }
+
+    getCoord() {
+        return this.coord;
+    }
+
+    setCoord(data: WeatherTodayData) {
+        this.coord = data.coord
     }
 
     getTemp() {

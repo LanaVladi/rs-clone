@@ -22,6 +22,7 @@ import INotify, {
     ModelEvent,
     NotifyParameters,
     pagesLang,
+    weatherIndicators,
 } from '../../../types';
 import { getCoordinates, getGeolocation, latLonToDMS } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
@@ -40,7 +41,6 @@ interface WeatherMapPageComponentProps {
 export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageComponentProps> implements INotify {
     private observerToView: ObserverToView;
     private language: Lang = 'ru';
-    // private geolocation: GeolocationModel;
     private WIDTH_INPUT = 11.1;
     private isOpen = false;
     private overlays!: IOverlays;
@@ -69,6 +69,8 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     private toggler!: HTMLDivElement;
     private windAnimLabel!: HTMLDivElement;
     private _map!: Map;
+    private lat!: number;
+    private lon!: number;
 
     constructor(
         controller: WeatherMapPageController,
@@ -77,10 +79,10 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         language: TranslatorModel
     ) {
         super('weather-map', { controller, router, observerToView, language }, 'div');
-        // this.geolocation  = geolocation;
         this.observerToView = observerToView;
         this.observerToView.subscribe(ModelEvent.weather_map, this);
         this.observerToView.subscribe(ModelEvent.language, this);
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
 
         const mutationObserver = new MutationObserver(this.refresh.bind(this));
         mutationObserver.observe(this.element, { attributes: true });
@@ -109,7 +111,13 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             }
             case ModelEvent.weather_map: {
                 const weatherData = <IWindyAPI>params.message;
-                console.log('weatherData IWindyAPI:', weatherData);
+                break;
+            }
+            case ModelEvent.today_weather_indicators: {
+                const { coord } = <weatherIndicators>params.message;
+                const { lat, lon } = coord;
+                if (this._map) this._map.panTo([lat, lon]);
+                break;
             }
         }
     }
@@ -124,8 +132,6 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             this.windyDiv.style.width = '99.9%';
             this.windyDiv.style.width = '100%';
             this._map.invalidateSize();
-            console.log('____REFRESH____');
-            
         }
     }
 
