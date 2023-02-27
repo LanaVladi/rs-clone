@@ -4,7 +4,7 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     border-radius: 1rem;
-    width: 80%;
+    width: 85%;
     max-width: 100rem;
 }
 
@@ -42,38 +42,24 @@
 
 @media screen and (max-width: 725px) {
     .five-days-container {
-        width: 60rem;
+        width: 90%;
     }
 
 }
 
 @media screen and (max-width: 625px) {
     .five-days-container {
-        width: 50rem;
-    }
-}
-
-@media screen and (max-width: 530px) {
-    .five-days-container {
-        width: 40rem;
+        width: 95%;
     }
 }
 
 @media screen and (max-width: 445px) {
-    .five-days-container {
-        width: 35rem;
-    }
-
     .daily-forecast-timestamp-box {
         margin: 1rem 2rem;
     }
 }
 
 @media screen and (max-width: 400px) {
-    .five-days-container {
-        width: 30rem;
-    }
-
     .daily-forecast-timestamp-box {
         margin: 1rem 1rem;
     }

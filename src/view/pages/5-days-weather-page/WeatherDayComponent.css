@@ -3,7 +3,7 @@
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    padding: 1rem 1.3rem;
+    padding: 1rem 0;
     font-size: 1.6rem;
     width: 100%;
 }
@@ -185,7 +185,7 @@
 @media screen and (max-width: 725px) {
 
     .day {
-        width: 85%;
+        width: 90%;
     }
 
     .daily-content {
