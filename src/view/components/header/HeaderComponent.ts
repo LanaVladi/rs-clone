@@ -16,9 +16,11 @@ interface HeaderComponentProps {
 }
 
 export class HeaderComponent extends BaseComponent<HeaderComponentProps> implements INotify {
-    private logo!: HTMLImageElement;
+    private logo!: HTMLDivElement;
     private conversion!: HTMLDivElement;
+    private headerTools!: HTMLDivElement;
     private headerLocation!: HTMLDivElement;
+    private headerBurgerButton!: HTMLDivElement;
     private locationName!: HTMLSpanElement;
     private temperature!: HTMLSpanElement;
     private weatherIcon!: HTMLImageElement;
@@ -76,7 +78,9 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
                 break;
             }
             case ModelEvent.today_weather_indicators: {
-                const { temp, icon, cityName, countryCode, id, dataCalcTime, sunrise, sunset } = <weatherIndicators>params.message;
+                const { temp, icon, cityName, countryCode, id, dataCalcTime, sunrise, sunset } = <weatherIndicators>(
+                    params.message
+                );
                 this.temperature.textContent = `${temp}°`;
                 this.locationName.textContent = `${cityName}, ${countryCode}`;
                 this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
@@ -90,10 +94,13 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         const headerContainer = document.createElement('div');
         headerContainer.className = 'header-container';
 
-        const headerTools = document.createElement('div');
-        headerTools.className = 'header-tools';
+        const headerToolsWrapper = document.createElement('div');
+        headerToolsWrapper.className = 'header-tools-wrapper';
 
-        this.logo = document.createElement('img');
+        this.headerTools = document.createElement('div');
+        this.headerTools.className = 'header-tools';
+
+        this.logo = document.createElement('div');
         this.logo.classList.add('header-logo');
 
         this.conversion = document.createElement('div');
@@ -104,13 +111,22 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
             this.props.controller.tempUnitController.component.element
         );
 
-        headerTools.append(
-            this.logo,
+        this.headerTools.append(
             this.props.controller.searcherController.component.element,
             this.props.controller.geolocationController.component.element,
             this.props.controller.voiceControl.component.element,
             this.conversion
         );
+
+        this.headerBurgerButton = document.createElement('div');
+        this.headerBurgerButton.id = 'header-burger-button';
+        this.headerBurgerButton.innerHTML = `
+            <span></span>
+            <span></span>
+            <span></span>
+        `;
+
+        headerToolsWrapper.append(this.logo, this.headerTools, this.headerBurgerButton);
 
         const headerNavContainer = document.createElement('nav');
         headerNavContainer.className = 'header-nav-container';
@@ -135,7 +151,7 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.componentAirQuality.textContent = this.props.controller.language.getTranslateRu().airQuality;
 
         this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
-        headerNavContainer.append(this.headerNav)
+        headerNavContainer.append(this.headerNav);
 
         const headerLocationContainer = document.createElement('div');
         headerLocationContainer.className = 'header-location-container';
@@ -156,7 +172,7 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.headerLocation.append(headerLocationItem);
         headerLocationContainer.append(this.headerLocation);
 
-        headerContainer.append(headerTools, headerLocationContainer, headerNavContainer);
+        headerContainer.append(headerToolsWrapper, headerLocationContainer, headerNavContainer);
         this.element.append(headerContainer);
     }
 
@@ -178,6 +194,12 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
 
         this.logo.addEventListener('click', (): void => {
             this.props.router.goTo('today');
+        });
+
+        this.headerBurgerButton.addEventListener('click', () => {
+            this.headerBurgerButton.classList.toggle('open');
+            this.headerTools.classList.toggle('burger-open');
+            document.body.classList.toggle('no-scroll-page');
         });
     }
 

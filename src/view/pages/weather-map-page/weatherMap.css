@@ -490,7 +490,8 @@
 .close-fullscreen-button:hover {
     background-color: rgba(183, 183, 183, 0.39);
 }
-#burger-button {
+
+.weather-map #burger-button {
     position: absolute;
     top: 0;
     z-index: 999;
@@ -510,7 +511,7 @@
     cursor: pointer;
 }
 
-#burger-button span {
+.weather-map #burger-button span {
     display: block;
     position: absolute;
     height: 0.6rem;
@@ -533,19 +534,19 @@
     -o-border-radius: 0.6rem;
 }
 
-#burger-button span:nth-child(1) {
+.weather-map #burger-button span:nth-child(1) {
     top: 0;
 }
 
-#burger-button span:nth-child(2) {
+.weather-map #burger-button span:nth-child(2) {
     top: 1.2rem;
 }
 
-#burger-button span:nth-child(3) {
+.weather-map #burger-button span:nth-child(3) {
     top: 2.4rem;
 }
 
-#burger-button.open span:nth-child(1) {
+.weather-map #burger-button.open span:nth-child(1) {
     top: 1.2rem;
     -webkit-transform: rotate(135deg);
     -moz-transform: rotate(135deg);
@@ -553,12 +554,12 @@
     transform: rotate(135deg);
 }
 
-#burger-button.open span:nth-child(2) {
+.weather-map #burger-button.open span:nth-child(2) {
     opacity: 0;
     left: -4rem;
 }
 
-#burger-button.open span:nth-child(3) {
+.weather-map #burger-button.open span:nth-child(3) {
     top: 1.2rem;
     -webkit-transform: rotate(-135deg);
     -moz-transform: rotate(-135deg);
@@ -567,7 +568,7 @@
 }
 
 @media screen and (max-width: 767px) {
-    #burger-button {
+    .weather-map #burger-button {
         display: block;
     }
 
@@ -603,11 +604,11 @@
         -o-transition: opacity .5s ease-in-out .3s;
     }
 
-    .burger-active {
+    .weather-map .burger-active {
         right: 0;
     }
 
-    .burger-active > div {
+    .weather-map .burger-active > div {
         opacity: 1;
     }
 
