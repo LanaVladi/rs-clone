@@ -42,11 +42,9 @@ export class LanguageComponent extends BaseComponent<LanguageComponentProps> {
     }
 
     protected checkLocalStorageLanguage() {
-        if (localStorage.getItem(this.storageKeyLang)) {
-            const langList = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
-            // console.log('langList :', langList);
+        if (localStorage.getItem('lang')) {
+            const langList = JSON.parse(`${localStorage.getItem('lang')}`);
             return (this.langName.textContent = langList.toUpperCase());
-            // return langList.toUpperCase();
         } else {
             const langList = 'ru';
             return (this.langName.textContent = langList.toUpperCase());
