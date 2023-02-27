@@ -16,7 +16,7 @@ interface HeaderComponentProps {
 }
 
 export class HeaderComponent extends BaseComponent<HeaderComponentProps> implements INotify {
-    private logo!: HTMLImageElement;
+    private logo!: HTMLDivElement;
     private conversion!: HTMLDivElement;
     private headerLocation!: HTMLDivElement;
     private locationName!: HTMLSpanElement;
@@ -90,10 +90,13 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         const headerContainer = document.createElement('div');
         headerContainer.className = 'header-container';
 
+        const headerToolsWrapper = document.createElement('div');
+        headerToolsWrapper.className = 'header-tools-wrapper';
+
         const headerTools = document.createElement('div');
         headerTools.className = 'header-tools';
 
-        this.logo = document.createElement('img');
+        this.logo = document.createElement('div');
         this.logo.classList.add('header-logo');
 
         this.conversion = document.createElement('div');
@@ -105,12 +108,13 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         );
 
         headerTools.append(
-            this.logo,
             this.props.controller.searcherController.component.element,
             this.props.controller.geolocationController.component.element,
             this.props.controller.voiceControl.component.element,
             this.conversion
         );
+
+        headerToolsWrapper.append(this.logo, headerTools);
 
         const headerNavContainer = document.createElement('nav');
         headerNavContainer.className = 'header-nav-container';
@@ -156,7 +160,7 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.headerLocation.append(headerLocationItem);
         headerLocationContainer.append(this.headerLocation);
 
-        headerContainer.append(headerTools, headerLocationContainer, headerNavContainer);
+        headerContainer.append(headerToolsWrapper, headerLocationContainer, headerNavContainer);
         this.element.append(headerContainer);
     }
 
