@@ -1,5 +1,6 @@
 .footer {
     width: 100%;
+ 
 }
 
 .footer-container {
@@ -7,7 +8,7 @@
     justify-content: space-around;
     align-items: center;
     padding: 1.0%;
-    color: var(--color-textDefault);
+    color: var(--color-white);
     height: 4.0rem;
     max-width: 100rem;
     margin: 0 auto;
@@ -27,10 +28,37 @@
     display: flex;
     text-align: center;
     gap: 1.5rem;
+
 }
 
 .footer__developers-gitHub-link,
 .footer__RSS-logo-link {
     cursor: pointer;
-    color: var(--color-textDefault);
+    color: var(--color-white);
+}
+.footer__developers-gitHub-link:hover,
+.footer__year:hover{
+    text-decoration: underline;
+}
+.footer__RSS-logo:hover{
+    opacity: 0.5; 
+}
+
+.footer-logo-icon{
+    background-image: url('../../../assets/svg/logo.svg');
+    width: 5rem;
+    height:2.5rem;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+@media  screen and (max-width: 400px){
+    .footer-container{
+        padding: 0.5rem;
+       height: 5rem;
+    }
+    .footer__developers-gitHub{
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 0.4rem;
+    }
 }
