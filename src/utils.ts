@@ -77,3 +77,8 @@ export function convertUnixToDate(timezone: number, unix: number) {
     else if (hours <= 0) hours = 24 + hours;
     return `${Math.floor(hours)}:${minutes.substring(minutes.length - 2)} `;
 }
+
+export function convertUnixToDayNight(currentTime: number, sunrise: number, sunset: number): 'day' | 'night' {
+    if (currentTime < sunrise || currentTime >= sunset) return 'night';
+    return 'day';
+}
