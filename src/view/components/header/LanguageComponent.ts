@@ -42,8 +42,8 @@ export class LanguageComponent extends BaseComponent<LanguageComponentProps> {
     }
 
     protected checkLocalStorageLanguage() {
-        if (localStorage.getItem(this.storageKeyLang)) {
-            const langList = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
+        if (localStorage.getItem('lang')) {
+            const langList = JSON.parse(`${localStorage.getItem('lang')}`);
             // console.log('langList :', langList);
             return (this.langName.textContent = langList.toUpperCase());
             // return langList.toUpperCase();

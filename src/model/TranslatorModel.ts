@@ -158,7 +158,7 @@ export class TranslatorModel implements INotify {
             pollutantUnits: 'µg/m3',
             moreDetailsText: 'Air Quality Index',
             airQualityLevelsCaption: 'Levels',
-            AirQualityPopOverTitle: 'Sourse',
+            AirQualityPopOverTitle: 'Source',
             AirQualityPopOverBody:
                 'Contains Copernicus Atmosphere Monitoring Service information 2023 and/or modified Copernicus Atmosphere Monitoring Service information 2023. Neither the European Commission nor ECMWF is responsible for any use of this information.',
             good: 'Good',
@@ -193,23 +193,4 @@ export class TranslatorModel implements INotify {
 
         return langObjEn;
     }
-
-    // const textValuesToAltitude = {
-    //     surface: 'поверхность',
-    //     '100m': '100м',
-    //     '300m': '300м',
-    //     '600m': '600м',
-    //     '750m': '750м',
-    //     '1km': '1км',
-    //     '1.5km': '1,5км',
-    //     '2km': '2км',
-    //     '3km': '3км',
-    //     '4.2km': '4,2км',
-    //     '5.5km': '5,5км',
-    //     '7km': '7км',
-    //     '9km': '9км',
-    //     '10km': '10км',
-    //     '11.7km': '11,7км',
-    //     '13.5km': '13,5км',
-    // };
 }
