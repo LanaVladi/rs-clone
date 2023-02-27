@@ -14,7 +14,7 @@ export class Router {
     private routes: routes;
     private currentRoute?: string;
     private pageController?: BaseController;
-
+    weatherTodayPageController: WeatherTodayPageController;
     constructor(
         container: HTMLElement,
         observerToModel: ObserverToModel,
@@ -23,7 +23,7 @@ export class Router {
     ) {
         this.container = container;
 
-        const weatherTodayPageController = new WeatherTodayPageController(this, observerToView, language);
+        this.weatherTodayPageController = new WeatherTodayPageController(this, observerToView, language);
         const weatherFiveDaysPageController = new WeatherFiveDaysPageController(
             this,
             observerToModel,
@@ -35,16 +35,16 @@ export class Router {
 
         this.routes = new Map<string, BaseController>([
             ['map', weatherMapPageController],
-            ['today', weatherTodayPageController],
+            ['today', this.weatherTodayPageController],
             ['five-days', weatherFiveDaysPageController],
             ['air-quality', airQualityPageController],
         ]);
 
-        weatherTodayPageController.component.element.style.display = 'none';
+        this.weatherTodayPageController.component.element.style.display = 'none';
         weatherFiveDaysPageController.component.element.style.display = 'none';
         weatherMapPageController.component.element.style.display = 'none';
         airQualityPageController.component.element.style.display = 'none';
-        this.container.append(weatherTodayPageController.component.element);
+        this.container.append(this.weatherTodayPageController.component.element);
         this.container.append(weatherFiveDaysPageController.component.element);
         this.container.append(weatherMapPageController.component.element);
         this.container.append(airQualityPageController.component.element);
@@ -65,6 +65,9 @@ export class Router {
             url = 'today';
         }
         if (url !== this.getCurrentRoute()) {
+            if (url !== 'today') {
+                this.weatherTodayPageController.component.element.style.display = 'none';
+            }
             history.pushState(null, '', url);
         }
     }

@@ -62,6 +62,11 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.startLang = this.checkLocalStorageLanguage();
         this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
 
+        this.updateElement();
+        this.observerToView.subscribe(ModelEvent.language, this);
+    }
+
+    updateElement() {
         this.detailsSummaryConditionIcon.src = `http://openweathermap.org/img/wn/${this.day.weather[0].icon}@2x.png`;
         this.weatherIcon.src = `http://openweathermap.org/img/wn/${this.day.weather[0].icon}@2x.png`;
         this.weatherIconNight.src = `http://openweathermap.org/img/wn/${this.day.night.weather[0].icon}@2x.png`;
@@ -105,7 +110,6 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.percentageValueSpeedNight.textContent = `${Math.floor(this.day.night.wind.speed * 3.6)} ${
             this.props.language.getTranslateRu().kmH
         }`;
-        this.observerToView.subscribe(ModelEvent.language, this);
     }
 
     protected checkLocalStorageLanguage() {
@@ -156,6 +160,13 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         }
     }
 
+    update(date: weatherOneDayData) {
+        this.day = date;
+        this.updateElement();
+    }
+
+
+
     protected render(): void {
         this.element.className = 'day';
         this.dayWrapper = document.createElement('div');
@@ -187,6 +198,7 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.detailsSummaryConditionIcon.className = 'details-summary--condition-icon';
 
         this.detailsSummaryExtended = document.createElement('div');
+        this.detailsSummaryExtended.className = 'details-summary-extended';
         this.detailsSummaryExtended.textContent = ``;
 
         const detailsSummaryPrecip = document.createElement('div');
@@ -206,7 +218,7 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
 
         const detailsSummaryWindIcon = document.createElement('div');
         detailsSummaryWindIcon.className = 'icon-container wind-item';
-        // detailsSummaryWindIcon.textContent =
+       
 
         lowTempValue.append(this.detailsSummaryLowTempValue);
         detailsTemperature.append(this.detailsSummaryHighTempValue, lowTempValue);
@@ -541,12 +553,10 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
     getDayofWeek(day: string) {
         const date = new Date(day);
         const language = localStorage.getItem(this.storageKeyLang);
-        // console.log('language :', language);
         if (language === 'ru') {
             this.weekDays = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
             return this.weekDays[date.getDay()] + ' ' + date.getDate();
         } else {
-            // console.log('language EN :', language);
             this.weekDays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
             return this.weekDays[date.getDay()] + ' ' + date.getDate();
         }
