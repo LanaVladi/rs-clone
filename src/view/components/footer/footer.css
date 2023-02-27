@@ -1,5 +1,4 @@
 .footer {
-    background-color: var(--color-bg-footer-header);
     width: 100%;
 }
 
@@ -7,7 +6,6 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: var(--color-bg-footer-header);
     padding: 1.0%;
     color: var(--color-textDefault);
     height: 4.0rem;
