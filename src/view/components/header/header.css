@@ -8,11 +8,10 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     align-items: center;
     padding: 1.0%;
     color: var(--color-textDefault);
-    height: 15rem;
+    height: 17rem;
     font-size: 1.3rem;
 }
 
@@ -21,6 +20,7 @@
     justify-content: space-evenly;
     display: flex;
     align-items: center;
+    margin-bottom: 1rem;
 }
 
 .header-logo {
