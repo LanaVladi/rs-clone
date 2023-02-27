@@ -18,7 +18,9 @@ interface HeaderComponentProps {
 export class HeaderComponent extends BaseComponent<HeaderComponentProps> implements INotify {
     private logo!: HTMLDivElement;
     private conversion!: HTMLDivElement;
+    private headerTools!: HTMLDivElement;
     private headerLocation!: HTMLDivElement;
+    private headerBurgerButton!: HTMLDivElement;
     private locationName!: HTMLSpanElement;
     private temperature!: HTMLSpanElement;
     private weatherIcon!: HTMLImageElement;
@@ -76,7 +78,9 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
                 break;
             }
             case ModelEvent.today_weather_indicators: {
-                const { temp, icon, cityName, countryCode, id, dataCalcTime, sunrise, sunset } = <weatherIndicators>params.message;
+                const { temp, icon, cityName, countryCode, id, dataCalcTime, sunrise, sunset } = <weatherIndicators>(
+                    params.message
+                );
                 this.temperature.textContent = `${temp}°`;
                 this.locationName.textContent = `${cityName}, ${countryCode}`;
                 this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
@@ -93,8 +97,8 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         const headerToolsWrapper = document.createElement('div');
         headerToolsWrapper.className = 'header-tools-wrapper';
 
-        const headerTools = document.createElement('div');
-        headerTools.className = 'header-tools';
+        this.headerTools = document.createElement('div');
+        this.headerTools.className = 'header-tools';
 
         this.logo = document.createElement('div');
         this.logo.classList.add('header-logo');
@@ -107,14 +111,22 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
             this.props.controller.tempUnitController.component.element
         );
 
-        headerTools.append(
+        this.headerTools.append(
             this.props.controller.searcherController.component.element,
             this.props.controller.geolocationController.component.element,
             this.props.controller.voiceControl.component.element,
             this.conversion
         );
 
-        headerToolsWrapper.append(this.logo, headerTools);
+        this.headerBurgerButton = document.createElement('div');
+        this.headerBurgerButton.id = 'header-burger-button';
+        this.headerBurgerButton.innerHTML = `
+            <span></span>
+            <span></span>
+            <span></span>
+        `;
+
+        headerToolsWrapper.append(this.logo, this.headerTools, this.headerBurgerButton);
 
         const headerNavContainer = document.createElement('nav');
         headerNavContainer.className = 'header-nav-container';
@@ -139,7 +151,7 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.componentAirQuality.textContent = this.props.controller.language.getTranslateRu().airQuality;
 
         this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
-        headerNavContainer.append(this.headerNav)
+        headerNavContainer.append(this.headerNav);
 
         const headerLocationContainer = document.createElement('div');
         headerLocationContainer.className = 'header-location-container';
@@ -183,13 +195,19 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.logo.addEventListener('click', (): void => {
             this.props.router.goTo('today');
         });
+
+        this.headerBurgerButton.addEventListener('click', () => {
+            this.headerBurgerButton.classList.toggle('open');
+            this.headerTools.classList.toggle('burger-open');
+            document.body.classList.toggle('no-scroll-page');
+        });
     }
 
     private updateBackground(id: number, dataCalcTime: number, sunrise: number, sunset: number) {
         const weatherId = id.toString() as WeatherId;
         const dayNight = convertUnixToDayNight(dataCalcTime, sunrise, sunset);
         const root = document.getElementById('root');
-        if(root) {
+        if (root) {
             root.style.backgroundColor = DataToBGStyle[dayNight][weatherId].headerColor;
             root.style.backgroundImage = DataToBGStyle[dayNight][weatherId].backgroundGradient;
         }

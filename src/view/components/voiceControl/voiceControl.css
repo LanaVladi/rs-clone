@@ -1,15 +1,29 @@
 .voice-control-container {
     position: relative;
+    width: 3.1rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-btn);
+    border-radius: 50%;
+    transition: background-color .2s;
+    -webkit-transition: background-color .2s;
+    -moz-transition: background-color .2s;
+    -ms-transition: background-color .2s;
+    -o-transition: background-color .2s;
+}
+
+.voice-control-container:hover {
+    background-color: var(--color-btn-hover);
 }
 
 .voice-control-icon {
-    background-image: url("https://img.icons8.com/material/96/null/microphone--v3.png");
+    background-image: url("https://img.icons8.com/material/96/ffffff/microphone--v3.png");
     background-size: contain;
     width: 2.7rem;
     height: 2.7rem;
     background-repeat: no-repeat;
-/*     position: absolute;
-    top: 0; */
     cursor: pointer;
 }
 
