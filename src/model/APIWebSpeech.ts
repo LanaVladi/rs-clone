@@ -10,10 +10,10 @@ class VoiceControl {
     private recognition: SpeechRecognition;
     private speechRecognitionList!: SpeechGrammarList;
     private synthesis: SpeechSynthesis;
-    private lang: langForSpeechAPI;
+    private lang!: langForSpeechAPI;
 
-    constructor(lang: string) {
-        this.lang = lang === 'en' ? langForSpeechAPI.en : langForSpeechAPI.ru;
+    constructor() {
+        // this.lang = lang === 'en' ? langForSpeechAPI.en : langForSpeechAPI.ru;
         this.recognition = new webkitSpeechRecognition();
         this.speechRecognitionList = new webkitSpeechGrammarList();
         this.synthesis = window.speechSynthesis;

@@ -5,6 +5,7 @@ import INotify, {
     ViewEvent,
     weatherFiveDaysData,
     WeatherTodayData,
+    WeatherTodayDataOrError,
 } from '../types';
 import {
     apiKeyOpenWeather,
@@ -60,6 +61,7 @@ export class ApiOpenWeather implements INotify {
         this.observerToModel.subscribe(ViewEvent.geolocation, this);
         this.observerToModel.subscribe(ViewEvent.temp_unit, this);
         this.observerToModel.subscribe(ViewEvent.language, this);
+        this.observerToModel.subscribe(ViewEvent.voice, this);
     }
 
     protected checkLocalStorageCity() {
@@ -83,10 +85,11 @@ export class ApiOpenWeather implements INotify {
         }
 
         const lastLang = this.langList;
-        this.notify({ message: lastLang});
+        this.notify({ message: lastLang });
     }
 
     public async notify<T>(params: NotifyParameters<T>) {
+        console.log('params :', params);
         if (typeof params.message === 'string') {
             if (params.message.includes('metric') || params.message.includes('imperial')) {
                 this.temperatureUnit = params.message;
@@ -94,7 +97,7 @@ export class ApiOpenWeather implements INotify {
                 this.lang = params.message;
             } else {
                 this.city = params.message;
-                // console.log('this.city :', this.city);
+                console.log('this.city :', this.city);
             }
             this.getAllWeatherData(this.city, this.temperatureUnit, this.lang);
         } else if (Array.isArray(params.message)) {
@@ -105,6 +108,11 @@ export class ApiOpenWeather implements INotify {
     }
 
     private async getAllWeatherData(city: string | number[], temperatureUnit?: string, lang?: string) {
+        if (typeof city === 'string') {
+            this.checkLocalStorage(city);
+            const localCity = localStorage.getItem(this.storageKeyCity);
+        }
+
         const weatherTodayData: WeatherTodayData = await this.getWeatherTodayData(city, temperatureUnit, lang);
         // console.log('weatherTodayData :', weatherTodayData);
 
@@ -162,27 +170,27 @@ export class ApiOpenWeather implements INotify {
         city: string | number[],
         temperatureUnit?: string,
         lang?: string
-    ): Promise<WeatherTodayData> {
+    // ): Promise<WeatherTodayData | ''> {
+        ): Promise<WeatherTodayData> {
         this.checkTempUnit(temperatureUnit);
         this.checkLanguage(lang);
-        if (typeof city === 'string') {
-            // console.log('city :', city);
-            this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?q=${city}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        } else {
-            const [lat, lon] = city;
-            // console.log('city :', city);
-            this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        }
-
-        const response = await fetch(this.#weatherUrlToday);
-
-        if (response.status === 200) {
+        // try {
             if (typeof city === 'string') {
-                this.checkLocalStorage(city);
-                const localCity = localStorage.getItem(this.storageKeyCity);
+                this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?q=${city}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
+            } else {
+                const [lat, lon] = city;
+                this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
             }
-        }
-        return await response.json();
+
+            const response = await fetch(this.#weatherUrlToday);
+            if (response.ok === true) {
+                console.log('response.ok :', response.ok);
+            }
+            return await response.json();
+        // } catch (error) {
+        //     console.log('error :', error);
+        //     return '';
+        // }
     }
 
     protected checkLocalStorage(cityName: string) {

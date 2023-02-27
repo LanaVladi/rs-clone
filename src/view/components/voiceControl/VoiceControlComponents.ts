@@ -1,9 +1,15 @@
 import { VoiceControlController } from '../../../controller/VoiceControlController';
+import { ObserverToView } from '../../../model/ObserverToView';
+import { ModelEvent, ViewEvent } from '../../../types';
+// import VoiceControl from '../../../model/APIWebSpeech';
 import { BaseComponent } from '../../BaseComponent';
 import '../voiceControl/voiceControl.css';
+import { ObserverToModel } from './../../../model/ObserverToModel';
 
 interface VoiceControlComponentProps {
     controller: VoiceControlController;
+    observerToModel: ObserverToModel;
+    observerToView: ObserverToView;
 }
 
 export class VoiceControlComponent extends BaseComponent<VoiceControlComponentProps> {
@@ -12,9 +18,13 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
     private modalInner!: HTMLDivElement;
     private overlay!: HTMLDivElement;
     private voiceRecordAnimation!: HTMLDivElement;
+    private observerToModel: ObserverToModel;
+    private observerToView: ObserverToView;
 
-    constructor(controller: VoiceControlController) {
-        super('voice-control-container', { controller }, 'div');
+    constructor(controller: VoiceControlController, observerToModel: ObserverToModel, observerToView: ObserverToView) {
+        super('voice-control-container', { controller, observerToModel, observerToView }, 'div');
+        this.observerToModel = observerToModel;
+        this.observerToView = observerToView;
     }
 
     protected render(): void {
@@ -50,7 +60,13 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
     }
 
     protected addListeners(): void {
-        this.voiceControlIcon.addEventListener('click', () => {
+        this.voiceControlIcon.addEventListener('click', async () => {
+            console.log('this.voiceControlIcon :', this.voiceControlIcon);
+
+            const record = await this.props.controller.voiceControlModel.getRecord();
+            console.log('record :', record);
+            this.observerToModel.notify(ViewEvent.voice, { message: record, typeEvents: ModelEvent.voice });
+
             this.voiceControlModal.style.visibility = 'visible';
             this.overlay.style.visibility = 'visible';
         });

@@ -1,3 +1,4 @@
+import VoiceControl from '../model/APIWebSpeech';
 import { ObserverToModel } from '../model/ObserverToModel';
 import { ObserverToView } from '../model/ObserverToView';
 import { TranslatorModel } from '../model/TranslatorModel';
@@ -9,12 +10,19 @@ export class VoiceControlController extends BaseController<VoiceControlComponent
     public observerToModel: ObserverToModel;
     public observerToView: ObserverToView;
     public language: TranslatorModel;
+    public voiceControlModel: VoiceControl;
 
-    constructor(observerToModel: ObserverToModel, observerToView: ObserverToView, language: TranslatorModel) {
+    constructor(
+        observerToModel: ObserverToModel,
+        observerToView: ObserverToView,
+        language: TranslatorModel,
+        voiceControlModel: VoiceControl
+    ) {
         super();
         this.language = language;
+        this.voiceControlModel = voiceControlModel;
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
-        this.component = new VoiceControlComponent(this);
+        this.component = new VoiceControlComponent(this, observerToModel, observerToView);
     }
 }

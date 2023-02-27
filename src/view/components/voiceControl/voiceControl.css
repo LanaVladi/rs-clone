@@ -17,8 +17,8 @@
 
 .voice-control-modal {
     position: fixed;
-    top: calc(50% - 6rem);
-    left: calc(50% - 6rem);
+    top: calc(50% - 13rem);
+    left: calc(50% - 11rem);
 }
 
 .voice-control-modal .modal-inner {
@@ -27,7 +27,7 @@
     width: 20rem;
     text-align: center;
     font-size: 3rem;
-    color: darkred;
+    color: var(--voice-title);
 }
 
 .voice-control-overlay {
