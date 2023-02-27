@@ -1,5 +1,9 @@
 .voice-control-container {
     position: relative;
+    width: 2.7rem;
+    height: 2.7rem;
+    display: flex;
+    align-items: center;
 }
 
 .voice-control-icon {
@@ -8,8 +12,6 @@
     width: 2.7rem;
     height: 2.7rem;
     background-repeat: no-repeat;
-    position: absolute;
-    top: 0;
     cursor: pointer;
 }
 
@@ -29,10 +31,14 @@
 }
 
 .voice-control-overlay {
+    visibility: hidden;
     position: fixed;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 50;
 }
 
 .voice-record-animation {

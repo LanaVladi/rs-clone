@@ -46,12 +46,13 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
         this.overlay = document.createElement('div');
         this.overlay.className = 'voice-control-overlay';
 
-        this.element.append(this.voiceControlIcon, this.voiceControlModal, /* this.overlay */);
+        this.element.append(this.voiceControlIcon, this.voiceControlModal, this.overlay);
     }
 
     protected addListeners(): void {
         this.voiceControlIcon.addEventListener('click', () => {
             this.voiceControlModal.style.visibility = 'visible';
+            this.overlay.style.visibility = 'visible';
         });
     }
 }

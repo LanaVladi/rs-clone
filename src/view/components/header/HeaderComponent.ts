@@ -107,8 +107,8 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         headerTools.append(
             this.logo,
             this.props.controller.searcherController.component.element,
-            this.props.controller.geolocationController.component.element,
             this.props.controller.voiceControl.component.element,
+            this.props.controller.geolocationController.component.element,
             this.conversion
         );
 
