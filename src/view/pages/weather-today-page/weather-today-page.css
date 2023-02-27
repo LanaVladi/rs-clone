@@ -1,13 +1,8 @@
 .weather-today {
     display: grid;
     grid-template-columns: 1fr;
-    /* grid-template-rows: repeat(3, 1fr); */
     grid-column-gap: 0rem;
     grid-row-gap: 1rem;
-    /* width: 70rem; */
-    /* margin: 0 auto; */
-
-
     margin: 1.2rem auto;
     height: 100%;
     width: 80%;
@@ -59,7 +54,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.6rem;
+    padding: 1rem 10rem;
 }
 
 .current-conditions-icon {
@@ -150,7 +145,7 @@
     flex-flow: row nowrap;
     justify-content: space-between;
     position: relative;
-    padding: 2.5rem 3.6rem;
+    padding: 2.5rem 7.6rem;
 }
 
 .today-details-header__feels-like-temp {
@@ -193,14 +188,6 @@
 .sunrise-sunset-svg {
     width: 10rem;
     height: 6rem;
-    /* background: url('../../../assets/svg/sunrise-sunset-path.svg') no-repeat center; */
-
-    /* transform-origin: 4rem 4rem;
-    transform: rotate(180deg);
-    stroke: #e87538;
-    fill: none;
-    stroke-width: 0.2rem;
-    stroke-linecap: round; */
 }
 
 .sunrise-sunset {
@@ -258,6 +245,7 @@
     display: flex;
     flex-wrap: wrap;
     font-size: 1.6rem;
+    margin: 0 2rem 2rem;
 }
 
 .todays-details-item {
@@ -318,18 +306,46 @@
     height: 2.4rem;
     margin-right: 1rem;
 }
+@media screen and (max-width: 992px) {
+    .current-conditions-box {
+        padding: 1rem 4.6rem;
+    }
 
+    .today-details-header {
+        padding: 2.5rem 3.6rem;
+    }
+}
 
 @media screen and (max-width: 767px) {
     .today-details-indicators {
         flex-direction: column;
         align-items: flex-start;
         flex-wrap: nowrap;
-        width: 96%;
+        width: 90%;
     }
 
     .todays-details-item {
-        width: 96%;
+        width: 90%;
+    }
+
+    .current-conditions-box {
+        padding: 1rem 2.6rem;
+    }
+
+    .today-details-header {
+        padding: 2.5rem 3.6rem;
+    }
+
+    @media screen and (max-width: 479px) {
+        .today-details-header {
+            padding: 2.5rem 2.6rem;
+        }
+    }
+
+    @media screen and (max-width: 449px) {
+        .today-details-title {
+            flex-direction: column;
+        }
     }
 
     @media screen and (max-width: 379px) {
