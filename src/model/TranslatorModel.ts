@@ -5,28 +5,12 @@ import { ObserverToView } from './ObserverToView';
 export class TranslatorModel implements INotify {
     private observerToModel: ObserverToModel;
     private observerToView: ObserverToView;
-    // private storageKeyLang = 'lang';
-    // private startLang!: string;
 
     constructor(observerToModel: ObserverToModel, observerToView: ObserverToView) {
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
-
-        // this.startLang = this.checkLocalStorageLanguage();
-        // this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
         this.observerToModel.subscribe(ViewEvent.language, this);
     }
-
-    // protected checkLocalStorageLanguage() {
-    //     if (!JSON.parse(`${localStorage.getItem('lang')}`)) {
-    //         const startLangInit = 'ru';
-    //         localStorage.setItem('lang', JSON.stringify(startLangInit));
-    //         return startLangInit;
-    //     } else {
-    //         const startLangInit = JSON.parse(`${localStorage.getItem('lang')}`);
-    //         return startLangInit;
-    //     }
-    // }
 
     notify<T>(params: NotifyParameters<T>): void {
         if (typeof params.message === 'string') {

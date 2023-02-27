@@ -40,7 +40,6 @@ interface WeatherMapPageComponentProps {
 export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageComponentProps> implements INotify {
     private observerToView: ObserverToView;
     private language: Lang = 'ru';
-    // private geolocation: GeolocationModel;
     private WIDTH_INPUT = 11.1;
     private isOpen = false;
     private overlays!: IOverlays;
@@ -77,7 +76,6 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         language: TranslatorModel
     ) {
         super('weather-map', { controller, router, observerToView, language }, 'div');
-        // this.geolocation  = geolocation;
         this.observerToView = observerToView;
         this.observerToView.subscribe(ModelEvent.weather_map, this);
         this.observerToView.subscribe(ModelEvent.language, this);
@@ -109,7 +107,6 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             }
             case ModelEvent.weather_map: {
                 const weatherData = <IWindyAPI>params.message;
-                console.log('weatherData IWindyAPI:', weatherData);
             }
         }
     }
@@ -124,8 +121,6 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
             this.windyDiv.style.width = '99.9%';
             this.windyDiv.style.width = '100%';
             this._map.invalidateSize();
-            console.log('____REFRESH____');
-            
         }
     }
 

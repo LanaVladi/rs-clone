@@ -208,7 +208,7 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         const dayNight = convertUnixToDayNight(dataCalcTime, sunrise, sunset);
         const root = document.getElementById('root');
         const footer = document.querySelector<HTMLElement>('.footer');
-        if(root && footer) {
+        if (root && footer) {
             root.style.backgroundColor = DataToBGStyle[dayNight][weatherId].headerColor;
             root.style.backgroundImage = DataToBGStyle[dayNight][weatherId].backgroundGradient;
             footer.style.backgroundColor = DataToBGStyle[dayNight][weatherId].headerColor;

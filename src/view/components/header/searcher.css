@@ -21,9 +21,7 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     z-index: 1;
-    /* visibility: hidden; */
     display: none;
-    /* padding: 1rem; */
 }
 
 .drop-down-list__weather-icon {
@@ -63,13 +61,11 @@
 .searcher-input-drop-down-list__alert,
 .searcher-input-drop-down-list {
     visibility: hidden;
-    /* display: none; */
 }
 
 .searcher-input-drop-down-list.visible,
 .searcher-input-drop-down-item.visible {
     visibility: visible;
-    /* display: flex; */
 }
 
 .searcher-input-drop-down-list__alert.visible {
@@ -79,7 +75,6 @@
 }
 
 .drop-down-list-box.visible {
-    /* visibility: visible; */
     display: flex;
 }
 

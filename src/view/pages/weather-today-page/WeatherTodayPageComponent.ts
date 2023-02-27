@@ -16,7 +16,6 @@ interface WeatherTodayPageProps {
 }
 
 export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPageProps> implements INotify {
-    //  first block
     private currentConditions!: HTMLDivElement;
     private currentConditionsTitleLocation!: HTMLHeadingElement;
     private currentConditionsTitleTimestampName!: HTMLSpanElement;
@@ -24,12 +23,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
     private boxTempValue!: HTMLSpanElement;
     private boxTempPhrase!: HTMLSpanElement;
     private currentConditionsIcon!: HTMLImageElement;
-
-    //  second block
-    // private todayWeatherCardTitle!: HTMLHeadingElement;
-    // private todayWeatherCardTitleValue!: HTMLHeadingElement;
-
-    //  third block
     private todayDetailsTitleName!: HTMLHeadingElement;
     private todayDetailsTitleValue!: HTMLHeadingElement;
     private sunriseSunsetAnimationBox!: HTMLDivElement;
@@ -95,11 +88,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         switch (params.typeEvents) {
             case ModelEvent.language: {
                 const langObject = <pagesLang>params.message;
-                //  first block
                 this.currentConditionsTitleTimestampName.textContent = langObject.asOf;
-                //  second block
-                // this.todayWeatherCardTitle.textContent = langObject.forecastToday;
-                //  third block
                 this.todayDetailsTitleName.textContent = langObject.weatherToday;
                 this.feelsLikeTempLabel.textContent = langObject.feelsLike;
                 this.todayDetailsItemLabelMaxMinTemp.textContent = `${langObject.high}/${langObject.low}`;
@@ -137,7 +126,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                     dataCalcTime,
                     country,
                 } = <weatherIndicators>params.message;
-                //  first block
                 this.currentConditionsTitleLocation.textContent = `${cityName}, ${countryCode}`;
                 this.currentConditionsTitleTimestampValue.textContent = `${convertUnixToDate(
                     timezone,
@@ -145,11 +133,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                 )}, GMT ${timezone}:00`;
                 this.boxTempValue.textContent = `${temp}°`;
                 this.boxTempPhrase.textContent = `${description}`;
-                // this.boxTempPhrase.textContent = `${mainWeather}`;
                 this.currentConditionsIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
-                //  second block
-                // this.todayWeatherCardTitleValue.textContent = `${cityName}, ${countryCode}`;
-                //  third block
                 this.feelsLikeTempValue.textContent = `${feelsLike}°`;
                 this.todayDetailsTitleValue.textContent = `${cityName}, ${countryCode}`;
                 this.sunriseSunsetTimeSunriseTime.textContent = `${convertUnixToDate(timezone, sunrise)}`;
@@ -169,7 +153,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
     }
 
     protected render(): void {
-        //  first block
         this.currentConditions = document.createElement('div');
         this.currentConditions.className = 'current-conditions-card container';
 
@@ -218,79 +201,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         this.currentConditions.append(currentConditionsTitle, currentConditionsBox);
 
-        // //  second block
-        // const todayWeatherCard = document.createElement('div');
-        // todayWeatherCard.className = 'today-weather-card container';
-
-        // const todayWeatherCardTitle = document.createElement('div');
-        // todayWeatherCardTitle.className = 'today-weather-card-title';
-        // this.todayWeatherCardTitle = document.createElement('h2');
-        // this.todayWeatherCardTitle.className = 'today-weather-card-title__name';
-        // this.todayWeatherCardTitle.textContent = this.props.language.getTranslateRu().forecastToday;
-        // this.todayWeatherCardTitleValue = document.createElement('h2');
-        // this.todayWeatherCardTitleValue.className = 'today-weather-card-title__value';
-        // todayWeatherCardTitle.append(this.todayWeatherCardTitle, this.todayWeatherCardTitleValue);
-
-        // // next block of info today-hours
-        // const todayWeatherCardTableWrapper = document.createElement('div');
-        // todayWeatherCardTableWrapper.className = 'today-weather-card--tableWrapper';
-
-        // const weatherTableColumns = document.createElement('ul');
-        // weatherTableColumns.className = 'weather-table--columns';
-
-        // weatherTableColumns.insertAdjacentHTML(
-        //     'beforeend',
-        //     `
-        // <li class="colomn-times-of-day">
-        //     <h3 class="colomn-label">'morning'</h3>
-        //     <div class="colomn-label">-23</div>
-        //     <div class="colomn-icon"></div>
-        //     <div class="colomn-precip">
-        //         <svg class="colomn-precip-icon"></svg>
-        //         <span class="colomn-precip-humidity">2%</span>
-        //     </div>
-        // </li>
-        // <li class="colomn-times-of-day">
-        //     <h3 class="colomn-label">afternoon</h3>
-        //     <div class="colomn-label">-23</div>
-        //     <div class="colomn-icon"></div>
-        //     <div class="colomn-precip">
-        //         <svg class="colomn-precip-icon"></svg>
-        //         <span class="colomn-precip-humidity">2%</span>
-        // </div>
-        // </li>
-        // <li class="colomn-times-of-day">
-        //     <h3 class="colomn-label">evening</h3>
-        //     <div class="colomn-label">-23</div>
-        //     <div class="colomn-icon"></div>
-        //     <div class="colomn-precip">
-        //      <svg class="colomn-precip-icon"></svg>
-        //      <span class="colomn-precip-humidity">2%</span>
-        // </div>
-        // </li>
-        // <li class="colomn-times-of-day">
-        //     <h3 class="colomn-label">night</h3>
-        //     <div class="colomn-label">-23</div>
-        //     <div class="colomn-icon"></div>
-        //     <div class="colomn-precip">
-        //      <svg class="colomn-precip-icon"></svg>
-        //         <span class="colomn-precip-humidity">2%</span>
-        // </div>
-        //  </li>`
-        // );
-
-        // todayWeatherCardTableWrapper.append(weatherTableColumns);
-        // const cardFooter = document.createElement('div');
-        // cardFooter.className = 'card-footer';
-
-        // const buttonPrimery = document.createElement('a');
-        // buttonPrimery.className = 'button-primery';
-        // buttonPrimery.textContent = 'nextHours';
-
-        // cardFooter.append(buttonPrimery);
-        // todayWeatherCard.append(todayWeatherCardTitle, todayWeatherCardTableWrapper, cardFooter);
-
-        // next block of info today-details-card         //  third block
         const todayDetailsCard = document.createElement('div');
         todayDetailsCard.className = 'today-details-card container';
 
@@ -326,12 +236,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         const sunriseSunsetSvgBox = document.createElement('div');
         sunriseSunsetSvgBox.className = 'sunrise-sunset-svg-box';
-        // sunriseSunsetSvgBox.textContent =         `
-        // <svg  class="sunrise-sunset">
-        // <path d="M -13.5 26.5 a 1 1 0 0 0 80 0" class="sunrise-sunset-path" style="transform-origin: 40px 40px;"></path></svg>
-        // `
-        // const sunriseSunsetSvg = document.createElement('svg');
-        // sunriseSunsetSvg.className = 'sunrise-sunset';
 
         sunriseSunsetBox.insertAdjacentHTML(
             'beforeend',
@@ -361,9 +265,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         sunriseSunsetTime.append(this.sunriseSunsetTimeSunriseTime, this.sunriseSunsetTimeSunsetTime);
         sunriseSunsetBox.append(sunriseSunsetTime, sunriseSunsetAnimation);
 
-        // sunriseSunsetBox.append(sunriseSunsetSvgBox);
         todayDetailsHeader.append(feelsLikeTempBox, sunriseSunsetBox);
-        // sunriseSunsetBox.append(sunriseSunsetSvgBox, sunriseSunsetTime);
 
         // block todayDetailsIndicators
         const todayDetailsIndicators = document.createElement('div');
@@ -470,7 +372,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         // todayDetailsItemPressure
         const todayDetailsItemPressure = document.createElement('div');
-        // todayDetailsItemPressure.className = 'todays-details-item';
         todayDetailsItemPressure.className = 'todays-details-item';
 
         const todayDetailsIconContainerPressure = document.createElement('div');
@@ -543,7 +444,6 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
         todayDetailsCard.append(todayDetailsTitle, todayDetailsHeader, todayDetailsIndicators);
         this.element.append(this.currentConditions, todayDetailsCard);
-        // this.element.append(currentConditions, todayWeatherCard, todayDetailsCard);
     }
 
     public show() {
@@ -553,7 +453,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
     private updateSunAnimation(sunrise: number, sunset: number, currentTime: number) {
         const day = sunset - sunrise;
         const sunPos = currentTime - sunrise;
-        const deg =(sunPos * HALF_CIRCLE_DEG) / day;
+        const deg = (sunPos * HALF_CIRCLE_DEG) / day;
         this.sunriseSunsetAnimationBox.style.transform = `rotate(${deg}deg)`;
     }
 

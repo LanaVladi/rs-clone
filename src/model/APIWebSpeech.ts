@@ -13,7 +13,6 @@ class VoiceControl {
     private lang!: langForSpeechAPI;
 
     constructor() {
-        // this.lang = lang === 'en' ? langForSpeechAPI.en : langForSpeechAPI.ru;
         this.recognition = new webkitSpeechRecognition();
         this.speechRecognitionList = new webkitSpeechGrammarList();
         this.synthesis = window.speechSynthesis;
@@ -47,7 +46,7 @@ class VoiceControl {
                 setTimeout(() => {
                     this.hideVoiceAnimation();
                     this.recognition.stop();
-                } , 5000);
+                }, 5000);
                 this.recognition.onresult = (event) => {
                     const last = event.results.length - 1;
                     const result = event.results[last];

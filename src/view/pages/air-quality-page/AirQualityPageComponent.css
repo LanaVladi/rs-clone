@@ -6,7 +6,7 @@
     max-width: 100rem
 }
 
-.air-quality-container{
+.air-quality-container {
     background-color: var(--color-white);
     margin-bottom: 1.2rem;
     padding: 1.6rem;
@@ -108,7 +108,7 @@
     border-bottom: none;
 }
 
-.air-quality-item__pollutant-info{
+.air-quality-item__pollutant-info {
     font-size: 1.3rem;
     line-height: 1.2;
     padding-left: 1rem;
@@ -255,7 +255,7 @@
 @media screen and (max-width: 767px) {
     .primary-pollutant-container {
         flex-direction: column;
-        align-items:flex-start;
+        align-items: flex-start;
     }
 
     .primary-pollutant__info {

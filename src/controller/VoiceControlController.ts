@@ -23,6 +23,6 @@ export class VoiceControlController extends BaseController<VoiceControlComponent
         this.voiceControlModel = voiceControlModel;
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
-        this.component = new VoiceControlComponent(this, observerToModel, observerToView);
+        this.component = new VoiceControlComponent(this, observerToModel, observerToView, language);
     }
 }

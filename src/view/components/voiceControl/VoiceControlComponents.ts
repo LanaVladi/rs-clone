@@ -1,7 +1,7 @@
 import { VoiceControlController } from '../../../controller/VoiceControlController';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { ModelEvent, ViewEvent } from '../../../types';
-// import VoiceControl from '../../../model/APIWebSpeech';
+import { TranslatorModel } from '../../../model/TranslatorModel';
+import INotify, { ModelEvent, NotifyParameters, pagesLang, ViewEvent } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import '../voiceControl/voiceControl.css';
 import { ObserverToModel } from './../../../model/ObserverToModel';
@@ -10,9 +10,10 @@ interface VoiceControlComponentProps {
     controller: VoiceControlController;
     observerToModel: ObserverToModel;
     observerToView: ObserverToView;
+    language: TranslatorModel;
 }
 
-export class VoiceControlComponent extends BaseComponent<VoiceControlComponentProps> {
+export class VoiceControlComponent extends BaseComponent<VoiceControlComponentProps> implements INotify {
     private voiceControlIcon!: HTMLDivElement;
     private voiceControlModal!: HTMLDivElement;
     private modalInner!: HTMLDivElement;
@@ -20,11 +21,50 @@ export class VoiceControlComponent extends BaseComponent<VoiceControlComponentPr
     private voiceRecordAnimation!: HTMLDivElement;
     private observerToModel: ObserverToModel;
     private observerToView: ObserverToView;
+    private storageKeyLang = 'lang';
+    private startLang!: pagesLang;
+    public language: TranslatorModel;
 
-    constructor(controller: VoiceControlController, observerToModel: ObserverToModel, observerToView: ObserverToView) {
-        super('voice-control-container', { controller, observerToModel, observerToView }, 'div');
+    constructor(
+        controller: VoiceControlController,
+        observerToModel: ObserverToModel,
+        observerToView: ObserverToView,
+        language: TranslatorModel
+    ) {
+        super('voice-control-container', { controller, observerToModel, observerToView, language }, 'div');
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
+        this.language = language;
+        this.startLang = this.checkLocalStorageLanguage();
+        this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
+        this.observerToView.subscribe(ModelEvent.language, this);
+    }
+
+    protected checkLocalStorageLanguage() {
+        if (!JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`)) {
+            const startLangInit = 'ru';
+            localStorage.setItem(this.storageKeyLang, JSON.stringify(startLangInit));
+            return this.language.getTranslateRu();
+        } else {
+            const startLangInit = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
+            if (startLangInit === 'en') {
+                return this.language.getTranslateEn();
+            } else {
+                return this.language.getTranslateRu();
+            }
+        }
+    }
+
+    notify<T>(params: NotifyParameters<T>): void {
+        switch (params.typeEvents) {
+            case ModelEvent.language: {
+                const langObject = <pagesLang>params.message;
+
+                this.modalInner.innerText = langObject.pleaseSpeak;
+
+                break;
+            }
+        }
     }
 
     protected render(): void {

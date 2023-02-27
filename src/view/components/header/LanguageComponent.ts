@@ -27,14 +27,8 @@ export class LanguageComponent extends BaseComponent<LanguageComponentProps> {
     protected render(): void {
         this.langName = document.createElement('div');
         this.langName.className = 'lang-name';
-
         const langDefault = this.checkLocalStorageLanguage();
-        // this.langDefault = this.checkLocalStorageLanguage();
-        // console.log('this.langDefault :', this.langDefault);
-        // // const langDefault = this.checkLocalStorageLanguage();
         this.langName.textContent = `${langDefault}`;
-        // console.log('this.langName.textContent :', this.langName.textContent);
-
         this.langIcon = document.createElement('div');
         this.langIcon.className = 'lang-icon';
 
@@ -67,10 +61,5 @@ export class LanguageComponent extends BaseComponent<LanguageComponentProps> {
 
             this.observerToModel.notify(ViewEvent.language, { message: this.langList });
         });
-
-        // window.addEventListener('DOMContentLoaded', () => {
-        //     this.checkLocalStorageLanguage();
-        //     console.log('сюда зашел');
-        // });
     }
 }

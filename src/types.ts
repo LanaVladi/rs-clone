@@ -281,9 +281,6 @@ export type pagesLang = {
     windAnimation: string;
     pleaseSpeak: string;
     surface: string;
-
-    // Ilya
-
     allPollutants: string;
     primaryPollutant: string;
     pollutantUnits: string;
@@ -309,8 +306,6 @@ export type pagesLang = {
     so2: string;
     pm2_5: string;
     pm10: string;
-
-    //Lana
     kmH: string;
     mb: string;
     km: string;

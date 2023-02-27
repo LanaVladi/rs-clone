@@ -106,9 +106,6 @@ export class Store implements INotify {
                 this.setDataCalcTime(WeatherTodayData);
                 const dataCalcTime = this.getDataCalcTime();
 
-                // this.setCountry(WeatherTodayData);
-                // const country = this.getCountry();
-
                 this.observerToView.notify(ModelEvent.today_weather_indicators, {
                     message: {
                         temp,
@@ -130,7 +127,6 @@ export class Store implements INotify {
                         cityName,
                         countryCode,
                         dataCalcTime,
-                        // country,
                     },
                     typeEvents: ModelEvent.today_weather_indicators,
                 });
@@ -138,39 +134,8 @@ export class Store implements INotify {
             }
             case ModelEvent.five_days_weather: {
                 const weatherFiveDaysData = <weatherFiveDaysData>params.message;
-                // console.log('weatherFiveDaysData :', weatherFiveDaysData);
-
                 this.setListOfDays(weatherFiveDaysData);
                 const list = this.getListOfDays();
-                // this.setTempMinFiveDays(weatherFiveDaysData);
-                // const tempMin = this.getTempMinFiveDays();
-                // this.setTempMaxFiveDays(weatherFiveDaysData);
-                // const tempMax = this.getTempMaxFiveDays();
-                // this.setFeelsLikeFiveDays(weatherFiveDaysData);
-                // const feelsLike = this.getFeelsLikeFiveDays();
-                // this.setHumidityFiveDays(weatherFiveDaysData);
-                // const humidity = this.getHumidityFiveDays();
-                // this.setPressureFiveDays(weatherFiveDaysData);
-                // const pressure = this.getPressureFiveDays();
-                // this.setVisibilityFiveDays(weatherFiveDaysData);
-                // const visibility = this.getVisibilityFiveDays();
-                // this.setWindSpeedFiveDays(weatherFiveDaysData);
-                // const windSpeed = this.getWindSpeed();
-                // this.setCloudsFiveDays(weatherFiveDaysData);
-                // const clouds = this.getCloudsFiveDays();
-                // this.setSunriseFiveDays(weatherFiveDaysData);
-                // const sunrise = this.getSunriseFiveDays();
-                // this.setSunsetFiveDays(weatherFiveDaysData);
-                // const sunset = this.getSunsetFiveDays();
-                // this.setIconFiveDays(weatherFiveDaysData);
-                // const icon = this.getIconFiveDays();
-
-                // this.setIdFiveDays(weatherFiveDaysData);
-                // const id = this.getIdFiveDays();
-                // this.setDescriptionFiveDays(weatherFiveDaysData);
-                // const description = this.getDescriptionFiveDays();
-                // this.setMainWeatherFiveDays(weatherFiveDaysData);
-                // const mainWeather = this.getMainWeatherFiveDays();
 
                 this.setTimezoneFiveDays(weatherFiveDaysData);
                 const timezone = this.getTimezoneFiveDays();
@@ -178,9 +143,6 @@ export class Store implements INotify {
                 const cityName = this.getCityNameFiveDays();
                 this.setCountryCodeFiveDays(weatherFiveDaysData);
                 const countryCode = this.getCountryCodeFiveDays();
-
-                // this.setDataCalcTimeFiveDays(weatherFiveDaysData);
-                // const dataCalcTime = this.getDataCalcTimeFiveDays();
 
                 this.observerToView.notify(ModelEvent.five_days_weather_indicators, {
                     message: {
@@ -362,7 +324,6 @@ export class Store implements INotify {
     }
 
     setTimezone(data: WeatherTodayData) {
-        // const timezone = +`${data.timezone}`.replace('-', '-0');
         this.timezone = data.timezone / this.secondsPerHour;
     }
 
@@ -381,14 +342,6 @@ export class Store implements INotify {
     setCountryCode(data: WeatherTodayData) {
         this.countryCode = data.sys.country;
     }
-
-    // getCountry() {
-    //     return this.country;
-    // }
-
-    // setCountry(data: WeatherTodayData) {
-    //     this.country = `${(data)}`;
-    // }
 
     getDataCalcTime() {
         return this.dataCalcTime;
@@ -437,20 +390,4 @@ export class Store implements INotify {
     setCountryCodeFiveDays(data: weatherFiveDaysData) {
         this.countryCode = data.city.country;
     }
-
-    // // getCountry() {
-    // //     return this.country;
-    // // }
-
-    // // setCountry(data: weatherFiveDaysData) {
-    // //     this.country = `${(data)}`;
-    // // }
-
-    // getDataCalcTime() {
-    //     return this.dataCalcTime;
-    // }
-
-    // setDataCalcTime(data: weatherFiveDaysData) {
-    //     this.dataCalcTime = `${new Date(data.dt).getHours()}:${new Date(data.dt).getMinutes()}`;
-    // }
 }
