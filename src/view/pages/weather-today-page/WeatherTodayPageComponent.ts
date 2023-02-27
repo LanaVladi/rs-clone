@@ -1,9 +1,9 @@
-import { HALF_CIRCLE_DEG, weatherIconImgFormat, weatherIconUrl } from '../../../constants';
+import { DataToBGStyle, HALF_CIRCLE_DEG, weatherIconImgFormat, weatherIconUrl } from '../../../constants';
 import { WeatherTodayPageController } from '../../../controller/WeatherTodayPageController';
 import { ObserverToView } from '../../../model/ObserverToView';
 import { TranslatorModel } from '../../../model/TranslatorModel';
-import INotify, { ModelEvent, NotifyParameters, pagesLang, weatherIndicators } from '../../../types';
-import { convertUnixToDate } from '../../../utils';
+import INotify, { ModelEvent, NotifyParameters, pagesLang, WeatherId, weatherIndicators } from '../../../types';
+import { convertUnixToDate, convertUnixToDayNight } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import './weather-today-page.css';
@@ -17,6 +17,7 @@ interface WeatherTodayPageProps {
 
 export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPageProps> implements INotify {
     //  first block
+    private currentConditions!: HTMLDivElement;
     private currentConditionsTitleLocation!: HTMLHeadingElement;
     private currentConditionsTitleTimestampName!: HTMLSpanElement;
     private currentConditionsTitleTimestampValue!: HTMLSpanElement;
@@ -161,6 +162,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                 this.todayDetailsItemInfoPressure.textContent = `${pressure}`;
                 this.todayDetailsItemInfoVisibility.textContent = `${visibility}`;
 
+                this.updateBackground(id, dataCalcTime, sunrise, sunset);
                 this.updateSunAnimation(sunrise, sunset, dataCalcTime);
             }
         }
@@ -168,8 +170,8 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
 
     protected render(): void {
         //  first block
-        const currentConditions = document.createElement('div');
-        currentConditions.className = 'current-conditions-card container';
+        this.currentConditions = document.createElement('div');
+        this.currentConditions.className = 'current-conditions-card container';
 
         const currentConditionsTitle = document.createElement('div');
         currentConditionsTitle.className = 'current-conditions-card-title';
@@ -214,7 +216,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         currentConditionsBoxTemp.append(this.boxTempValue, this.boxTempPhrase);
         currentConditionsBox.append(currentConditionsBoxTemp, currentConditionsBoxIcon);
 
-        currentConditions.append(currentConditionsTitle, currentConditionsBox);
+        this.currentConditions.append(currentConditionsTitle, currentConditionsBox);
 
         // //  second block
         // const todayWeatherCard = document.createElement('div');
@@ -540,7 +542,7 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         );
 
         todayDetailsCard.append(todayDetailsTitle, todayDetailsHeader, todayDetailsIndicators);
-        this.element.append(currentConditions, todayDetailsCard);
+        this.element.append(this.currentConditions, todayDetailsCard);
         // this.element.append(currentConditions, todayWeatherCard, todayDetailsCard);
     }
 
@@ -553,5 +555,11 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
         const sunPos = currentTime - sunrise;
         const deg =(sunPos * HALF_CIRCLE_DEG) / day;
         this.sunriseSunsetAnimationBox.style.transform = `rotate(${deg}deg)`;
+    }
+
+    private updateBackground(id: number, dataCalcTime: number, sunrise: number, sunset: number) {
+        const weatherId = id.toString() as WeatherId;
+        const dayNight = convertUnixToDayNight(dataCalcTime, sunrise, sunset);
+        this.currentConditions.style.backgroundImage = `url(${DataToBGStyle[dayNight][weatherId].img})`;
     }
 }

@@ -1,5 +1,5 @@
 .header {
-    background-color: var(--color-bg-footer-header);
+    /* background-color: var(--color-bg-footer-header); */
     width: 100%;
 }
 
@@ -8,11 +8,10 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     align-items: center;
     padding: 1.0%;
     color: var(--color-textDefault);
-    height: 15rem;
+    height: 17rem;
     font-size: 1.3rem;
 }
 
@@ -21,6 +20,7 @@
     justify-content: space-evenly;
     display: flex;
     align-items: center;
+    margin-bottom: 1rem;
 }
 
 .header-logo {
@@ -39,12 +39,27 @@
     width: 10em;
 }
 
+.header-location-container {
+    width: 100vw;
+    height: 4rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 .header-location {
-    display: inline-flex;
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    height: 100%;
     gap: 1rem;
     align-items: center;
     justify-content: space-around;
     font-size: 1.4rem;
+    color: var(--color-white);
+}
+
+.header-location-item {
+    display: flex;
+    align-items: center;
 }
 
 .header__weather-icon {
@@ -80,12 +95,21 @@
     height: 1.6em;
 }
 
+.header-nav-container {
+    width: 100vw;
+    height: 4rem;
+    background-color: rgb(0, 0, 0, 0.4);
+}
+
 .header-nav {
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     font-size: 1.6rem;
+    height: 100%;
+    color: var(--color-white);
 }
 
 .header-nav-li {

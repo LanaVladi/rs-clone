@@ -1,11 +1,12 @@
 import { HeaderController } from '../../../controller/HeaderController';
-import INotify, { ModelEvent, NotifyParameters, pagesLang, weatherIndicators } from '../../../types';
+import INotify, { ModelEvent, NotifyParameters, pagesLang, WeatherId, weatherIndicators } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
 import { ObserverToView } from '../../../model/ObserverToView';
-import { weatherIconUrl, weatherIconImgFormat } from '../../../constants';
+import { weatherIconUrl, weatherIconImgFormat, DataToBGStyle } from '../../../constants';
 import './header.css';
 import { TranslatorModel } from '../../../model/TranslatorModel';
+import { convertUnixToDayNight } from '../../../utils';
 
 interface HeaderComponentProps {
     controller: HeaderController;
@@ -75,11 +76,12 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
                 break;
             }
             case ModelEvent.today_weather_indicators: {
-                const { temp, icon, cityName, countryCode } = <weatherIndicators>params.message;
-
+                const { temp, icon, cityName, countryCode, id, dataCalcTime, sunrise, sunset } = <weatherIndicators>params.message;
                 this.temperature.textContent = `${temp}°`;
                 this.locationName.textContent = `${cityName}, ${countryCode}`;
                 this.weatherIcon.src = `${weatherIconUrl}${icon}${weatherIconImgFormat}`;
+
+                this.updateBackground(id, dataCalcTime, sunrise, sunset);
             }
         }
     }
@@ -110,6 +112,9 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
             this.conversion
         );
 
+        const headerNavContainer = document.createElement('nav');
+        headerNavContainer.className = 'header-nav-container';
+
         this.headerNav = document.createElement('ul');
         this.headerNav.classList.add('header-nav');
 
@@ -130,6 +135,13 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.componentAirQuality.textContent = this.props.controller.language.getTranslateRu().airQuality;
 
         this.headerNav.append(this.componentToday, this.componentFiveDays, this.componentMap, this.componentAirQuality);
+        headerNavContainer.append(this.headerNav)
+
+        const headerLocationContainer = document.createElement('div');
+        headerLocationContainer.className = 'header-location-container';
+
+        const headerLocationItem = document.createElement('div');
+        headerLocationItem.className = 'header-location-item';
 
         this.headerLocation = document.createElement('div');
         this.headerLocation.className = 'header-location';
@@ -140,9 +152,11 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.temperature = document.createElement('span');
         this.locationName = document.createElement('span');
 
-        this.headerLocation.append(this.weatherIcon, this.temperature, this.locationName);
+        headerLocationItem.append(this.weatherIcon, this.temperature, this.locationName);
+        this.headerLocation.append(headerLocationItem);
+        headerLocationContainer.append(this.headerLocation);
 
-        headerContainer.append(headerTools, this.headerLocation, this.headerNav);
+        headerContainer.append(headerTools, headerLocationContainer, headerNavContainer);
         this.element.append(headerContainer);
     }
 
@@ -165,5 +179,15 @@ export class HeaderComponent extends BaseComponent<HeaderComponentProps> impleme
         this.logo.addEventListener('click', (): void => {
             this.props.router.goTo('today');
         });
+    }
+
+    private updateBackground(id: number, dataCalcTime: number, sunrise: number, sunset: number) {
+        const weatherId = id.toString() as WeatherId;
+        const dayNight = convertUnixToDayNight(dataCalcTime, sunrise, sunset);
+        const root = document.getElementById('root');
+        if(root) {
+            root.style.backgroundColor = DataToBGStyle[dayNight][weatherId].headerColor;
+            root.style.backgroundImage = DataToBGStyle[dayNight][weatherId].backgroundGradient;
+        }
     }
 }
