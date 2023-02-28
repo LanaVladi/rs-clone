@@ -119,12 +119,10 @@ export class WeatherTodayPageComponent extends BaseComponent<WeatherTodayPagePro
                     icon,
                     description,
                     id,
-                    mainWeather,
                     timezone,
                     cityName,
                     countryCode,
                     dataCalcTime,
-                    country,
                 } = <weatherIndicators>params.message;
                 this.currentConditionsTitleLocation.textContent = `${cityName}, ${countryCode}`;
                 this.currentConditionsTitleTimestampValue.textContent = `${convertUnixToDate(

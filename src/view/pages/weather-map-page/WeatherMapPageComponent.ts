@@ -105,9 +105,6 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
                 this.translateAltitudeValue();
                 break;
             }
-            case ModelEvent.weather_map: {
-                const weatherData = <IWindyAPI>params.message;
-            }
         }
     }
 

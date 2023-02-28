@@ -101,7 +101,6 @@ export class ApiOpenWeather implements INotify {
     private async getAllWeatherData(city: string | number[], temperatureUnit?: string, lang?: string) {
         if (typeof city === 'string') {
             this.checkLocalStorage(city);
-            const localCity = localStorage.getItem('city');
         }
 
         const weatherTodayData: WeatherTodayData | '' = await this.getWeatherTodayData(city, temperatureUnit, lang);
@@ -193,7 +192,6 @@ export class ApiOpenWeather implements INotify {
             const response = await fetch(this.#weatherUrlToday);
             if (response.ok === true) {
                 if (city === 'string') this.checkLocalStorage(city);
-                const localCity = localStorage.getItem('city');
             }
             return await response.json();
         } catch (error) {
@@ -220,7 +218,6 @@ export class ApiOpenWeather implements INotify {
 
             if (response.ok === true) {
                 if (city === 'string') this.checkLocalStorage(city);
-                const localCity = localStorage.getItem('city');
             }
             return await response.json();
         } catch (error) {
@@ -251,7 +248,6 @@ export class ApiOpenWeather implements INotify {
 
             if (response.ok === true) {
                 if (city === 'string') this.checkLocalStorage(city);
-                const localCity = localStorage.getItem('city');
             }
             return await response.json();
         } catch (error) {
