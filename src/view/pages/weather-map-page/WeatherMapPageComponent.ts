@@ -22,6 +22,7 @@ import INotify, {
     ModelEvent,
     NotifyParameters,
     pagesLang,
+    weatherIndicators,
 } from '../../../types';
 import { getCoordinates, getGeolocation, latLonToDMS } from '../../../utils';
 import { BaseComponent } from '../../BaseComponent';
@@ -68,6 +69,8 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
     private toggler!: HTMLDivElement;
     private windAnimLabel!: HTMLDivElement;
     private _map!: Map;
+    private lat!: number;
+    private lon!: number;
 
     constructor(
         controller: WeatherMapPageController,
@@ -79,6 +82,7 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
         this.observerToView = observerToView;
         this.observerToView.subscribe(ModelEvent.weather_map, this);
         this.observerToView.subscribe(ModelEvent.language, this);
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
 
         const mutationObserver = new MutationObserver(this.refresh.bind(this));
         mutationObserver.observe(this.element, { attributes: true });
@@ -103,6 +107,12 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
 
                 this.translateWeatherForecastDays();
                 this.translateAltitudeValue();
+                break;
+            }
+            case ModelEvent.today_weather_indicators: {
+                const { coord } = <weatherIndicators>params.message;
+                const { lat, lon } = coord;
+                if (this._map) this._map.panTo([lat, lon]);
                 break;
             }
         }
@@ -499,14 +509,14 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
 
     private addListnerToScreenSizeButtons(map: Map) {
         this.openFullScreen.addEventListener('click', async () => {
-            document.querySelector('.weather-map')?.classList.add('fullscreen');
+            document.querySelector('.weather-map-container')?.classList.add('fullscreen');
             this.openFullScreen.style.visibility = 'hidden';
             this.closeFullScreen.style.visibility = 'visible';
             map.invalidateSize();
         });
 
         this.closeFullScreen.addEventListener('click', async () => {
-            document.querySelector('.weather-map')?.classList.remove('fullscreen');
+            document.querySelector('.weather-map-container')?.classList.remove('fullscreen');
             this.closeFullScreen.style.visibility = 'hidden';
             this.openFullScreen.style.visibility = 'visible';
             map.invalidateSize();

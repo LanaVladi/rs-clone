@@ -4,7 +4,7 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     border-radius: 1rem;
-    width: 85%;
+    width: 90%;
     max-width: 100rem;
 }
 
@@ -40,11 +40,10 @@
     font-size: 2rem;
 }
 
-@media screen and (max-width: 725px) {
+@media screen and (max-width: 840px) {
     .five-days-container {
-        width: 90%;
+        width: 100%;
     }
-
 }
 
 @media screen and (max-width: 625px) {
