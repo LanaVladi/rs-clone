@@ -27,7 +27,6 @@ export class GeolocationComponent extends BaseComponent<GeolocationComponentProp
     protected addListeners() {
         this.element.addEventListener('click', async () => {
             const cityCoords = await this.props.controller.getGeolocationCoords();
-            console.log('cityCoords :', cityCoords);
             this.observerToModel.notify(ViewEvent.geolocation, { message: cityCoords });
         });
     }

@@ -10,6 +10,7 @@ import { LanguageController } from './LanguageController';
 import { TranslatorModel } from '../model/TranslatorModel';
 import { TempUnitController } from './TempUnitController';
 import { VoiceControlController } from './VoiceControlController';
+import VoiceControl from '../model/APIWebSpeech';
 
 export class HeaderController extends BaseController<HeaderComponent> {
     public component: HeaderComponent;
@@ -18,6 +19,7 @@ export class HeaderController extends BaseController<HeaderComponent> {
     public geolocationController: GeolocationController;
     public tempUnitController: TempUnitController;
     public voiceControl: VoiceControlController;
+    public voiceControlModel: VoiceControl;
 
     public geolocation: GeolocationModel;
     public language: TranslatorModel;
@@ -27,14 +29,16 @@ export class HeaderController extends BaseController<HeaderComponent> {
         observerToModel: ObserverToModel,
         observerToView: ObserverToView,
         geolocation: GeolocationModel,
-        language: TranslatorModel
+        language: TranslatorModel,
+        voiceControlModel: VoiceControl
     ) {
         super();
         this.geolocation = geolocation;
         this.language = language;
-        this.voiceControl = new VoiceControlController(observerToModel, observerToView, language);
+        this.voiceControlModel = voiceControlModel;
+        this.voiceControl = new VoiceControlController(observerToModel, observerToView, language, voiceControlModel);
         this.languageController = new LanguageController(observerToModel);
-        this.searcherController = new SearcherController(observerToModel, observerToView, language);
+        this.searcherController = new SearcherController(observerToModel, observerToView, language, voiceControlModel);
         this.tempUnitController = new TempUnitController(observerToModel);
         this.geolocationController = new GeolocationController(observerToModel, geolocation);
         this.component = new HeaderComponent(this, router, observerToView, language);

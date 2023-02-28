@@ -585,7 +585,7 @@
     }
 
     .weather-map {
-       height: 40rem;
+        height: 40rem;
     }
 
     .fullscreen {
@@ -599,7 +599,7 @@
         top: 0;
         right: -50rem;
         z-index: 100;
-        background-color: rgba(0, 0 , 0 , 0.7);
+        background-color: rgba(0, 0, 0, 0.7);
         transition: right .3s ease-in-out;
         -webkit-transition: right .3s ease-in-out;
         -moz-transition: right .3s ease-in-out;
@@ -607,7 +607,7 @@
         -o-transition: right .3s ease-in-out;
     }
 
-    .map-controls-container > div {
+    .map-controls-container>div {
         opacity: 0;
         transition: opacity .5s ease-in-out .3s;
         -webkit-transition: opacity .5s ease-in-out .3s;
@@ -620,7 +620,7 @@
         right: 0;
     }
 
-    .weather-map .burger-active > div {
+    .weather-map .burger-active>div {
         opacity: 1;
     }
 

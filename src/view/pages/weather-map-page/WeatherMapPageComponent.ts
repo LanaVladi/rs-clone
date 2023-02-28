@@ -513,14 +513,14 @@ export class WeatherMapPageComponent extends BaseComponent<WeatherMapPageCompone
 
     private addListnerToScreenSizeButtons(map: Map) {
         this.openFullScreen.addEventListener('click', async () => {
-            document.querySelector('.weather-map')?.classList.add('fullscreen');
+            document.querySelector('.weather-map-container')?.classList.add('fullscreen');
             this.openFullScreen.style.visibility = 'hidden';
             this.closeFullScreen.style.visibility = 'visible';
             map.invalidateSize();
         });
 
         this.closeFullScreen.addEventListener('click', async () => {
-            document.querySelector('.weather-map')?.classList.remove('fullscreen');
+            document.querySelector('.weather-map-container')?.classList.remove('fullscreen');
             this.closeFullScreen.style.visibility = 'hidden';
             this.openFullScreen.style.visibility = 'visible';
             map.invalidateSize();

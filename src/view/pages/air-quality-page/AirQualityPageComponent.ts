@@ -11,6 +11,7 @@ import INotify, {
     Pollutants,
     PollutantSettings,
     PollutantsIndicator,
+    weatherIndicators,
 } from '../../../types';
 import { BaseComponent } from '../../BaseComponent';
 import { Router } from '../../Router';
@@ -73,6 +74,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         this.language = language;
         this.startLang = this.checkLocalStorageLanguage();
         this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
         this.observerToView.subscribe(ModelEvent.air_quality_forecast_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
     }
@@ -103,7 +105,6 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
                 this.airQualityLevelsCaption.textContent = langObject.airQualityLevelsCaption;
                 this.AirQualityPopOverTitle.textContent = langObject.AirQualityPopOverTitle;
                 this.AirQualityPopOverBody.textContent = langObject.AirQualityPopOverBody;
-                
                 break;
             }
             case ModelEvent.air_quality_forecast_indicators: {
@@ -114,6 +115,12 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
                 this.translatePrimaryPollutant(this.startLang);
                 this.translateAllPollutantCharts(this.startLang);
                 this.translateLevelList(this.startLang);
+                break;
+            }
+            case ModelEvent.today_weather_indicators: {
+                const { cityName, countryCode } = <weatherIndicators>params.message;
+                this.locationPageTitle.textContent = `${cityName}, ${countryCode}`;
+                break;
             }
         }
     }
@@ -129,7 +136,7 @@ export class AirQualityPageComponent extends BaseComponent<AirQualityPageCompone
         this.title.textContent = this.props.language.getTranslateRu().airQualityToday;
 
         this.locationPageTitle = document.createElement('span');
-        this.locationPageTitle.textContent = 'Location'; //////DATA FROM HEADER
+        this.locationPageTitle.textContent = 'Location';
         titleContainer.append(this.title, ' - ', this.locationPageTitle);
 
         this.primaryPollutantContainer = document.createElement('div');

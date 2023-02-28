@@ -3,6 +3,7 @@ import { ObserverToModel } from '../model/ObserverToModel';
 import { SearcherComponent } from '../view/components/header/SearcherComponent';
 import { TranslatorModel } from '../model/TranslatorModel';
 import { ObserverToView } from '../model/ObserverToView';
+import VoiceControl from '../model/APIWebSpeech';
 
 export class SearcherController extends BaseController<SearcherComponent> {
     public component: SearcherComponent;
@@ -10,7 +11,7 @@ export class SearcherController extends BaseController<SearcherComponent> {
     public observerToView: ObserverToView;
     public language: TranslatorModel;
 
-    constructor(observerToModel: ObserverToModel, observerToView: ObserverToView, language: TranslatorModel) {
+    constructor(observerToModel: ObserverToModel, observerToView: ObserverToView, language: TranslatorModel, voiceControlModel: VoiceControl) {
         super();
         this.language = language;
         this.observerToModel = observerToModel;

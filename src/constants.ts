@@ -1,4 +1,3 @@
-
 export const apiKeyMapForecast = 'xXzWFyvlQ5v6hx3VoAyja2ss9hpFgVRi'; // windy.com Map Forecast API
 export const baseLinkMapForecast = `https://api.windy.com/assets/map-forecast/`;
 
@@ -10,7 +9,8 @@ export const baseLinkOpenWeatherToday = 'https://api.openweathermap.org/data/2.5
 export const baseLinkOpenWeatherFiveDays = 'https://api.openweathermap.org/data/2.5/forecast'; //openweathermap.org 5 days weather
 export const baseLinkOpenWeatherAirQuality = 'http://api.openweathermap.org/data/2.5/air_pollution'; //openweathermap.org air quality
 export const baseLinkOpenWeatherDirectGeocoding = 'http://api.openweathermap.org/geo/1.0/direct'; //openweathermap.org direct geocoding
-export const baseLinkDirectGeocoding = 'https://nominatim.openstreetmap.org/search/${encodeURIComponent(location)}?format=json';
+export const baseLinkDirectGeocoding =
+    'https://nominatim.openstreetmap.org/search/${encodeURIComponent(location)}?format=json';
 
 export const celsius = 'metric';
 export const fahrenheit = 'imperial';
@@ -18,8 +18,6 @@ export const lang: 'en' | 'ru' = 'ru';
 
 export const weatherIconUrl = `http://openweathermap.org/img/wn/`;
 export const weatherIconImgFormat = `@2x.png`;
-
-// export weatherIconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
 export const langObj = {
     en: {
@@ -89,7 +87,7 @@ export const langObj = {
 };
 
 export const textValuesToAltitude = {
-    'surface': 'поверхность',
+    surface: 'поверхность',
     '100 m': '100 м',
     '300 m': '300 м',
     '600 m': '600 м',
@@ -105,7 +103,7 @@ export const textValuesToAltitude = {
     '10 km': '10 км',
     '11.7 km': '11,7 км',
     '13.5 km': '13,5 км',
-}
+};
 
 export const SPEECH_RATE = 0.75;
 export const NUMBER_ALTERNATIVE_MATCHES = 1;
@@ -113,7 +111,7 @@ export const WEIGHT_VALUE_THIS_GRAMMAR = 1;
 
 export const enum langForSpeechAPI {
     ru = 'ru-RU',
-    en = 'en-US'
+    en = 'en-US',
 }
 
 export const wordsForGrammar = {

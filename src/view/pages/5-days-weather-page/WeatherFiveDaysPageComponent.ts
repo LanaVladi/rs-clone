@@ -5,6 +5,7 @@ import INotify, {
     ModelEvent,
     NotifyParameters,
     pagesLang,
+    weatherIndicators,
     weatherIndicatorsFiveDays,
     weatherOneDayData,
 } from '../../../types';
@@ -21,7 +22,6 @@ interface WeatherFiveDaysPageComponentProps {
 }
 
 export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysPageComponentProps> implements INotify {
-    // private title!: HTMLHeadingElement;
     private observerToView: ObserverToView;
     private language: TranslatorModel;
     private pageName!: HTMLHeadingElement;
@@ -44,10 +44,10 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
         this.language = language;
         this.startLang = this.checkLocalStorageLanguage();
         this.notify({ message: this.startLang, typeEvents: ModelEvent.language });
+        this.observerToView.subscribe(ModelEvent.today_weather_indicators, this);
         this.observerToView.subscribe(ModelEvent.five_days_weather_indicators, this);
         this.observerToView.subscribe(ModelEvent.language, this);
     }
-
 
     protected checkLocalStorageLanguage() {
         if (!JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`)) {
@@ -72,13 +72,13 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                 this.dailyForecastTimestamp.textContent = langObject.asOf;
                 break;
             }
-            case ModelEvent.five_days_weather_indicators: {
-                const { list, timezone, cityName, dataCalcTime } = <weatherIndicatorsFiveDays>params.message;
-               
-               
+            case ModelEvent.today_weather_indicators: {
+                const { dataCalcTime, timezone } = <weatherIndicators>params.message;
                 this.dailyForecastTime.textContent = `${convertUnixToDate(timezone, dataCalcTime)}, GMT ${timezone}:00`;
-                
-                
+                break;
+            }
+            case ModelEvent.five_days_weather_indicators: {
+                const { list, cityName } = <weatherIndicatorsFiveDays>params.message;
                 const filteredArrayDay = list.filter(function (el) {
                     const day = new Date(el.dt_txt);
                     if (day.getHours() === 12) {
@@ -109,9 +109,8 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
                         day.update(newRes[index]);
                     });
                 }
-                
                 this.locationTitle.textContent = `${cityName}`;
-
+                break;
             }
         }
     }
@@ -130,6 +129,7 @@ export class WeatherFiveDaysPageComponent extends BaseComponent<WeatherFiveDaysP
         this.locationTitle.className = 'location-title';
 
         const dailyForecastTimestampBox = document.createElement('div');
+        dailyForecastTimestampBox.className = 'daily-forecast-timestamp-box';
         this.dailyForecastTimestamp = document.createElement('span');
         this.dailyForecastTimestamp.className = 'daily-forecast-timestamp';
         this.dailyForecastTimestamp.textContent = this.props.language.getTranslateRu().asOf;

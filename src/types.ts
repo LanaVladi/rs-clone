@@ -19,6 +19,7 @@ export const enum ModelEvent {
     language = 'language',
     temp_unit = 'temp-unit',
     input = 'input',
+    voice = 'voice',
 
     today_weather_indicators = 'today-weather-indicators',
     five_days_weather_indicators = 'five-days-weather-indicators',
@@ -31,6 +32,7 @@ export const enum ViewEvent {
     geolocation = 'geolocation',
     language = 'language',
     temp_unit = 'temp-unit',
+    voice = 'voice',
 }
 
 // =========== Observer ===================== //
@@ -112,6 +114,11 @@ export type WeatherTodayData = {
     id: number;
     name: string;
     cod: number;
+};
+
+export type WeatherTodayDataOrError = {
+    weatherTodayData: WeatherTodayData;
+    error?: string;
 };
 
 export type weatherIndicatorsFiveDays = {
@@ -245,7 +252,6 @@ export type airQualityForecastData = {
 
 // =========== open Weather ===================== //
 
-
 // =========== language ===================== //
 
 export type pagesLang = {
@@ -279,9 +285,6 @@ export type pagesLang = {
     windAnimation: string;
     pleaseSpeak: string;
     surface: string;
-
-    // Ilya
-
     allPollutants: string;
     primaryPollutant: string;
     pollutantUnits: string;
@@ -307,8 +310,6 @@ export type pagesLang = {
     so2: string;
     pm2_5: string;
     pm10: string;
-
-    //Lana
     kmH: string;
     mb: string;
     km: string;
@@ -458,7 +459,7 @@ export type Pollutants = {
 };
 
 export type PollutantsIndicator = {
-    pollutants : Pollutants;
+    pollutants: Pollutants;
 };
 
 export type LevelKey = 'good' | 'moderate' | 'unhealthyForGroups' | 'unhealthy' | 'veryUnhealthy' | 'hazardous';

@@ -64,6 +64,7 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
 
         this.updateElement();
         this.observerToView.subscribe(ModelEvent.language, this);
+        this.observerToView.subscribe(ModelEvent.five_days_weather_indicators, this);
     }
 
     updateElement() {
@@ -131,6 +132,7 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         switch (params.typeEvents) {
             case ModelEvent.language: {
                 const langObject = <pagesLang>params.message;
+                this.startLang = langObject;
                 this.detailsTableLabelVisibility.textContent = langObject.visibility;
                 this.detailsTableLabelHumidity.textContent = langObject.humidity;
                 this.detailsTableLabelFeelLike.textContent = langObject.feelsLike;
@@ -139,23 +141,26 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
                 this.detailsTableLabelHumidityNight.textContent = langObject.humidity;
                 this.detailsTableLabelFeelLikeNight.textContent = langObject.feelsLike;
                 this.detailsTableLabelPressureNight.textContent = langObject.pressure;
-                this.nightOftheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${langObject.night}`;
-                this.detailsSummaryWindText.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${langObject.kmH}`;
-                this.dayOfTheWeek.textContent = `${this.getDayofWeek(this.day.night.dt_txt)} ${langObject.afternoon}`;
-                this.detailsTableValueVisibility.textContent = `${Math.round(this.day.visibility / 1000)} ${
-                    langObject.km
+                break;
+            }
+            case ModelEvent.five_days_weather_indicators: {
+                this.detailsSummaryWindText.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${
+                    this.startLang.kmH
                 }`;
-                this.percentageValueSpeed.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${langObject.kmH}`;
+                this.detailsTableValueVisibility.textContent = `${Math.round(this.day.visibility / 1000)} ${
+                    this.startLang.km
+                }`;
+                this.percentageValueSpeed.textContent = `${Math.floor(this.day.wind.speed * 3.6)} ${
+                    this.startLang.kmH
+                }`;
                 this.percentageValueSpeedNight.textContent = `${Math.floor(this.day.night.wind.speed * 3.6)} ${
-                    langObject.kmH
+                    this.startLang.kmH
                 }`;
                 this.detailsTableValueVisibilityNight.textContent = `${Math.round(this.day.night.visibility / 1000)} ${
-                    langObject.km
+                    this.startLang.km
                 }`;
-                this.detailsTableValuePressure.textContent = `${this.day.main.pressure} ${langObject.mb}`;
-                this.detailsTableValuePressureNight.textContent = `${this.day.night.main.pressure} ${langObject.mb}`;
-                // this.detailsSummaryExtended.textContent = `${this.day.weather[0].main}${langObject.clear}`;
-                break;
+                this.detailsTableValuePressure.textContent = `${this.day.main.pressure} ${this.startLang.mb}`;
+                this.detailsTableValuePressureNight.textContent = `${this.day.night.main.pressure} ${this.startLang.mb}`;
             }
         }
     }
@@ -164,8 +169,6 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         this.day = date;
         this.updateElement();
     }
-
-
 
     protected render(): void {
         this.element.className = 'day';
@@ -218,7 +221,6 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
 
         const detailsSummaryWindIcon = document.createElement('div');
         detailsSummaryWindIcon.className = 'icon-container wind-item';
-       
 
         lowTempValue.append(this.detailsSummaryLowTempValue);
         detailsTemperature.append(this.detailsSummaryHighTempValue, lowTempValue);
@@ -470,7 +472,6 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         );
 
         listItemFeelLike.append(feelLikeIcon, detailsTabeleFieldFeelLike);
-
         listItemFeelLikeNight.append(feelLikeIconNight, detailsTabeleFieldFeelLikeNight);
 
         const listItemVisibility = document.createElement('li');
@@ -515,7 +516,6 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         );
 
         listItemVisibility.append(visibilityIcon, detailsTabeleFieldVisibility);
-
         listItemVisibilityNight.append(visibilityIconNight, detailsTabeleFieldVisibilityNight);
 
         conditionsSummary.append(this.temperatureValue, this.weatherIcon, dataPoints);
@@ -536,13 +536,13 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
         detailsTableContainerNight.append(detailsTableNight);
         this.daypartDetails.append(dailyContent, dailyContentNight, detailsTableContainer, detailsTableContainerNight);
         this.daysContainer.append(this.dayWrapper, this.daypartDetails, this.summaryIcon);
-
         this.element.append(this.daysContainer);
     }
 
     protected addListeners(): void {
         this.summaryIcon.addEventListener('click', this.extendedWindow.bind(this));
     }
+
     extendedWindow() {
         this.dayWrapper.classList.toggle('day-wrapper-none');
         this.daypartDetails.classList.toggle('daypart-details-active');
@@ -552,13 +552,18 @@ export class WeatherOneDayComponent extends BaseComponent<WeatherOneDayComponent
 
     getDayofWeek(day: string) {
         const date = new Date(day);
-        const language = localStorage.getItem(this.storageKeyLang);
-        if (language === 'ru') {
+        if (!JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`)) {
             this.weekDays = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
             return this.weekDays[date.getDay()] + ' ' + date.getDate();
         } else {
-            this.weekDays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-            return this.weekDays[date.getDay()] + ' ' + date.getDate();
+            const startLangInit = JSON.parse(`${localStorage.getItem(this.storageKeyLang)}`);
+            if (startLangInit === 'en') {
+                this.weekDays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+                return this.weekDays[date.getDay()] + ' ' + date.getDate();
+            } else {
+                this.weekDays = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+                return this.weekDays[date.getDay()] + ' ' + date.getDate();
+            }
         }
     }
 }

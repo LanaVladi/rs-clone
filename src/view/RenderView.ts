@@ -7,6 +7,7 @@ import { ObserverToView } from '../model/ObserverToView';
 import { GeolocationModel } from '../model/GeolocationModel';
 import { TranslatorModel } from '../model/TranslatorModel';
 import { Store } from '../model/Store';
+import VoiceControl from '../model/APIWebSpeech';
 
 class RenderView {
     constructor() {
@@ -22,9 +23,17 @@ class RenderView {
 
         new ApiOpenWeather(observerToModel, observerToView, geolocation, store);
         const language = new TranslatorModel(observerToModel, observerToView);
+        const voiceControl = new VoiceControl();
         const router = new Router(main, observerToModel, observerToView, language);
 
-        const headerController = new HeaderController(router, observerToModel, observerToView, geolocation, language);
+        const headerController = new HeaderController(
+            router,
+            observerToModel,
+            observerToView,
+            geolocation,
+            language,
+            voiceControl
+        );
         const footerController = new FooterController();
 
         root.append(headerController.component.element, main, footerController.component.element);

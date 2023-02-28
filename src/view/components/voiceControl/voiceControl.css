@@ -29,24 +29,36 @@
 
 .voice-control-modal {
     position: fixed;
-    top: calc(50% - 6rem);
-    left: calc(50% - 6rem);
+    top: calc(50% - 13rem);
+    left: calc(50% - 11rem);
+    z-index: 51;
 }
 
 .voice-control-modal .modal-inner {
-    margin-top: 16rem;
+    margin-top: 20rem;
     position: absolute;
     width: 20rem;
+    padding: 1rem;
     text-align: center;
     font-size: 3rem;
-    color: darkred;
+    color: var(--voice-title);
+    background-color: var(--color-headerBlock);
+    border-radius: 10rem;
+    -webkit-border-radius: 10rem;
+    -moz-border-radius: 10rem;
+    -ms-border-radius: 10rem;
+    -o-border-radius: 10rem;
 }
 
 .voice-control-overlay {
+    visibility: hidden;
     position: fixed;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.6);
+    z-index: 50;
 }
 
 .voice-record-animation {

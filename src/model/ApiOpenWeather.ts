@@ -18,7 +18,6 @@ import { ObserverToModel } from './ObserverToModel';
 import { ObserverToView } from './ObserverToView';
 import { GeolocationModel } from './GeolocationModel';
 import { Store } from './Store';
-// import { TranslatorModel } from './TranslatorModel';
 
 export class ApiOpenWeather implements INotify {
     #weatherUrlToday!: string;
@@ -28,7 +27,6 @@ export class ApiOpenWeather implements INotify {
     private readonly storageKeyCity = 'city';
     private storageKeyLang = 'lang';
     private cityList = new Array<string>();
-    // private langList = new Array<string>();
     private langList!: string;
     public temperatureUnit!: string;
     public tempUnitInRequest!: string;
@@ -39,14 +37,12 @@ export class ApiOpenWeather implements INotify {
     private observerToView: ObserverToView;
     private store: Store;
     private geolocation: GeolocationModel;
-    // private language: TranslatorModel;
 
     constructor(
         observerToModel: ObserverToModel,
         observerToView: ObserverToView,
         geolocation: GeolocationModel,
         store: Store
-        // language: TranslatorModel
     ) {
         this.observerToModel = observerToModel;
         this.observerToView = observerToView;
@@ -55,11 +51,11 @@ export class ApiOpenWeather implements INotify {
         this.checkLocalStorageCity();
         this.checkLocalStorageLanguage();
 
-        // this.language = language;
         this.observerToModel.subscribe(ViewEvent.input, this);
         this.observerToModel.subscribe(ViewEvent.geolocation, this);
         this.observerToModel.subscribe(ViewEvent.temp_unit, this);
         this.observerToModel.subscribe(ViewEvent.language, this);
+        this.observerToModel.subscribe(ViewEvent.voice, this);
     }
 
     protected checkLocalStorageCity() {
@@ -83,7 +79,7 @@ export class ApiOpenWeather implements INotify {
         }
 
         const lastLang = this.langList;
-        this.notify({ message: lastLang});
+        this.notify({ message: lastLang });
     }
 
     public async notify<T>(params: NotifyParameters<T>) {
@@ -94,44 +90,48 @@ export class ApiOpenWeather implements INotify {
                 this.lang = params.message;
             } else {
                 this.city = params.message;
-                // console.log('this.city :', this.city);
             }
             this.getAllWeatherData(this.city, this.temperatureUnit, this.lang);
         } else if (Array.isArray(params.message)) {
             this.city = params.message;
-            // console.log('city coords :', this.city);
             this.getAllWeatherData(this.city, this.temperatureUnit, this.lang);
         }
     }
 
     private async getAllWeatherData(city: string | number[], temperatureUnit?: string, lang?: string) {
-        const weatherTodayData: WeatherTodayData = await this.getWeatherTodayData(city, temperatureUnit, lang);
-        // console.log('weatherTodayData :', weatherTodayData);
+        if (typeof city === 'string') {
+            this.checkLocalStorage(city);
+            const localCity = localStorage.getItem('city');
+        }
 
-        this.store.setWeatherTodayData(weatherTodayData);
+        const weatherTodayData: WeatherTodayData | '' = await this.getWeatherTodayData(city, temperatureUnit, lang);
+
+        if (weatherTodayData !== '') this.store.setWeatherTodayData(weatherTodayData);
 
         this.observerToView.notify(ModelEvent.today_weather, {
             message: weatherTodayData,
             typeEvents: ModelEvent.today_weather,
         });
 
-        const weatherFiveDaysData: weatherFiveDaysData = await this.getWeatherFiveDaysData(city, temperatureUnit, lang);
-        // console.log('weatherFiveDaysData :', weatherFiveDaysData);
+        const weatherFiveDaysData: weatherFiveDaysData | '' = await this.getWeatherFiveDaysData(
+            city,
+            temperatureUnit,
+            lang
+        );
 
-        this.store.setWeatherFiveDaysData(weatherFiveDaysData);
+        if (weatherFiveDaysData !== '') this.store.setWeatherFiveDaysData(weatherFiveDaysData);
         this.observerToView.notify(ModelEvent.five_days_weather, {
             message: weatherFiveDaysData,
             typeEvents: ModelEvent.five_days_weather,
         });
 
-        const airQualityForecastData: airQualityForecastData = await this.getForecastAirQualityData(
+        const airQualityForecastData: airQualityForecastData | '' = await this.getForecastAirQualityData(
             city,
             temperatureUnit,
             lang
         );
-        // console.log('airQualityForecastData :', airQualityForecastData);
 
-        this.store.setAirQualityForecastData(airQualityForecastData);
+        if (airQualityForecastData !== '') this.store.setAirQualityForecastData(airQualityForecastData);
         this.observerToView.notify(ModelEvent.air_quality_forecast, {
             message: airQualityForecastData,
             typeEvents: ModelEvent.air_quality_forecast,
@@ -158,33 +158,6 @@ export class ApiOpenWeather implements INotify {
         }
     }
 
-    private async getWeatherTodayData(
-        city: string | number[],
-        temperatureUnit?: string,
-        lang?: string
-    ): Promise<WeatherTodayData> {
-        this.checkTempUnit(temperatureUnit);
-        this.checkLanguage(lang);
-        if (typeof city === 'string') {
-            // console.log('city :', city);
-            this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?q=${city}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        } else {
-            const [lat, lon] = city;
-            // console.log('city :', city);
-            this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        }
-
-        const response = await fetch(this.#weatherUrlToday);
-
-        if (response.status === 200) {
-            if (typeof city === 'string') {
-                this.checkLocalStorage(city);
-                const localCity = localStorage.getItem(this.storageKeyCity);
-            }
-        }
-        return await response.json();
-    }
-
     protected checkLocalStorage(cityName: string) {
         if (localStorage.getItem(this.storageKeyCity)) {
             this.cityList = JSON.parse(`${localStorage.getItem(this.storageKeyCity)}`);
@@ -202,61 +175,87 @@ export class ApiOpenWeather implements INotify {
         localStorage.setItem(this.storageKeyCity, JSON.stringify(this.cityList));
     }
 
+    private async getWeatherTodayData(
+        city: string | number[],
+        temperatureUnit?: string,
+        lang?: string
+    ): Promise<WeatherTodayData | ''> {
+        this.checkTempUnit(temperatureUnit);
+        this.checkLanguage(lang);
+        try {
+            if (typeof city === 'string') {
+                this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?q=${city}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
+            } else {
+                const [lat, lon] = city;
+                this.#weatherUrlToday = `${baseLinkOpenWeatherToday}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
+            }
+
+            const response = await fetch(this.#weatherUrlToday);
+            if (response.ok === true) {
+                if (city === 'string') this.checkLocalStorage(city);
+                const localCity = localStorage.getItem('city');
+            }
+            return await response.json();
+        } catch (error) {
+            return '';
+        }
+    }
+
     private async getWeatherFiveDaysData(
         city: string | number[],
         temperatureUnit?: string,
         lang?: string
-    ): Promise<weatherFiveDaysData> {
+    ): Promise<weatherFiveDaysData | ''> {
         this.checkTempUnit(temperatureUnit);
         this.checkLanguage(lang);
-
-        if (typeof city === 'string') {
-            this.#weatherUrlFiveDays = `${baseLinkOpenWeatherFiveDays}?q=${city}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        } else {
-            const [lat, lon] = city;
-            this.#weatherUrlFiveDays = `${baseLinkOpenWeatherFiveDays}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        }
-
-        const response = await fetch(this.#weatherUrlFiveDays);
-
-        if (response.status === 200) {
+        try {
             if (typeof city === 'string') {
-                this.checkLocalStorage(city);
-                const localCity = localStorage.getItem(this.storageKeyCity);
+                this.#weatherUrlFiveDays = `${baseLinkOpenWeatherFiveDays}?q=${city}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
+            } else {
+                const [lat, lon] = city;
+                this.#weatherUrlFiveDays = `${baseLinkOpenWeatherFiveDays}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
             }
+
+            const response = await fetch(this.#weatherUrlFiveDays);
+
+            if (response.ok === true) {
+                if (city === 'string') this.checkLocalStorage(city);
+                const localCity = localStorage.getItem('city');
+            }
+            return await response.json();
+        } catch (error) {
+            return '';
         }
-        return await response.json();
     }
 
     private async getForecastAirQualityData(
         city: string | number[],
         temperatureUnit?: string,
         lang?: string
-    ): Promise<airQualityForecastData> {
+    ): Promise<airQualityForecastData | ''> {
         this.checkTempUnit(temperatureUnit);
         this.checkLanguage(lang);
-
-        if (typeof city === 'string') {
-            const coord = await this.geolocation.getCoordinates(city);
-
-            const lat = coord[0];
-            const lon = coord[1];
-            this.#forecastUrlAirQuality = `${baseLinkOpenWeatherAirQuality}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        } else {
-            const [lat, lon] = city;
-            this.#forecastUrlAirQuality = `${baseLinkOpenWeatherAirQuality}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
-        }
-
-        const response = await fetch(this.#forecastUrlAirQuality);
-
-        if (response.status === 200) {
+        try {
             if (typeof city === 'string') {
-                this.checkLocalStorage(city);
-                const localCity = localStorage.getItem(this.storageKeyCity);
-            }
-        }
-        return await response.json();
-    }
+                const coord = await this.geolocation.getCoordinates(city);
 
-    // private async getWeatherMap(city: string): Promise<IWindyAPI> {}
+                const lat = coord[0];
+                const lon = coord[1];
+                this.#forecastUrlAirQuality = `${baseLinkOpenWeatherAirQuality}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
+            } else {
+                const [lat, lon] = city;
+                this.#forecastUrlAirQuality = `${baseLinkOpenWeatherAirQuality}?lat=${lat}&lon=${lon}&appid=${apiKeyOpenWeather}&lang=${this.lang}&units=${this.tempUnitInRequest}`;
+            }
+
+            const response = await fetch(this.#forecastUrlAirQuality);
+
+            if (response.ok === true) {
+                if (city === 'string') this.checkLocalStorage(city);
+                const localCity = localStorage.getItem('city');
+            }
+            return await response.json();
+        } catch (error) {
+            return '';
+        }
+    }
 }
