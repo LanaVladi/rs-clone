@@ -1,0 +1,65 @@
+.five-days-container {
+    background-color: var(--color-white);
+    margin: 0 auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    width: 90%;
+    max-width: 100rem;
+}
+
+.daily-forecast-timestamp-box {
+    font-size: 1.6rem;
+    margin: 1rem 3rem;
+    color: var(--color-dark-grey);
+}
+
+.daily-forecast-timestamp {
+    padding: 1rem 1.6rem;
+}
+
+.daily-forecast-disclosure-list {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.location-page-title {
+    display: flex;
+    padding: 1.5rem 3rem 1.5rem;
+    background-color: var(--color-headerBlock);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    color: var(--color-white);
+    gap: 1rem;
+}
+
+.location-title {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+}
+
+@media screen and (max-width: 840px) {
+    .five-days-container {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 625px) {
+    .five-days-container {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 445px) {
+    .daily-forecast-timestamp-box {
+        margin: 1rem 2rem;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .daily-forecast-timestamp-box {
+        margin: 1rem 1rem;
+    }
+}

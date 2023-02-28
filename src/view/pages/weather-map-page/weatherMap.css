@@ -1,0 +1,720 @@
+:root {
+    --main-weather-map-color: rgb(212, 149, 0);
+}
+
+.weather-map {
+    margin: 0 auto;
+    margin-bottom: 3rem;
+    width: 90%;
+    height: 60rem;
+    padding: 1rem;
+    max-width: 100rem;
+    background-color: var(--color-white);
+    box-shadow: 0 0 1.2rem 0 #0003;
+    border-radius: 0.6rem;
+}
+
+.weather-map-container {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    max-width: 100rem;
+    overflow: hidden;
+}
+
+.fullscreen {
+    position: fixed;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    height: 100vh;
+}
+
+.weather-map #windy {
+    width: 100%;
+    height: 100%;
+}
+
+.weather-map #windy #mobile-ovr-select {
+    display: none;
+}
+
+.weather-map #windy #logo {
+    transform: scale(0.6, 0.6);
+    left: 5rem;
+    top: -0.5rem;
+}
+
+#weather-data-value-display {
+    position: fixed;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.weather-map #windy #bottom #progress-bar {
+    bottom: 1.5rem;
+}
+
+.weather-map #windy #bottom #progress-bar .progress-line {
+    height: 4rem;
+}
+
+.weather-map #accTime-legend {
+    position: absolute;
+    left: 4.5rem;
+    right: 0;
+    top: 0.6rem;
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 1.5rem;
+    -webkit-border-radius: 1.5rem;
+    -moz-border-radius: 1.5rem;
+    -ms-border-radius: 1.5rem;
+    -o-border-radius: 1.5rem;
+    box-shadow: 0 0 4px 0 black;
+}
+
+.weather-map #accTime-legend div {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 0.6rem 0 0 0;
+    font-size: 1.2rem;
+    line-height: 1;
+    height: 2.3rem;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.weather-map #accTime-legend div:not(:first-child) {
+    border-left: 1px solid rgba(68, 65, 65, 0.84);
+}
+
+.weather-map #windy #legend-mobile {
+    position: absolute;
+    width: 40rem;
+    left: auto;
+    padding: 0 0.5rem;
+    font-size: 1.55rem;
+    border-radius: 1.5rem;
+    -webkit-border-radius: 1.5rem;
+    -moz-border-radius: 1.5rem;
+    -ms-border-radius: 1.5rem;
+    -o-border-radius: 1.5rem;
+    box-shadow: 0 0 4px 0 black;
+}
+
+.weather-map #windy .timecode {
+    font-size: 1.2rem;
+}
+
+.weather-map #windy #embed-zoom {
+    top: 0;
+}
+
+.weather-map #windy #embed-zoom .zoom-ctrl {
+    font-size: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    line-height: 1.7;
+}
+
+.weatherMap-controls {
+    margin: 0 auto;
+    width: 20%;
+    position: absolute;
+    top: 60%;
+    left: 11%;
+    font-size: 1.2rem;
+}
+
+.weatherMap-controls input {
+    width: auto;
+}
+
+.layers-buttons {
+    position: absolute;
+    top: 30%;
+    left: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.layers-buttons button {
+    transition: background-color .3s;
+    line-height: 1.4;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+    margin-top: 0.15rem;
+    border-radius: 1.2em;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 4px 0 black;
+    cursor: pointer;
+}
+
+.layers-buttons button:hover {
+    background-color: rgba(68, 65, 65, 0.84);
+}
+
+.layers-buttons button.active {
+    background-color: var(--main-weather-map-color);
+}
+
+.layers-buttons button.active:hover {
+    background-color: var(--main-weather-map-color);
+}
+
+.wind-anim-toggler {
+    position: absolute;
+    top: 49%;
+    left: 1.1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: #fff;
+    transition-duration: 300ms;
+    margin: 1rem 0;
+    font-size: 1.2rem;
+}
+
+.wind-anim-toggler:hover {
+    text-shadow: 1px 1px 4px black;
+}
+
+.wind-anim-toggler .switch-btn {
+    display: inline-block;
+    width: 2.5rem;
+    height: 1.2rem;
+    box-sizing: content-box;
+    border: 1px solid white;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    transition-duration: 300ms;
+    border-radius: 1.2rem;
+    -webkit-border-radius: 1.2rem;
+    -moz-border-radius: 1.2rem;
+    -ms-border-radius: 1.2rem;
+    -o-border-radius: 1.2rem;
+}
+
+.wind-anim-toggler .switch-btn::after {
+    content: "";
+    height: 1.2rem;
+    width: 1.1rem;
+    background-color: #fff;
+    left: 0px;
+    transition-duration: 300ms;
+    box-shadow: 0 0 4px 0 #999;
+    position: absolute;
+    z-index: 1;
+    border-radius: 0.9rem;
+    -webkit-border-radius: 0.9rem;
+    -moz-border-radius: 0.9rem;
+    -ms-border-radius: 0.9rem;
+    -o-border-radius: 0.9rem;
+}
+
+.wind-anim-toggler .switch-on {
+    background-color: #fff;
+    box-shadow: inset 0 0 4px 0 #555;
+}
+
+.wind-anim-toggler .switch-on::after {
+    left: 1.4rem;
+    background-color: var(--main-weather-map-color);
+}
+
+.layer-metric-select {
+    transition: background-color .3s;
+    line-height: 1.4;
+    padding: 0.2rem 0.7rem;
+    border-radius: 1.2em;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 4px 0 black;
+}
+
+.layer-metric-select:hover {
+    background-color: rgba(68, 65, 65, 0.84);
+}
+
+.layer-metric-select option {
+    color: black;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.layer-metric-select option:hover {
+    color: black;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.altitude-input-container {
+    position: absolute;
+    top: 57%;
+    left: 1.1rem;
+}
+
+.altitude-range[type="range"] {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    margin: 6rem -5rem 0 -6rem;
+    width: 13rem;
+    height: 0.8rem;
+    background: rgba(68, 65, 65, 0.84);
+    border-radius: 0.5rem;
+    background-image: linear-gradient(#fff, #fff);
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+    z-index: 5;
+}
+
+.altitude-range[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 50%;
+    background: var(--main-weather-map-color);
+    cursor: pointer;
+    transition: background .3s ease-in-out;
+    z-index: 5;
+    box-shadow: 0 0 2px 0 black;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    -webkit-transition: background .3s ease-in-out;
+    -moz-transition: background .3s ease-in-out;
+    -ms-transition: background .3s ease-in-out;
+    -o-transition: background .3s ease-in-out;
+}
+
+
+.altitude-range[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+.altitude-value {
+    color: #fff;
+    font-size: 1.2rem;
+    text-align: center;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 2rem;
+    z-index: 0;
+    width: 7.7rem;
+    height: 1.8rem;
+    background-color: rgba(68, 65, 65);
+    box-shadow: 0 0 2px 0 black;
+    border-radius: 0.5rem;
+    -webkit-border-radius: 0.5rem;
+    -moz-border-radius: 0.5rem;
+    -ms-border-radius: 0.5rem;
+    -o-border-radius: 0.5rem;
+}
+
+.altitude-value::before {
+    content: '';
+    left: 0;
+    border: solid transparent;
+    height: 0;
+    width: 0;
+    position: absolute;
+    border-top-color: rgba(68, 65, 65);
+    border-width: 0.5em;
+    margin-left: -1.1rem;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+}
+
+.map-search-container {
+    display: none;
+    position: absolute;
+    top: 3.7rem;
+    left: 1.1rem;
+    width: 15%;
+    transition: width .5s;
+    -webkit-transition: width .5s;
+    -moz-transition: width .5s;
+    -ms-transition: width .5s;
+    -o-transition: width .5s;
+}
+
+.fullscreen .map-search-container {
+    display: block;
+}
+
+.active-form {
+    width: 35%;
+}
+
+.map-search-form {
+    width: 100%;
+}
+
+.map-search-input {
+    width: 70%;
+    box-sizing: border-box;
+    color: #333;
+    background-color: #fff;
+    border: none;
+    background-size: 1.8rem;
+    background-repeat: no-repeat;
+    padding: 0 1rem 0 2rem;
+    box-shadow: 0 0 4px 0 black;
+    height: 2.6rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    background-position: 7px 6px;
+    border-radius: 1.5rem;
+    transition: .25s all 2s;
+    -webkit-border-radius: 1.5rem;
+    -moz-border-radius: 1.5rem;
+    -ms-border-radius: 1.5rem;
+    -o-border-radius: 1.5rem;
+}
+
+.map-search-form::before {
+    content: "⌕";
+    height: 1.2rem;
+    width: 1.1rem;
+    position: absolute;
+    top: 0;
+    left: 0.5rem;
+    font-size: 2rem;
+    color: #999;
+}
+
+.map-search-button {
+    display: none;
+    margin-left: 0.5rem;
+    box-sizing: border-box;
+    border: none;
+    background-size: 1.8rem;
+    background-repeat: no-repeat;
+    height: 2.6rem;
+    font-size: 1.4rem;
+    background-position: 7px 6px;
+    line-height: 1.4;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+    border-radius: 1.2em;
+    color: rgb(255, 255, 255);
+    background-color: var(--main-weather-map-color);
+    box-shadow: 0 0 4px 0 black;
+    transition: 0s linear 0.5s;
+}
+
+.find-me-button {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: rotate(315deg);
+    font-size: 1.7rem;
+    border-radius: 2rem;
+    padding: 0.7rem 0px 0px 0.8rem;
+    width: 3rem;
+    height: 3rem;
+    color: rgb(255, 255, 255);
+    background-color: rgba(68, 65, 65, 0.84);
+    cursor: pointer;
+}
+
+.find-me-button:hover {
+    background-color: rgba(183, 183, 183, 0.39);
+}
+
+.find-me-button.active {
+    background-color: var(--main-weather-map-color);
+}
+
+.open-fullscreen-button {
+    position: absolute;
+    top: 6px;
+    left: calc(50% - 50px);
+    transition: background-color .3s;
+    font-size: 1.5rem;
+    line-height: 1.4;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-radius: 1.2rem;
+    color: rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 4px 0 black;
+}
+
+.open-fullscreen-button:hover {
+    background-color: rgba(68, 65, 65, 0.84);
+}
+
+.open-fullscreen-button:active {
+    background-color: rgb(54, 52, 52);
+}
+
+.close-fullscreen-button {
+    visibility: hidden;
+    position: absolute;
+    top: 0.6rem;
+    left: calc(50% - 15px);
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 2rem;
+    width: 3rem;
+    height: 3rem;
+    color: rgb(255, 255, 255);
+    background-color: rgba(68, 65, 65, 0.84);
+}
+
+.close-fullscreen-button:hover {
+    background-color: rgba(183, 183, 183, 0.39);
+}
+
+.weather-map #burger-button {
+    position: absolute;
+    top: 0;
+    z-index: 999;
+    right: 1.1rem;
+    display: none;
+    width: 4rem;
+    height: 3rem;
+    margin: 2rem auto;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: .5s ease-in-out;
+    -moz-transition: .5s ease-in-out;
+    -o-transition: .5s ease-in-out;
+    transition: .5s ease-in-out;
+    cursor: pointer;
+}
+
+.weather-map #burger-button span {
+    display: block;
+    position: absolute;
+    height: 0.6rem;
+    width: 100%;
+    background: var(--main-weather-map-color);
+    border-radius: 0.6rem;
+    opacity: 1;
+    left: 0;
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+    -webkit-transition: .25s ease-in-out;
+    -moz-transition: .25s ease-in-out;
+    -o-transition: .25s ease-in-out;
+    transition: .25s ease-in-out;
+    -webkit-border-radius: 0.6rem;
+    -moz-border-radius: 0.6rem;
+    -ms-border-radius: 0.6rem;
+    -o-border-radius: 0.6rem;
+}
+
+.weather-map #burger-button span:nth-child(1) {
+    top: 0;
+}
+
+.weather-map #burger-button span:nth-child(2) {
+    top: 1.2rem;
+}
+
+.weather-map #burger-button span:nth-child(3) {
+    top: 2.4rem;
+}
+
+.weather-map #burger-button.open span:nth-child(1) {
+    top: 1.2rem;
+    -webkit-transform: rotate(135deg);
+    -moz-transform: rotate(135deg);
+    -o-transform: rotate(135deg);
+    transform: rotate(135deg);
+}
+
+.weather-map #burger-button.open span:nth-child(2) {
+    opacity: 0;
+    left: -4rem;
+}
+
+.weather-map #burger-button.open span:nth-child(3) {
+    top: 1.2rem;
+    -webkit-transform: rotate(-135deg);
+    -moz-transform: rotate(-135deg);
+    -o-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+@media screen and (max-width: 767px) {
+    .weather-map #burger-button {
+        display: block;
+    }
+
+    .weather-map {
+        height: 40rem;
+    }
+
+    .fullscreen {
+        height: 100vh;
+    }
+
+    .map-controls-container {
+        width: 25rem;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: -50rem;
+        z-index: 100;
+        background-color: rgba(0, 0, 0, 0.7);
+        transition: right .3s ease-in-out;
+        -webkit-transition: right .3s ease-in-out;
+        -moz-transition: right .3s ease-in-out;
+        -ms-transition: right .3s ease-in-out;
+        -o-transition: right .3s ease-in-out;
+    }
+
+    .map-controls-container>div {
+        opacity: 0;
+        transition: opacity .5s ease-in-out .3s;
+        -webkit-transition: opacity .5s ease-in-out .3s;
+        -moz-transition: opacity .5s ease-in-out .3s;
+        -ms-transition: opacity .5s ease-in-out .3s;
+        -o-transition: opacity .5s ease-in-out .3s;
+    }
+
+    .weather-map .burger-active {
+        right: 0;
+    }
+
+    .weather-map .burger-active>div {
+        opacity: 1;
+    }
+
+    .fullscreen .map-controls-container {
+        height: 100vh;
+    }
+
+    .map-search-container {
+        width: 65%;
+    }
+
+    .active-form {
+        width: 75%;
+    }
+
+    .map-search-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+    .map-search-input {
+        width: 90%;
+    }
+
+    .map-search-button {
+        margin-left: 0;
+        width: 6rem;
+    }
+
+    .layers-buttons {
+        left: auto;
+        right: 1.1rem;
+        align-items: flex-end;
+        top: 18%;
+        gap: 1.7rem;
+    }
+
+    .wind-anim-toggler {
+        flex-direction: row-reverse;
+        gap: 0.5rem;
+        left: auto;
+        right: 1.1rem;
+        top: 53%;
+    }
+
+    .altitude-input-container {
+        left: auto;
+        right: 0.4rem;
+        top: 65%;
+    }
+
+    .altitude-value {
+        text-align: center;
+        left: -8.7rem;
+        z-index: 0;
+        width: 7.7rem;
+        height: 1.8rem;
+    }
+
+    .altitude-value::before {
+        left: 8.7rem;
+        transform: rotate(270deg);
+        -webkit-transform: rotate(270deg);
+        -moz-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        -o-transform: rotate(270deg);
+    }
+
+    .weather-map #windy #embed-zoom {
+        top: 30%;
+        left: 1.1rem;
+        right: auto;
+    }
+
+    .find-me-button {
+        right: auto;
+        left: 1.3rem;
+    }
+
+    .weather-map #windy #legend-mobile {
+        width: 40rem;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .weather-map #windy #legend-mobile {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .weather-map #windy #logo {
+        left: 5rem;
+        margin-left: -7rem;
+    }
+}
