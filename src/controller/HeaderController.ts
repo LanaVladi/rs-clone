@@ -38,7 +38,7 @@ export class HeaderController extends BaseController<HeaderComponent> {
         this.voiceControlModel = voiceControlModel;
         this.voiceControl = new VoiceControlController(observerToModel, observerToView, language, voiceControlModel);
         this.languageController = new LanguageController(observerToModel);
-        this.searcherController = new SearcherController(observerToModel, observerToView, language, voiceControlModel);
+        this.searcherController = new SearcherController(observerToModel, observerToView, language);
         this.tempUnitController = new TempUnitController(observerToModel);
         this.geolocationController = new GeolocationController(observerToModel, geolocation);
         this.component = new HeaderComponent(this, router, observerToView, language);
